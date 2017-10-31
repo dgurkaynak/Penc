@@ -87,7 +87,57 @@ class GestureHandler: ScrollHandlerDelegate {
     }
     
     func onScrollEnded(scrollHandler: ScrollHandler, delta: (x: CGFloat, y: CGFloat)?) {
-        // Check its swipe?
+        if self.pressedKeys == [.command] && delta != nil {
+            let threshold: CGFloat = 30
+            var swipe = (x: 0, y: 0)
+            
+            if abs(delta!.x) > threshold {
+                swipe.x = delta!.x > 0 ? 1 : -1
+            }
+            
+            if abs(delta!.y) > threshold {
+                swipe.y = delta!.y > 0 ? 1 : -1
+            }
+            
+            var swipeType: GestureType? = nil
+            
+            switch swipe {
+            case (x: -1, y: -1):
+                swipeType = GestureType.SWIPE_BOTTOM_RIGHT
+                break
+            case (x: -1, y: 0):
+                swipeType = GestureType.SWIPE_RIGHT
+                break
+            case (x: -1, y: 1):
+                swipeType = GestureType.SWIPE_TOP_RIGHT
+                break
+            case (x: 0, y: -1):
+                swipeType = GestureType.SWIPE_BOTTOM
+                break
+            case (x: 0, y: 0):
+                swipeType = nil
+                break
+            case (x: 0, y: 1):
+                swipeType = GestureType.SWIPE_TOP
+                break
+            case (x: 1, y: -1):
+                swipeType = GestureType.SWIPE_BOTTOM_LEFT
+                break
+            case (x: 1, y: 0):
+                swipeType = GestureType.SWIPE_LEFT
+                break
+            case (x: 1, y: 1):
+                swipeType = GestureType.SWIPE_TOP_LEFT
+                break
+            default:
+                swipeType = nil
+                break
+            }
+            
+            if swipeType != nil {
+                self.change(swipeType!, delta: nil)
+            }
+        }
     }
     
     private func begin() {

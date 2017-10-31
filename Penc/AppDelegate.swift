@@ -93,17 +93,51 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
         if self.focusedWindow == nil { return }
         if self.focusedScreen == nil { return }
         
+        var rect: CGRect? = nil
+        
         if type == .RESIZE_ANCHOR_TOP_LEFT && self.focusedWindow!.isResizable() && delta != nil {
-            let rect = self.placeholderWindow.frame
-            let newRect = CGRect(x: rect.origin.x, y: rect.origin.y + delta!.y, width: rect.size.width - delta!.x, height: rect.size.height - delta!.y).fitInVisibleFrame(self.focusedScreen!)
-            self.placeholderWindow.setFrame(newRect, display: true, animate: false)
-            self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
+            rect = CGRect(
+                x: self.placeholderWindow.frame.origin.x,
+                y: self.placeholderWindow.frame.origin.y + delta!.y,
+                width: self.placeholderWindow.frame.size.width - delta!.x,
+                height: self.placeholderWindow.frame.size.height - delta!.y
+            ).fitInVisibleFrame(self.focusedScreen!)
+        } else if type == .MOVE && self.focusedWindow!.isMovable() && delta != nil {
+            rect = CGRect(
+                x: self.placeholderWindow.frame.origin.x - delta!.x,
+                y: self.placeholderWindow.frame.origin.y + delta!.y,
+                width: self.placeholderWindow.frame.size.width,
+                height: self.placeholderWindow.frame.size.height
+            ).fitInVisibleFrame(self.focusedScreen!)
+        } else if self.focusedWindow!.isMovable() && [GestureType.SWIPE_TOP, GestureType.SWIPE_BOTTOM].contains(type) {
+            let newHeight = self.focusedScreen!.visibleFrame.height / 2
+            rect = CGRect(
+                x: self.focusedScreen!.visibleFrame.origin.x,
+                y: self.focusedScreen!.visibleFrame.origin.y + (type == .SWIPE_TOP ? newHeight : 0),
+                width: self.focusedScreen!.visibleFrame.width,
+                height: newHeight
+            )
+        } else if self.focusedWindow!.isMovable() && [GestureType.SWIPE_LEFT, GestureType.SWIPE_RIGHT].contains(type) {
+            let newWidth = self.focusedScreen!.visibleFrame.width / 2
+            rect = CGRect(
+                x: self.focusedScreen!.visibleFrame.origin.x + (type == .SWIPE_RIGHT ? newWidth : 0),
+                y: self.focusedScreen!.visibleFrame.origin.y,
+                width: newWidth,
+                height: self.focusedScreen!.visibleFrame.height
+            )
+        } else if self.focusedWindow!.isMovable() && [GestureType.SWIPE_TOP_LEFT, GestureType.SWIPE_TOP_RIGHT, GestureType.SWIPE_BOTTOM_LEFT, GestureType.SWIPE_BOTTOM_RIGHT].contains(type) {
+            let newHeight = self.focusedScreen!.visibleFrame.height / 2
+            let newWidth = self.focusedScreen!.visibleFrame.width / 2
+            rect = CGRect(
+                x: self.focusedScreen!.visibleFrame.origin.x + (type == .SWIPE_TOP_RIGHT || type == .SWIPE_BOTTOM_RIGHT ? newWidth : 0),
+                y: self.focusedScreen!.visibleFrame.origin.y + (type == .SWIPE_TOP_LEFT || type == .SWIPE_TOP_RIGHT ? newHeight : 0),
+                width: newWidth,
+                height: newHeight
+            )
         }
         
-        if type == .MOVE && self.focusedWindow!.isMovable() && delta != nil {
-            let rect = self.placeholderWindow.frame
-            let newRect = CGRect(x: rect.origin.x - delta!.x, y: rect.origin.y + delta!.y, width: rect.size.width, height: rect.size.height).fitInVisibleFrame(self.focusedScreen!)
-            self.placeholderWindow.setFrame(newRect, display: true, animate: false)
+        if rect != nil {
+            self.placeholderWindow.setFrame(rect!, display: true, animate: false)
             self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
         }
     }
