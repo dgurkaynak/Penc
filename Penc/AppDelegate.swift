@@ -13,9 +13,13 @@ import Silica
 
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
     
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
+    let gestureHandler = GestureHandler()
+    let placeholderWindow = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
+    var focusedWindow: SIWindow? = nil
+    var focusedScreen: NSScreen? = nil
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -26,7 +30,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         if checkPermissions() {
             constructMenu()
-            listenEvents()
+            self.gestureHandler.setDelegate(self)
+            self.setupPlaceholderWindow()
         } else {
             let warnAlert = NSAlert();
             warnAlert.messageText = "Resizr relies upon having permission to 'control your computer'. If the permission prompt did not appear automatically, go to System Preferences, Security & Privacy, Privacy, Accessibility, and add Resizr to the list of allowed apps. Then relaunch Resizr.";
@@ -68,90 +73,48 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    func listenEvents() {
-        var deltaX: CGFloat = 0
-        var deltaY: CGFloat = 0
-        var pressedModifierKeys = NSEvent.ModifierFlags.init(rawValue: 0)
-        var active = false
-        
-        var placeholderWindow = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
+    func setupPlaceholderWindow() {
         placeholderWindow.level = .floating
         placeholderWindow.isOpaque = false
         placeholderWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.25)
+    }
+    
+    func onGestureBegan(gestureHandler: GestureHandler) {
+        self.focusedWindow = SIWindow.focused()
+        if self.focusedWindow == nil { return }
+        self.focusedScreen = self.focusedWindow!.screen()
+        if self.focusedScreen == nil { return }
+        let rect = self.focusedWindow!.frame()
+        let newRect = rect.topLeft2bottomLeft(self.focusedScreen!)
+        placeholderWindow.setFrame(newRect, display: true, animate: false)
+    }
+    
+    func onGestureChanged(gestureHandler: GestureHandler, type: GestureType, delta: (x: CGFloat, y: CGFloat)?) {
+        if self.focusedWindow == nil { return }
+        if self.focusedScreen == nil { return }
         
-        // [.shift] [.control] [.option] [.command]
-        NSEvent.addGlobalMonitorForEvents(matching: .flagsChanged) { (event) in
-            pressedModifierKeys = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-            
-            if pressedModifierKeys.rawValue == 0 {
-                placeholderWindow.orderOut(placeholderWindow)
-                
-                if active, let focusedWindow = SIWindow.focused() {
-                    let screen = focusedWindow.screen()!
-                    focusedWindow.setFrame(CGRect(x: placeholderWindow.frame.origin.x, y: screen.frame.height - placeholderWindow.frame.height - placeholderWindow.frame.origin.y, width: placeholderWindow.frame.width, height: placeholderWindow.frame.height))
-                    placeholderWindow.orderOut(placeholderWindow)
-                    
-                    active = false
-                }
-            }
+        if type == .RESIZE_ANCHOR_TOP_LEFT && self.focusedWindow!.isResizable() && delta != nil {
+            let rect = self.placeholderWindow.frame
+            let newRect = CGRect(x: rect.origin.x, y: rect.origin.y + delta!.y, width: rect.size.width - delta!.x, height: rect.size.height - delta!.y)
+            self.placeholderWindow.setFrame(newRect, display: true, animate: false)
+            self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
         }
         
-        NSEvent.addGlobalMonitorForEvents(matching: .scrollWheel) { (event) in
-            guard let focusedWindow = SIWindow.focused() else {
-                return
-            }
-            
-            if pressedModifierKeys != [.command] && pressedModifierKeys != [.command, .option] {
-                return
-            }
-            
-            if event.phase == NSEvent.Phase.began {
-                deltaX = 0
-                deltaY = 0
-                active = true
-                
-                let screen = focusedWindow.screen()!
-                let rect = focusedWindow.frame()
-                placeholderWindow.setFrame(CGRect(x: rect.origin.x, y: screen.frame.height - rect.height - rect.origin.y, width: rect.width, height: rect.height), display: true, animate: false)
-                
-            } else if event.phase == NSEvent.Phase.cancelled {
-                deltaX = 0
-                deltaY = 0
-                active = false
-                
-                placeholderWindow.orderOut(placeholderWindow)
-            } else if event.phase == NSEvent.Phase.changed {
-                if !active {
-                    return
-                }
-                
-                deltaX = deltaX + event.scrollingDeltaX
-                deltaY = deltaY + event.scrollingDeltaY
-                
-                if pressedModifierKeys == [.command, .option] && focusedWindow.isResizable() {
-                    let rect = placeholderWindow.frame
-                    placeholderWindow.setFrame(CGRect(x: rect.origin.x, y: rect.origin.y + event.scrollingDeltaY, width: rect.size.width - event.scrollingDeltaX, height: rect.size.height - event.scrollingDeltaY), display: true, animate: false)
-                    placeholderWindow.makeKeyAndOrderFront(placeholderWindow)
-                }
-                
-                if pressedModifierKeys == [.command] && focusedWindow.isMovable() {
-                    let rect = placeholderWindow.frame
-                    placeholderWindow.setFrame(CGRect(x: rect.origin.x - event.scrollingDeltaX, y: rect.origin.y + event.scrollingDeltaY, width: rect.size.width, height: rect.size.height), display: true, animate: false)
-                    placeholderWindow.makeKeyAndOrderFront(placeholderWindow)
-                }
-            } else if event.phase == NSEvent.Phase.ended {
-                deltaX = 0
-                deltaY = 0
-                active = false
-                
-                let screen = focusedWindow.screen()!
-                focusedWindow.setFrame(CGRect(x: placeholderWindow.frame.origin.x, y: screen.frame.height - placeholderWindow.frame.height - placeholderWindow.frame.origin.y, width: placeholderWindow.frame.width, height: placeholderWindow.frame.height))
-                placeholderWindow.orderOut(placeholderWindow)
-            }
-            
-            //            print(deltaX, deltaY)
-            
+        if type == .MOVE && self.focusedWindow!.isMovable() && delta != nil {
+            let rect = self.placeholderWindow.frame
+            let newRect = CGRect(x: rect.origin.x - delta!.x, y: rect.origin.y + delta!.y, width: rect.size.width, height: rect.size.height)
+            self.placeholderWindow.setFrame(newRect, display: true, animate: false)
+            self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
         }
+    }
+    
+    func onGestureEnded(gestureHandler: GestureHandler) {
+        if self.focusedWindow == nil { return }
+        if self.focusedScreen == nil { return }
+        
+        let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(self.focusedScreen!)
+        self.focusedWindow!.setFrame(newRect)
+        self.placeholderWindow.orderOut(self.placeholderWindow)
     }
     
     
