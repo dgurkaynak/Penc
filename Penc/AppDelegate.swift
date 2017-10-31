@@ -18,6 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
     let gestureHandler = GestureHandler()
     let placeholderWindow = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
+    let preferencesWindow = NSWindow(contentViewController: PreferencesViewController.freshController())
     var focusedWindow: SIWindow? = nil
     var focusedScreen: NSScreen? = nil
     
@@ -32,6 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
             constructMenu()
             self.gestureHandler.setDelegate(self)
             self.setupPlaceholderWindow()
+            self.setupPreferencesWindow()
         } else {
             let warnAlert = NSAlert();
             warnAlert.messageText = "Resizr relies upon having permission to 'control your computer'. If the permission prompt did not appear automatically, go to System Preferences, Security & Privacy, Privacy, Accessibility, and add Resizr to the list of allowed apps. Then relaunch Resizr.";
@@ -45,21 +47,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
         // Insert code here to tear down your application
     }
     
-    @objc func printQuote(_ sender: Any?) {
-        let quoteText = "Never put off until tomorrow what you can do the day after tomorrow."
-        let quoteAuthor = "Mark Twain"
-        
-        print("\(quoteText) — \(quoteAuthor)")
-    }
-    
     func constructMenu() {
         let menu = NSMenu()
         
-        menu.addItem(NSMenuItem(title: "Print Quote", action: #selector(AppDelegate.printQuote(_:)), keyEquivalent: "P"))
+        menu.addItem(NSMenuItem(title: "Preferences", action: #selector(AppDelegate.openPreferencesWindow(_:)), keyEquivalent: ","))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         
         statusItem.menu = menu
+    }
+    
+    @objc func openPreferencesWindow(_ sender: Any?) {
+        self.preferencesWindow.makeKeyAndOrderFront(self.preferencesWindow)
+        NSApplication.shared.activate(ignoringOtherApps: true)
     }
     
     func checkPermissions() -> Bool {
@@ -77,6 +77,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
         placeholderWindow.level = .floating
         placeholderWindow.isOpaque = false
         placeholderWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.25)
+    }
+    
+    func setupPreferencesWindow() {
+        self.preferencesWindow.title = "Penc Preferences"
+        self.preferencesWindow.styleMask.remove(.resizable)
+        self.preferencesWindow.styleMask.remove(.miniaturizable)
+
     }
     
     func onGestureBegan(gestureHandler: GestureHandler) {
