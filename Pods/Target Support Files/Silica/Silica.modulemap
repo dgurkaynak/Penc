@@ -1,0 +1,6 @@
+framework module Silica {
+  umbrella header "Silica-umbrella.h"
+
+  export *
+  module * { export * }
+}
