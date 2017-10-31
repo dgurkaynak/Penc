@@ -25,14 +25,21 @@ protocol ScrollHandlerDelegate: class {
 
 class ScrollHandler {
     weak var delegate: ScrollHandlerDelegate?
-    private var monitor: Any?
+    private var globalMonitor: Any?
+    private var localMonitor: Any?
     var phase = ScrollHandlerPhase.ENDED
     var originalPhase = NSEvent.Phase.ended
     var latestDelta: (x: CGFloat, y: CGFloat)?
     var paused = false
     
     init() {
-        self.monitor = NSEvent.addGlobalMonitorForEvents(matching: .scrollWheel) { (event) in
+        self.localMonitor = NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { (event) in
+            self.originalPhase = event.phase
+            if self.paused { return event }
+            self.onEvent(event)
+            return event
+        }
+        self.globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: .scrollWheel) { (event) in
             self.originalPhase = event.phase
             if self.paused { return }
             self.onEvent(event)
@@ -100,6 +107,7 @@ class ScrollHandler {
     }
     
     deinit {
-        NSEvent.removeMonitor(self.monitor as Any)
+        NSEvent.removeMonitor(self.globalMonitor as Any)
+        NSEvent.removeMonitor(self.localMonitor as Any)
     }
 }

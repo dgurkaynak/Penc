@@ -36,7 +36,8 @@ protocol GestureHandlerDelegate: class {
 
 class GestureHandler: ScrollHandlerDelegate {
     weak var delegate: GestureHandlerDelegate?
-    private var modifierKeyMonitor: Any?
+    private var globalModifierKeyMonitor: Any?
+    private var localModifierKeyMonitor: Any?
     private let scrollHandler = ScrollHandler()
     var pressedKeys = NSEvent.ModifierFlags.init(rawValue: 0)
     var phase = GestureHandlerPhase.ENDED
@@ -44,8 +45,12 @@ class GestureHandler: ScrollHandlerDelegate {
     init() {
         self.scrollHandler.setDelegate(self)
         self.scrollHandler.pause()
-        self.modifierKeyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .flagsChanged) { (event) in
+        self.globalModifierKeyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .flagsChanged) { (event) in
             self.onModifierKeyEvent(event)
+        }
+        self.localModifierKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { (event) in
+            self.onModifierKeyEvent(event)
+            return event
         }
     }
     
@@ -103,6 +108,7 @@ class GestureHandler: ScrollHandlerDelegate {
     }
     
     deinit {
-        NSEvent.removeMonitor(self.modifierKeyMonitor as Any)
+        NSEvent.removeMonitor(self.localModifierKeyMonitor as Any)
+        NSEvent.removeMonitor(self.globalModifierKeyMonitor as Any)
     }
 }
