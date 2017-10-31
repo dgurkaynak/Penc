@@ -7,129 +7,280 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		08643C09AE237576F0FDFACAAB2C3CE7 /* Pods-Penc-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B39DA431BD3E7505E11D984300A269A /* Pods-Penc-dummy.m */; };
-		0F5FA31CC1F72B32CC50DF8992AEE784 /* NSScreen+Silica.h in Headers */ = {isa = PBXBuildFile; fileRef = CA569EF78C9702061F96A4237F2487EB /* NSScreen+Silica.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		179CEA74035B89BA16F32ED654200A13 /* SIUniversalAccessHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 10D2BA468FF459BE3A7D39AE4C790880 /* SIUniversalAccessHelper.m */; };
-		19248934EFFB31E76E77CB6C2692E5A5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B64EF07050E5980D59E4FB4670DC0331 /* Cocoa.framework */; };
-		29950235E03717714575054E7393D8DB /* SIAccessibilityElement.h in Headers */ = {isa = PBXBuildFile; fileRef = D244129C2BE43CA9D33D8D0D50FC043A /* SIAccessibilityElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		35448AED0BF8187D68AB66C0FCE65A44 /* SISystemWideElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 21988D3560E556E563D6D1E71C356520 /* SISystemWideElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		433D39FDC959AABC9D146232EE9AE5C2 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B86FD956D5DE5F41DE626800C6D00863 /* Carbon.framework */; };
-		5827F3B13154CDE0483F44FE58F33020 /* CGSSpaces.h in Headers */ = {isa = PBXBuildFile; fileRef = 4EDBC77A7EC79D2DD65C062FD436D814 /* CGSSpaces.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		740E985A9E86CBA37F0903BC65891DA9 /* Silica-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F3F97001C44CA5061330CC90B3F8050 /* Silica-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		74159EAE0F8D9CAC350B571C9643081F /* SIApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = DD6D3956955A30CAE306DADBE243CF67 /* SIApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8DC82F2B4BF3835650512CB3C9884295 /* NSRunningApplication+Silica.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B55235203FB845159150744DA248AD9 /* NSRunningApplication+Silica.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8ECDF03A2A651D0A3C413C9305D423EC /* NSRunningApplication+Silica.m in Sources */ = {isa = PBXBuildFile; fileRef = E0F7AA99A1849951858210AB11397EEE /* NSRunningApplication+Silica.m */; };
-		974E6564778F40FFD3F62E0997E8E4EE /* SIAccessibilityElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A880500F99B3E56C681B62C0B0095F5 /* SIAccessibilityElement.m */; };
-		A381C8F5BFA1B51E21FED21ED8F76732 /* Silica-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B55EE052980328FA3C2A25436A7945B /* Silica-dummy.m */; };
-		A99DE663A875CAE56BA2B399851899CC /* SIWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = BA21B3966DCDAA4DA242B4F615331C5B /* SIWindow.m */; };
-		B52366A5DEAD175159D62B4CFF18E184 /* Pods-Penc-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B79592A4B764D98A1A86B6358A07274 /* Pods-Penc-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B5A06CCC8E772A32E09D0584FA1707E4 /* SISystemWideElement.m in Sources */ = {isa = PBXBuildFile; fileRef = CD6CF6F1ECFFB1E402E33AA5AAE1568D /* SISystemWideElement.m */; };
-		BD1F229A088BB7BB6D268F820EEC0150 /* SIUniversalAccessHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 0593FD33070FA3AA42E54B9B0153F6B4 /* SIUniversalAccessHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BD8B48C773A926F1BBA4747C1394A221 /* Silica.h in Headers */ = {isa = PBXBuildFile; fileRef = 7347195F2501620AE704D77736DAA608 /* Silica.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D5F2BE0ECC43D4C7E3E60A616431CA0E /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11DB1F0A8578E5AA57CE3F47F3CA3AF7 /* AppKit.framework */; };
-		DC05172D14609476E3336ECA8DBF9575 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B2B84575984D22630C7B5357C066870 /* IOKit.framework */; };
-		E41CD0ACDB88C64D1D92731A032710A1 /* SIApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = FD751C911C047C6F12A307D2FB0F3121 /* SIApplication.m */; };
-		EF2BC43EEAE858D0DBAD73BAABEE9C91 /* NSScreen+Silica.m in Sources */ = {isa = PBXBuildFile; fileRef = A95CE6BB212320468A05F955BD757C7E /* NSScreen+Silica.m */; };
-		FAE95AD130694075E70153AAF5B9F377 /* SIWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 49A099814D5C784489259A16586EC6ED /* SIWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FF7B7CD33FC43854523552616A15B1F7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B64EF07050E5980D59E4FB4670DC0331 /* Cocoa.framework */; };
+		0B3B49028FECAE7CBA05187BBFE154DB /* SIApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 2191B491441A54B7D4C52EFEBFA36AC5 /* SIApplication.m */; };
+		12149EA10608B7DE38879E6242D2826C /* ko.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 719274A14656C86378ABCC2B63FAFD39 /* ko.lproj */; };
+		157AE1FBA8F6C3B710CDE90F86492010 /* MASShortcut.m in Sources */ = {isa = PBXBuildFile; fileRef = C19509B2408C7570E2EAB8E229F87221 /* MASShortcut.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		1E2DB82357E8AB4D2C93E4293BF83679 /* NSScreen+Silica.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D0C11BCD185549697C99350FA9AC3D /* NSScreen+Silica.m */; };
+		20887597017160017549465EBFB7E977 /* zh-Hant.lproj in Resources */ = {isa = PBXBuildFile; fileRef = F3B82B5C9406069D1529CA63B5F5CCC2 /* zh-Hant.lproj */; };
+		2BDB0250478319027C1FA3E53598AB05 /* SIAccessibilityElement.h in Headers */ = {isa = PBXBuildFile; fileRef = 64EAC035304CB78BF96F92BD989B52DC /* SIAccessibilityElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3076DFAD05E4F7F0356153478F071D74 /* MASShortcut-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D1200C22222238E5C0C699B99B1F4455 /* MASShortcut-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		313C298CC3B0FAB70F9CCB6208F9640B /* NSScreen+Silica.h in Headers */ = {isa = PBXBuildFile; fileRef = A6CCF3DEDB177A5686E2DC1C3951B342 /* NSScreen+Silica.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		33121A10C5EFB7D91A9848B01AECCBD6 /* Pods-Penc-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B79592A4B764D98A1A86B6358A07274 /* Pods-Penc-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3594A4815E18F8019B17CEA0823304A6 /* NSRunningApplication+Silica.m in Sources */ = {isa = PBXBuildFile; fileRef = BF5C92B740C3D2CDA8D8E96ECF9C4BFC /* NSRunningApplication+Silica.m */; };
+		38974DB132715266ADE00F2E3DFBB320 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B64EF07050E5980D59E4FB4670DC0331 /* Cocoa.framework */; };
+		3E709DF9E160B62E84C4DBC616D9DC96 /* CGSSpaces.h in Headers */ = {isa = PBXBuildFile; fileRef = AA0956E890D43C385ACC493ECB69356A /* CGSSpaces.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4A6AF0A712D4C473177BE88389D15D2A /* MASDictionaryTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = B1540C74518DAD3D8B609D895DDA50E7 /* MASDictionaryTransformer.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		4E2431026F1A53624D28AB17AEB61F50 /* NSRunningApplication+Silica.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E9F1A77F324BB3C1C5889CAAEC0B731 /* NSRunningApplication+Silica.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4ECA4149FA2E778D6F8C8DDB9A96D395 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B86FD956D5DE5F41DE626800C6D00863 /* Carbon.framework */; };
+		50404A7A52BAD08BD184A6FD3AE3DC86 /* SISystemWideElement.m in Sources */ = {isa = PBXBuildFile; fileRef = F7C59727C2BE35AE023EDC11F4498B5C /* SISystemWideElement.m */; };
+		51358F3E24AC8F1A4172E388769FF1FA /* MASShortcutView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8F7FB572B02F2003FD365D226321D132 /* MASShortcutView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		58CE04D9C6CAC7243825ABF4AB20EF32 /* MASShortcutValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 77CD73998C04FE354C400D4547B5FC10 /* MASShortcutValidator.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		590F223387B03165CC1DC30CA1F73991 /* Silica-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F12ED9AD87BAE3A476B257E38A0839C /* Silica-dummy.m */; };
+		5A30DAB76BB1814664FA7DC30939DA24 /* MASShortcutBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C7D62363155E9844836D22E1DE4E7C1 /* MASShortcutBinder.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		5DC2D7626284247FF2A7CD286FCA39DE /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11DB1F0A8578E5AA57CE3F47F3CA3AF7 /* AppKit.framework */; };
+		5F1FA9D431587CD257C703AF16134030 /* ja.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 42323900812172C36EFF7E0EF3381314 /* ja.lproj */; };
+		5FF7D42F51FEAEB192E61355AAEAC6DE /* MASShortcutMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B3673C671E7D68AF1109814A285452D /* MASShortcutMonitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		618D3C71663174E07B65950421C46D48 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11DB1F0A8578E5AA57CE3F47F3CA3AF7 /* AppKit.framework */; };
+		66DEB394C39F5DCCD70A27ECEF274983 /* de.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 5A7EA508AA01007ED457A4C8496D46FD /* de.lproj */; };
+		6B4361F5ADC6268E7953732371174FE9 /* MASShortcut-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E5EF7178C4C7C145E4366B92E20E81DE /* MASShortcut-dummy.m */; };
+		74EFCC6DC65CEBCF60B106F7FBB14EA2 /* MASShortcutMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 39BDD67B918D4B7647CF384B6EE6D038 /* MASShortcutMonitor.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		751AC207B038ADC338015FD80AA54B76 /* MASLocalization.h in Headers */ = {isa = PBXBuildFile; fileRef = 0E38FC826F6709EF562B2544805FB1E3 /* MASLocalization.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		76537FCDFF46E2EAA84E9632DB6A21ED /* MASKeyMasks.h in Headers */ = {isa = PBXBuildFile; fileRef = 54A571BE7999947FF14E945F573A9D04 /* MASKeyMasks.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		77122C2F4FCE6FBAD01ECC00A5E56032 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B2B84575984D22630C7B5357C066870 /* IOKit.framework */; };
+		7925B3CE00BE3834922D815496802929 /* SISystemWideElement.h in Headers */ = {isa = PBXBuildFile; fileRef = D36F780795DE3B818F68EFEDD71C1949 /* SISystemWideElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7E20F5346ADC8F4F5C069EDDE10897FD /* MASShortcut.h in Headers */ = {isa = PBXBuildFile; fileRef = 0BFB177D2C7E582D7E668A71ADC046A5 /* MASShortcut.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		81A13A0920D234FF6BBE2FE87899B750 /* SIUniversalAccessHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A2ECA0DBDB2A0564D5600730AB8D1F /* SIUniversalAccessHelper.m */; };
+		81B6397FECC803695902CEDB37CB4DFA /* MASShortcutBinder.h in Headers */ = {isa = PBXBuildFile; fileRef = 75DEAEC4602A3CB6804F79337E903535 /* MASShortcutBinder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		85D07DDE65C97F4BEFE10979E1AEBBC2 /* SIAccessibilityElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AD091103D46B5FC01D649F0D74CBB69 /* SIAccessibilityElement.m */; };
+		8B332F4B02A2951B8897D0AEAD8D4EB5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B64EF07050E5980D59E4FB4670DC0331 /* Cocoa.framework */; };
+		8C5EA18EEE22A60BF10955E38F0D3A75 /* MASShortcutValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 86985B5E1DE11D49FCF42CC09FD5BAAC /* MASShortcutValidator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8FFA3A6A77962B3A36B009A49634D081 /* MASHotKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 2393F19C45D1EA0AE25F6DDC56AE1110 /* MASHotKey.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		90C67A4DCA029E18BE7059A98A342691 /* SIUniversalAccessHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 733FB90142F799E67A97214FBE68E027 /* SIUniversalAccessHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		97B374490F695A6ECB06271EF080EB6C /* nl.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 5EAD5A68D7DF186A63D1B3FA732DD08A /* nl.lproj */; };
+		A4DBF0AB2E88B1A9D1078042F47618B0 /* ru.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 0249D712733769BEACC0A93CD2A2485A /* ru.lproj */; };
+		AA7CDF00DFA1EAFF7F28CAF33FE5BC37 /* MASHotKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 00487B76031BF28FBEE2F8595C1F1427 /* MASHotKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ACBE29C4BF8BAEA483D6EEA940FE5314 /* MASShortcutView+Bindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 01BAFD35BB744A5E5C939E42E7746015 /* MASShortcutView+Bindings.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		B30AF847896E373838AAF5BC69089F12 /* SIWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = AD0732CCA82EE37A30742EF5BE21599D /* SIWindow.m */; };
+		B6D581392EF0CEBCA0C2A6D640FC20B5 /* SIApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 4EC24B0EE41254A9E2BFC7F58036515A /* SIApplication.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B79FF88A755DA948AAD198C5CEC80E75 /* Pods-Penc-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B39DA431BD3E7505E11D984300A269A /* Pods-Penc-dummy.m */; };
+		C06EE84D23391E9FA94864DEDE34F548 /* fr.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 36CC229B6E314C676DB5CDBFF0011217 /* fr.lproj */; };
+		C50FA5B211B8916770FBE55623B83DA4 /* MASLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B4E1C86996F32BC6A5596EEDE925E3 /* MASLocalization.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		D6EA93219364CDC135BAFE63084F6361 /* es.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 00CC47A8EC126F09E1937BCCB42D7683 /* es.lproj */; };
+		DBF606BCA64BE75EB2E29F747660EE09 /* SIWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = E610706E08867A0EF9ADBC73A8273F21 /* SIWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DE24C629B3DB152EE4924B56E3CC59F5 /* pl.lproj in Resources */ = {isa = PBXBuildFile; fileRef = FCB5BE7FBA27B5089538421C4E0D5157 /* pl.lproj */; };
+		DFA6E4455415B3EB3BB38A9F48EEB044 /* Shortcut.h in Headers */ = {isa = PBXBuildFile; fileRef = 9697988F928822B90F753E2E24C7F79C /* Shortcut.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E158B6F4B7C227F71B54ACE5DF2935EA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B64EF07050E5980D59E4FB4670DC0331 /* Cocoa.framework */; };
+		E5312C0FED7C61135F252D3A7A112990 /* MASShortcutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A34AA15892857E128A99D7E08D3E3A5 /* MASShortcutView.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		E560A21728B29AF234BD0F37AFE16F36 /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 2C59CBE5BA0D66C88731AA8018B3CB64 /* en.lproj */; };
+		E66F7AFACFC665B23022A09E46815B5C /* it.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 105BB472028AA44AD8E54DE2757663AA /* it.lproj */; };
+		E7DCA7A79F6E38F30A94A7C08E58996E /* Silica.h in Headers */ = {isa = PBXBuildFile; fileRef = 7717372B9508A559F73FE858AF244C5E /* Silica.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E97573A653DE3A4CB8BAC26FB7B3E9A9 /* MASShortcutView+Bindings.h in Headers */ = {isa = PBXBuildFile; fileRef = 55C08D89F188291955ADD07D249DF3B2 /* MASShortcutView+Bindings.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EE3A79FAA60A198321767854B60B772F /* MASDictionaryTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 27D15D859E1460B474A68BAB7004E1AD /* MASDictionaryTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EE85F313D5EC70842C812EB16038F4F2 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B86FD956D5DE5F41DE626800C6D00863 /* Carbon.framework */; };
+		EFFA4247C90B98FD9160F30905A64569 /* cs.lproj in Resources */ = {isa = PBXBuildFile; fileRef = CF8ED3511A6A3AE4ABCA3D54AB0F92DF /* cs.lproj */; };
+		F44386819D44846A436139CEF3D372A5 /* zh-Hans.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 6E8B8C83512D14F0217425774B1E0119 /* zh-Hans.lproj */; };
+		F8815ECB42FCF09BBC99D3730DFD577C /* MASShortcut.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B5B782881A3DBB5C2AE2C049813F8D87 /* MASShortcut.bundle */; };
+		F94ACA6AA0DD416E5BF05E2425E5F2A6 /* MASKeyCodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 540F5480E149760B50A978E9248DD861 /* MASKeyCodes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FC3BB1291A592341FA5D6BE93C4B51CE /* Silica-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 27B88B14AA86F6EBB82DA24FEBD234C8 /* Silica-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		A74720A044798F3A4A66BE775D823B1F /* PBXContainerItemProxy */ = {
+		3E25939CFCA6230D52E2EEEDDEFF2850 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D7D8EF0E06BA7CAFB70C39D7D46BC18F;
+			remoteGlobalIDString = 00C94ED0B49A44FBF0C4E2F6C875CFFC;
+			remoteInfo = MASShortcut;
+		};
+		A7708F6CFFF6E4FD2E6FDB5109CDF5E7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D6E5ED8DAF7CA937C8F68F342C48B26E;
+			remoteInfo = "MASShortcut-MASShortcut";
+		};
+		C6B47D6D17D21E4C1C41CE907977ED0B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 907BDFCC0A772B5D5EB4E809E83AAF57;
 			remoteInfo = Silica;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0593FD33070FA3AA42E54B9B0153F6B4 /* SIUniversalAccessHelper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SIUniversalAccessHelper.h; path = Silica/SIUniversalAccessHelper.h; sourceTree = "<group>"; };
-		072164CB64A1B85EB009497C5A7F62B0 /* Pods_Penc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Penc.framework; path = "Pods-Penc.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		10D2BA468FF459BE3A7D39AE4C790880 /* SIUniversalAccessHelper.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SIUniversalAccessHelper.m; path = Silica/SIUniversalAccessHelper.m; sourceTree = "<group>"; };
+		00487B76031BF28FBEE2F8595C1F1427 /* MASHotKey.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASHotKey.h; path = Framework/MASHotKey.h; sourceTree = "<group>"; };
+		00CC47A8EC126F09E1937BCCB42D7683 /* es.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = es.lproj; sourceTree = "<group>"; };
+		01BAFD35BB744A5E5C939E42E7746015 /* MASShortcutView+Bindings.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "MASShortcutView+Bindings.m"; path = "Framework/MASShortcutView+Bindings.m"; sourceTree = "<group>"; };
+		0249D712733769BEACC0A93CD2A2485A /* ru.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = ru.lproj; sourceTree = "<group>"; };
+		032E0EEF89A0C6BCC79653F7694D273F /* Silica.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Silica.framework; path = Silica.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A34AA15892857E128A99D7E08D3E3A5 /* MASShortcutView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MASShortcutView.m; path = Framework/MASShortcutView.m; sourceTree = "<group>"; };
+		0BFB177D2C7E582D7E668A71ADC046A5 /* MASShortcut.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASShortcut.h; path = Framework/MASShortcut.h; sourceTree = "<group>"; };
+		0E38FC826F6709EF562B2544805FB1E3 /* MASLocalization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASLocalization.h; path = Framework/MASLocalization.h; sourceTree = "<group>"; };
+		105BB472028AA44AD8E54DE2757663AA /* it.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = it.lproj; sourceTree = "<group>"; };
 		11DB1F0A8578E5AA57CE3F47F3CA3AF7 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/AppKit.framework; sourceTree = DEVELOPER_DIR; };
-		1B55235203FB845159150744DA248AD9 /* NSRunningApplication+Silica.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSRunningApplication+Silica.h"; path = "Silica/NSRunningApplication+Silica.h"; sourceTree = "<group>"; };
-		21988D3560E556E563D6D1E71C356520 /* SISystemWideElement.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SISystemWideElement.h; path = Silica/SISystemWideElement.h; sourceTree = "<group>"; };
-		3A880500F99B3E56C681B62C0B0095F5 /* SIAccessibilityElement.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SIAccessibilityElement.m; path = Silica/SIAccessibilityElement.m; sourceTree = "<group>"; };
-		433E60299D723A67ABDDB9BAC4BAF867 /* Silica.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Silica.framework; path = Silica.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4876E36FB796832F8E47AC9AFCF7B9E5 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		49A099814D5C784489259A16586EC6ED /* SIWindow.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SIWindow.h; path = Silica/SIWindow.h; sourceTree = "<group>"; };
+		15A89565B41799E5EA307DE065138D9F /* ResourceBundle-MASShortcut-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "ResourceBundle-MASShortcut-Info.plist"; sourceTree = "<group>"; };
+		1B3673C671E7D68AF1109814A285452D /* MASShortcutMonitor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASShortcutMonitor.h; path = Framework/MASShortcutMonitor.h; sourceTree = "<group>"; };
+		1B9B43D6521EAB3AC883F63BBD227330 /* MASShortcut-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MASShortcut-prefix.pch"; sourceTree = "<group>"; };
+		1C7D62363155E9844836D22E1DE4E7C1 /* MASShortcutBinder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MASShortcutBinder.m; path = Framework/MASShortcutBinder.m; sourceTree = "<group>"; };
+		1FF927C478F77F4CB6734C91DB6013C7 /* Silica.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = Silica.modulemap; sourceTree = "<group>"; };
+		2191B491441A54B7D4C52EFEBFA36AC5 /* SIApplication.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SIApplication.m; path = Silica/SIApplication.m; sourceTree = "<group>"; };
+		2393F19C45D1EA0AE25F6DDC56AE1110 /* MASHotKey.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MASHotKey.m; path = Framework/MASHotKey.m; sourceTree = "<group>"; };
+		254BFBB58F7B1E9118A214FD6B4928B0 /* MASShortcut.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = MASShortcut.framework; path = MASShortcut.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		27B88B14AA86F6EBB82DA24FEBD234C8 /* Silica-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Silica-umbrella.h"; sourceTree = "<group>"; };
+		27D15D859E1460B474A68BAB7004E1AD /* MASDictionaryTransformer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASDictionaryTransformer.h; path = Framework/MASDictionaryTransformer.h; sourceTree = "<group>"; };
+		2C59CBE5BA0D66C88731AA8018B3CB64 /* en.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = en.lproj; sourceTree = "<group>"; };
+		36CC229B6E314C676DB5CDBFF0011217 /* fr.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = fr.lproj; sourceTree = "<group>"; };
+		39BDD67B918D4B7647CF384B6EE6D038 /* MASShortcutMonitor.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MASShortcutMonitor.m; path = Framework/MASShortcutMonitor.m; sourceTree = "<group>"; };
+		3F12ED9AD87BAE3A476B257E38A0839C /* Silica-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Silica-dummy.m"; sourceTree = "<group>"; };
+		42323900812172C36EFF7E0EF3381314 /* ja.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = ja.lproj; sourceTree = "<group>"; };
+		43F4A215239549E0E59C8CF2428ED868 /* MASShortcut.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = MASShortcut.modulemap; sourceTree = "<group>"; };
 		4E9682D4123A0F21A732246831B353FB /* Pods-Penc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Penc.debug.xcconfig"; sourceTree = "<group>"; };
-		4EDBC77A7EC79D2DD65C062FD436D814 /* CGSSpaces.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CGSSpaces.h; path = Silica/CGSSpaces.h; sourceTree = "<group>"; };
+		4EC24B0EE41254A9E2BFC7F58036515A /* SIApplication.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SIApplication.h; path = Silica/SIApplication.h; sourceTree = "<group>"; };
 		4EEB1E37745E37BE4FCB03EB8FA47D1A /* Pods-Penc-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Penc-acknowledgements.plist"; sourceTree = "<group>"; };
 		508AC161B937E517D90849FB852F5AAD /* Pods-Penc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Penc.release.xcconfig"; sourceTree = "<group>"; };
-		5524CD6953EFE7599045DE4CFD7A9C1A /* Silica.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = Silica.modulemap; sourceTree = "<group>"; };
-		56BEFC4FB136A2234B2A7ED2405CB920 /* Silica-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Silica-prefix.pch"; sourceTree = "<group>"; };
+		540F5480E149760B50A978E9248DD861 /* MASKeyCodes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASKeyCodes.h; path = Framework/MASKeyCodes.h; sourceTree = "<group>"; };
+		54A571BE7999947FF14E945F573A9D04 /* MASKeyMasks.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASKeyMasks.h; path = Framework/MASKeyMasks.h; sourceTree = "<group>"; };
+		55C08D89F188291955ADD07D249DF3B2 /* MASShortcutView+Bindings.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "MASShortcutView+Bindings.h"; path = "Framework/MASShortcutView+Bindings.h"; sourceTree = "<group>"; };
+		55D0C11BCD185549697C99350FA9AC3D /* NSScreen+Silica.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSScreen+Silica.m"; path = "Silica/NSScreen+Silica.m"; sourceTree = "<group>"; };
+		5A7EA508AA01007ED457A4C8496D46FD /* de.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = de.lproj; sourceTree = "<group>"; };
 		5B39DA431BD3E7505E11D984300A269A /* Pods-Penc-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Penc-dummy.m"; sourceTree = "<group>"; };
-		5F3F97001C44CA5061330CC90B3F8050 /* Silica-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Silica-umbrella.h"; sourceTree = "<group>"; };
-		7347195F2501620AE704D77736DAA608 /* Silica.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Silica.h; path = Silica/Silica.h; sourceTree = "<group>"; };
+		5EAD5A68D7DF186A63D1B3FA732DD08A /* nl.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = nl.lproj; sourceTree = "<group>"; };
+		64EAC035304CB78BF96F92BD989B52DC /* SIAccessibilityElement.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SIAccessibilityElement.h; path = Silica/SIAccessibilityElement.h; sourceTree = "<group>"; };
+		66FE5DBD7EE4C4A2A635E39ECCD486DB /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E8B8C83512D14F0217425774B1E0119 /* zh-Hans.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = "zh-Hans.lproj"; sourceTree = "<group>"; };
+		6E9F1A77F324BB3C1C5889CAAEC0B731 /* NSRunningApplication+Silica.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSRunningApplication+Silica.h"; path = "Silica/NSRunningApplication+Silica.h"; sourceTree = "<group>"; };
+		719274A14656C86378ABCC2B63FAFD39 /* ko.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = ko.lproj; sourceTree = "<group>"; };
+		733FB90142F799E67A97214FBE68E027 /* SIUniversalAccessHelper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SIUniversalAccessHelper.h; path = Silica/SIUniversalAccessHelper.h; sourceTree = "<group>"; };
+		74A2ECA0DBDB2A0564D5600730AB8D1F /* SIUniversalAccessHelper.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SIUniversalAccessHelper.m; path = Silica/SIUniversalAccessHelper.m; sourceTree = "<group>"; };
+		75DEAEC4602A3CB6804F79337E903535 /* MASShortcutBinder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASShortcutBinder.h; path = Framework/MASShortcutBinder.h; sourceTree = "<group>"; };
+		7717372B9508A559F73FE858AF244C5E /* Silica.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Silica.h; path = Silica/Silica.h; sourceTree = "<group>"; };
+		77CD73998C04FE354C400D4547B5FC10 /* MASShortcutValidator.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MASShortcutValidator.m; path = Framework/MASShortcutValidator.m; sourceTree = "<group>"; };
 		787CC8774157CD09581660CCA7C0CEE9 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		86985B5E1DE11D49FCF42CC09FD5BAAC /* MASShortcutValidator.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASShortcutValidator.h; path = Framework/MASShortcutValidator.h; sourceTree = "<group>"; };
+		88399401DC4BF0559A96A2FED2C90FF1 /* Silica.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Silica.xcconfig; sourceTree = "<group>"; };
+		8AD091103D46B5FC01D649F0D74CBB69 /* SIAccessibilityElement.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SIAccessibilityElement.m; path = Silica/SIAccessibilityElement.m; sourceTree = "<group>"; };
 		8B2B84575984D22630C7B5357C066870 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
+		8F7FB572B02F2003FD365D226321D132 /* MASShortcutView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MASShortcutView.h; path = Framework/MASShortcutView.h; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9B55EE052980328FA3C2A25436A7945B /* Silica-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Silica-dummy.m"; sourceTree = "<group>"; };
+		9697988F928822B90F753E2E24C7F79C /* Shortcut.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Shortcut.h; path = Framework/Shortcut.h; sourceTree = "<group>"; };
 		9B79592A4B764D98A1A86B6358A07274 /* Pods-Penc-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Penc-umbrella.h"; sourceTree = "<group>"; };
 		A4AF868D3673ECC7B1B6758252D6AAE7 /* Pods-Penc-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Penc-resources.sh"; sourceTree = "<group>"; };
-		A95CE6BB212320468A05F955BD757C7E /* NSScreen+Silica.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSScreen+Silica.m"; path = "Silica/NSScreen+Silica.m"; sourceTree = "<group>"; };
+		A6CCF3DEDB177A5686E2DC1C3951B342 /* NSScreen+Silica.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSScreen+Silica.h"; path = "Silica/NSScreen+Silica.h"; sourceTree = "<group>"; };
+		AA0956E890D43C385ACC493ECB69356A /* CGSSpaces.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CGSSpaces.h; path = Silica/CGSSpaces.h; sourceTree = "<group>"; };
+		AD0732CCA82EE37A30742EF5BE21599D /* SIWindow.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SIWindow.m; path = Silica/SIWindow.m; sourceTree = "<group>"; };
 		AD3A4E21646B58E2012E3BDB4B86BC2D /* Pods-Penc.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-Penc.modulemap"; sourceTree = "<group>"; };
+		B1540C74518DAD3D8B609D895DDA50E7 /* MASDictionaryTransformer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MASDictionaryTransformer.m; path = Framework/MASDictionaryTransformer.m; sourceTree = "<group>"; };
+		B5B782881A3DBB5C2AE2C049813F8D87 /* MASShortcut.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = MASShortcut.bundle; path = MASShortcut.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		B64EF07050E5980D59E4FB4670DC0331 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		B86FD956D5DE5F41DE626800C6D00863 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/Carbon.framework; sourceTree = DEVELOPER_DIR; };
-		BA21B3966DCDAA4DA242B4F615331C5B /* SIWindow.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SIWindow.m; path = Silica/SIWindow.m; sourceTree = "<group>"; };
 		BE2AFE6C90DF3F196D41BDF4E6090CDD /* Pods-Penc-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Penc-acknowledgements.markdown"; sourceTree = "<group>"; };
-		CA569EF78C9702061F96A4237F2487EB /* NSScreen+Silica.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSScreen+Silica.h"; path = "Silica/NSScreen+Silica.h"; sourceTree = "<group>"; };
-		CD6CF6F1ECFFB1E402E33AA5AAE1568D /* SISystemWideElement.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SISystemWideElement.m; path = Silica/SISystemWideElement.m; sourceTree = "<group>"; };
-		D244129C2BE43CA9D33D8D0D50FC043A /* SIAccessibilityElement.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SIAccessibilityElement.h; path = Silica/SIAccessibilityElement.h; sourceTree = "<group>"; };
+		BF5C92B740C3D2CDA8D8E96ECF9C4BFC /* NSRunningApplication+Silica.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSRunningApplication+Silica.m"; path = "Silica/NSRunningApplication+Silica.m"; sourceTree = "<group>"; };
+		C19509B2408C7570E2EAB8E229F87221 /* MASShortcut.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MASShortcut.m; path = Framework/MASShortcut.m; sourceTree = "<group>"; };
+		C5711D2C79BF51CFF23D7A87C023DC4B /* Silica-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Silica-prefix.pch"; sourceTree = "<group>"; };
+		CF8ED3511A6A3AE4ABCA3D54AB0F92DF /* cs.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = cs.lproj; sourceTree = "<group>"; };
+		D1200C22222238E5C0C699B99B1F4455 /* MASShortcut-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MASShortcut-umbrella.h"; sourceTree = "<group>"; };
+		D36F780795DE3B818F68EFEDD71C1949 /* SISystemWideElement.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SISystemWideElement.h; path = Silica/SISystemWideElement.h; sourceTree = "<group>"; };
 		D846CA93E10CED442FD77DEA57B10583 /* Pods-Penc-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Penc-frameworks.sh"; sourceTree = "<group>"; };
-		DD6D3956955A30CAE306DADBE243CF67 /* SIApplication.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SIApplication.h; path = Silica/SIApplication.h; sourceTree = "<group>"; };
-		E0F7AA99A1849951858210AB11397EEE /* NSRunningApplication+Silica.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSRunningApplication+Silica.m"; path = "Silica/NSRunningApplication+Silica.m"; sourceTree = "<group>"; };
-		F501A37BC0A34CCB96BA795B91D771A7 /* Silica.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Silica.xcconfig; sourceTree = "<group>"; };
-		FD751C911C047C6F12A307D2FB0F3121 /* SIApplication.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SIApplication.m; path = Silica/SIApplication.m; sourceTree = "<group>"; };
+		DBBB11AB122C06A7D300B873B26547BE /* Pods_Penc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Penc.framework; path = "Pods-Penc.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE88C8A4235AA9C44AAC1DCD469365ED /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E5EF7178C4C7C145E4366B92E20E81DE /* MASShortcut-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "MASShortcut-dummy.m"; sourceTree = "<group>"; };
+		E610706E08867A0EF9ADBC73A8273F21 /* SIWindow.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SIWindow.h; path = Silica/SIWindow.h; sourceTree = "<group>"; };
+		F3B82B5C9406069D1529CA63B5F5CCC2 /* zh-Hant.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = "zh-Hant.lproj"; sourceTree = "<group>"; };
+		F5B4E1C86996F32BC6A5596EEDE925E3 /* MASLocalization.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MASLocalization.m; path = Framework/MASLocalization.m; sourceTree = "<group>"; };
+		F6DBF9252DB5344AEBF08A896DC21905 /* MASShortcut.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MASShortcut.xcconfig; sourceTree = "<group>"; };
+		F7C59727C2BE35AE023EDC11F4498B5C /* SISystemWideElement.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SISystemWideElement.m; path = Silica/SISystemWideElement.m; sourceTree = "<group>"; };
+		FCB5BE7FBA27B5089538421C4E0D5157 /* pl.lproj */ = {isa = PBXFileReference; includeInIndex = 1; path = pl.lproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A0020132E42F74EEE7C92D7D1AE2AF47 /* Frameworks */ = {
+		06DB63E0064B15C5B39BFF16CDD7970E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5F2BE0ECC43D4C7E3E60A616431CA0E /* AppKit.framework in Frameworks */,
-				433D39FDC959AABC9D146232EE9AE5C2 /* Carbon.framework in Frameworks */,
-				19248934EFFB31E76E77CB6C2692E5A5 /* Cocoa.framework in Frameworks */,
-				DC05172D14609476E3336ECA8DBF9575 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D61692E14C44658A10229F6638122C52 /* Frameworks */ = {
+		5BE7670D9E93BBFC25F4B19B92BE279E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF7B7CD33FC43854523552616A15B1F7 /* Cocoa.framework in Frameworks */,
+				E158B6F4B7C227F71B54ACE5DF2935EA /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9D6195BA4CD57E2FA41125F806A7DD29 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5DC2D7626284247FF2A7CD286FCA39DE /* AppKit.framework in Frameworks */,
+				4ECA4149FA2E778D6F8C8DDB9A96D395 /* Carbon.framework in Frameworks */,
+				8B332F4B02A2951B8897D0AEAD8D4EB5 /* Cocoa.framework in Frameworks */,
+				77122C2F4FCE6FBAD01ECC00A5E56032 /* IOKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDE6AA439381DD5665018F889D1E5A6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				618D3C71663174E07B65950421C46D48 /* AppKit.framework in Frameworks */,
+				EE85F313D5EC70842C812EB16038F4F2 /* Carbon.framework in Frameworks */,
+				38974DB132715266ADE00F2E3DFBB320 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		36FEE485B951DABA5070990CFCB1DFB9 /* Products */ = {
+		0D33FECB8F6DADE2F5877D6477B6074C /* Silica */ = {
 			isa = PBXGroup;
 			children = (
-				072164CB64A1B85EB009497C5A7F62B0 /* Pods_Penc.framework */,
-				433E60299D723A67ABDDB9BAC4BAF867 /* Silica.framework */,
+				AA0956E890D43C385ACC493ECB69356A /* CGSSpaces.h */,
+				6E9F1A77F324BB3C1C5889CAAEC0B731 /* NSRunningApplication+Silica.h */,
+				BF5C92B740C3D2CDA8D8E96ECF9C4BFC /* NSRunningApplication+Silica.m */,
+				A6CCF3DEDB177A5686E2DC1C3951B342 /* NSScreen+Silica.h */,
+				55D0C11BCD185549697C99350FA9AC3D /* NSScreen+Silica.m */,
+				64EAC035304CB78BF96F92BD989B52DC /* SIAccessibilityElement.h */,
+				8AD091103D46B5FC01D649F0D74CBB69 /* SIAccessibilityElement.m */,
+				4EC24B0EE41254A9E2BFC7F58036515A /* SIApplication.h */,
+				2191B491441A54B7D4C52EFEBFA36AC5 /* SIApplication.m */,
+				7717372B9508A559F73FE858AF244C5E /* Silica.h */,
+				D36F780795DE3B818F68EFEDD71C1949 /* SISystemWideElement.h */,
+				F7C59727C2BE35AE023EDC11F4498B5C /* SISystemWideElement.m */,
+				733FB90142F799E67A97214FBE68E027 /* SIUniversalAccessHelper.h */,
+				74A2ECA0DBDB2A0564D5600730AB8D1F /* SIUniversalAccessHelper.m */,
+				E610706E08867A0EF9ADBC73A8273F21 /* SIWindow.h */,
+				AD0732CCA82EE37A30742EF5BE21599D /* SIWindow.m */,
+				B05A6BB15B0EAB2C271C811AA4D9C757 /* Support Files */,
 			);
-			name = Products;
+			name = Silica;
+			path = Silica;
 			sourceTree = "<group>";
 		};
-		559EADAC4882BE4EAC2AB8DC2D287547 /* Support Files */ = {
+		4745B60A76E4934BB6E2DA01E656C03F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4876E36FB796832F8E47AC9AFCF7B9E5 /* Info.plist */,
-				5524CD6953EFE7599045DE4CFD7A9C1A /* Silica.modulemap */,
-				F501A37BC0A34CCB96BA795B91D771A7 /* Silica.xcconfig */,
-				9B55EE052980328FA3C2A25436A7945B /* Silica-dummy.m */,
-				56BEFC4FB136A2234B2A7ED2405CB920 /* Silica-prefix.pch */,
-				5F3F97001C44CA5061330CC90B3F8050 /* Silica-umbrella.h */,
+				CF8ED3511A6A3AE4ABCA3D54AB0F92DF /* cs.lproj */,
+				5A7EA508AA01007ED457A4C8496D46FD /* de.lproj */,
+				2C59CBE5BA0D66C88731AA8018B3CB64 /* en.lproj */,
+				00CC47A8EC126F09E1937BCCB42D7683 /* es.lproj */,
+				36CC229B6E314C676DB5CDBFF0011217 /* fr.lproj */,
+				105BB472028AA44AD8E54DE2757663AA /* it.lproj */,
+				42323900812172C36EFF7E0EF3381314 /* ja.lproj */,
+				719274A14656C86378ABCC2B63FAFD39 /* ko.lproj */,
+				5EAD5A68D7DF186A63D1B3FA732DD08A /* nl.lproj */,
+				FCB5BE7FBA27B5089538421C4E0D5157 /* pl.lproj */,
+				0249D712733769BEACC0A93CD2A2485A /* ru.lproj */,
+				6E8B8C83512D14F0217425774B1E0119 /* zh-Hans.lproj */,
+				F3B82B5C9406069D1529CA63B5F5CCC2 /* zh-Hant.lproj */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		5539A5387B7C1B9EA2EB4308807B78F3 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				DE88C8A4235AA9C44AAC1DCD469365ED /* Info.plist */,
+				43F4A215239549E0E59C8CF2428ED868 /* MASShortcut.modulemap */,
+				F6DBF9252DB5344AEBF08A896DC21905 /* MASShortcut.xcconfig */,
+				E5EF7178C4C7C145E4366B92E20E81DE /* MASShortcut-dummy.m */,
+				1B9B43D6521EAB3AC883F63BBD227330 /* MASShortcut-prefix.pch */,
+				D1200C22222238E5C0C699B99B1F4455 /* MASShortcut-umbrella.h */,
+				15A89565B41799E5EA307DE065138D9F /* ResourceBundle-MASShortcut-Info.plist */,
 			);
 			name = "Support Files";
-			path = "../Target Support Files/Silica";
+			path = "../Target Support Files/MASShortcut";
 			sourceTree = "<group>";
 		};
 		6103C953E19FE5288BAAFD704B7F2358 /* OS X */ = {
@@ -143,12 +294,35 @@
 			name = "OS X";
 			sourceTree = "<group>";
 		};
-		7130551405610C6853769A1194DA9F87 /* Pods */ = {
+		6B977FCCC9FD45A74666C808BF9FF89B /* MASShortcut */ = {
 			isa = PBXGroup;
 			children = (
-				79E508E6C30F5F966792705F7F698AC2 /* Silica */,
+				27D15D859E1460B474A68BAB7004E1AD /* MASDictionaryTransformer.h */,
+				B1540C74518DAD3D8B609D895DDA50E7 /* MASDictionaryTransformer.m */,
+				00487B76031BF28FBEE2F8595C1F1427 /* MASHotKey.h */,
+				2393F19C45D1EA0AE25F6DDC56AE1110 /* MASHotKey.m */,
+				540F5480E149760B50A978E9248DD861 /* MASKeyCodes.h */,
+				54A571BE7999947FF14E945F573A9D04 /* MASKeyMasks.h */,
+				0E38FC826F6709EF562B2544805FB1E3 /* MASLocalization.h */,
+				F5B4E1C86996F32BC6A5596EEDE925E3 /* MASLocalization.m */,
+				0BFB177D2C7E582D7E668A71ADC046A5 /* MASShortcut.h */,
+				C19509B2408C7570E2EAB8E229F87221 /* MASShortcut.m */,
+				75DEAEC4602A3CB6804F79337E903535 /* MASShortcutBinder.h */,
+				1C7D62363155E9844836D22E1DE4E7C1 /* MASShortcutBinder.m */,
+				1B3673C671E7D68AF1109814A285452D /* MASShortcutMonitor.h */,
+				39BDD67B918D4B7647CF384B6EE6D038 /* MASShortcutMonitor.m */,
+				86985B5E1DE11D49FCF42CC09FD5BAAC /* MASShortcutValidator.h */,
+				77CD73998C04FE354C400D4547B5FC10 /* MASShortcutValidator.m */,
+				8F7FB572B02F2003FD365D226321D132 /* MASShortcutView.h */,
+				0A34AA15892857E128A99D7E08D3E3A5 /* MASShortcutView.m */,
+				55C08D89F188291955ADD07D249DF3B2 /* MASShortcutView+Bindings.h */,
+				01BAFD35BB744A5E5C939E42E7746015 /* MASShortcutView+Bindings.m */,
+				9697988F928822B90F753E2E24C7F79C /* Shortcut.h */,
+				4745B60A76E4934BB6E2DA01E656C03F /* Resources */,
+				5539A5387B7C1B9EA2EB4308807B78F3 /* Support Files */,
 			);
-			name = Pods;
+			name = MASShortcut;
+			path = MASShortcut;
 			sourceTree = "<group>";
 		};
 		78849EA6A2C2051B23CF92AF230C6BF6 /* Targets Support Files */ = {
@@ -159,40 +333,38 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		79E508E6C30F5F966792705F7F698AC2 /* Silica */ = {
-			isa = PBXGroup;
-			children = (
-				4EDBC77A7EC79D2DD65C062FD436D814 /* CGSSpaces.h */,
-				1B55235203FB845159150744DA248AD9 /* NSRunningApplication+Silica.h */,
-				E0F7AA99A1849951858210AB11397EEE /* NSRunningApplication+Silica.m */,
-				CA569EF78C9702061F96A4237F2487EB /* NSScreen+Silica.h */,
-				A95CE6BB212320468A05F955BD757C7E /* NSScreen+Silica.m */,
-				D244129C2BE43CA9D33D8D0D50FC043A /* SIAccessibilityElement.h */,
-				3A880500F99B3E56C681B62C0B0095F5 /* SIAccessibilityElement.m */,
-				DD6D3956955A30CAE306DADBE243CF67 /* SIApplication.h */,
-				FD751C911C047C6F12A307D2FB0F3121 /* SIApplication.m */,
-				7347195F2501620AE704D77736DAA608 /* Silica.h */,
-				21988D3560E556E563D6D1E71C356520 /* SISystemWideElement.h */,
-				CD6CF6F1ECFFB1E402E33AA5AAE1568D /* SISystemWideElement.m */,
-				0593FD33070FA3AA42E54B9B0153F6B4 /* SIUniversalAccessHelper.h */,
-				10D2BA468FF459BE3A7D39AE4C790880 /* SIUniversalAccessHelper.m */,
-				49A099814D5C784489259A16586EC6ED /* SIWindow.h */,
-				BA21B3966DCDAA4DA242B4F615331C5B /* SIWindow.m */,
-				559EADAC4882BE4EAC2AB8DC2D287547 /* Support Files */,
-			);
-			name = Silica;
-			path = Silica;
-			sourceTree = "<group>";
-		};
 		7DB346D0F39D3F0E887471402A8071AB = {
 			isa = PBXGroup;
 			children = (
 				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
 				CD75D5B60FCA72FBF7F9C770460B2C26 /* Frameworks */,
-				7130551405610C6853769A1194DA9F87 /* Pods */,
-				36FEE485B951DABA5070990CFCB1DFB9 /* Products */,
+				C920E1C3ECAE451D3478C13BCDB587DA /* Pods */,
+				EBF98F123CB396A47DEF1BE2AC1C8CCB /* Products */,
 				78849EA6A2C2051B23CF92AF230C6BF6 /* Targets Support Files */,
 			);
+			sourceTree = "<group>";
+		};
+		B05A6BB15B0EAB2C271C811AA4D9C757 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				66FE5DBD7EE4C4A2A635E39ECCD486DB /* Info.plist */,
+				1FF927C478F77F4CB6734C91DB6013C7 /* Silica.modulemap */,
+				88399401DC4BF0559A96A2FED2C90FF1 /* Silica.xcconfig */,
+				3F12ED9AD87BAE3A476B257E38A0839C /* Silica-dummy.m */,
+				C5711D2C79BF51CFF23D7A87C023DC4B /* Silica-prefix.pch */,
+				27B88B14AA86F6EBB82DA24FEBD234C8 /* Silica-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Silica";
+			sourceTree = "<group>";
+		};
+		C920E1C3ECAE451D3478C13BCDB587DA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6B977FCCC9FD45A74666C808BF9FF89B /* MASShortcut */,
+				0D33FECB8F6DADE2F5877D6477B6074C /* Silica */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		CD75D5B60FCA72FBF7F9C770460B2C26 /* Frameworks */ = {
@@ -221,62 +393,113 @@
 			path = "Target Support Files/Pods-Penc";
 			sourceTree = "<group>";
 		};
+		EBF98F123CB396A47DEF1BE2AC1C8CCB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B5B782881A3DBB5C2AE2C049813F8D87 /* MASShortcut.bundle */,
+				254BFBB58F7B1E9118A214FD6B4928B0 /* MASShortcut.framework */,
+				DBBB11AB122C06A7D300B873B26547BE /* Pods_Penc.framework */,
+				032E0EEF89A0C6BCC79653F7694D273F /* Silica.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		5F421DB5A275E5EAF7F1B8D2949EC55C /* Headers */ = {
+		3495E6E0E552061C20FDCE32E2B38E5B /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5827F3B13154CDE0483F44FE58F33020 /* CGSSpaces.h in Headers */,
-				8DC82F2B4BF3835650512CB3C9884295 /* NSRunningApplication+Silica.h in Headers */,
-				0F5FA31CC1F72B32CC50DF8992AEE784 /* NSScreen+Silica.h in Headers */,
-				29950235E03717714575054E7393D8DB /* SIAccessibilityElement.h in Headers */,
-				74159EAE0F8D9CAC350B571C9643081F /* SIApplication.h in Headers */,
-				740E985A9E86CBA37F0903BC65891DA9 /* Silica-umbrella.h in Headers */,
-				BD8B48C773A926F1BBA4747C1394A221 /* Silica.h in Headers */,
-				35448AED0BF8187D68AB66C0FCE65A44 /* SISystemWideElement.h in Headers */,
-				BD1F229A088BB7BB6D268F820EEC0150 /* SIUniversalAccessHelper.h in Headers */,
-				FAE95AD130694075E70153AAF5B9F377 /* SIWindow.h in Headers */,
+				3E709DF9E160B62E84C4DBC616D9DC96 /* CGSSpaces.h in Headers */,
+				4E2431026F1A53624D28AB17AEB61F50 /* NSRunningApplication+Silica.h in Headers */,
+				313C298CC3B0FAB70F9CCB6208F9640B /* NSScreen+Silica.h in Headers */,
+				2BDB0250478319027C1FA3E53598AB05 /* SIAccessibilityElement.h in Headers */,
+				B6D581392EF0CEBCA0C2A6D640FC20B5 /* SIApplication.h in Headers */,
+				FC3BB1291A592341FA5D6BE93C4B51CE /* Silica-umbrella.h in Headers */,
+				E7DCA7A79F6E38F30A94A7C08E58996E /* Silica.h in Headers */,
+				7925B3CE00BE3834922D815496802929 /* SISystemWideElement.h in Headers */,
+				90C67A4DCA029E18BE7059A98A342691 /* SIUniversalAccessHelper.h in Headers */,
+				DBF606BCA64BE75EB2E29F747660EE09 /* SIWindow.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AEC01D68CBDF2A039615D2A5C7968CA7 /* Headers */ = {
+		50786031BD2EBA73F93AEF41DB2DC0EB /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B52366A5DEAD175159D62B4CFF18E184 /* Pods-Penc-umbrella.h in Headers */,
+				33121A10C5EFB7D91A9848B01AECCBD6 /* Pods-Penc-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		68FE8321E00587BF5072825A5E9B4704 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE3A79FAA60A198321767854B60B772F /* MASDictionaryTransformer.h in Headers */,
+				AA7CDF00DFA1EAFF7F28CAF33FE5BC37 /* MASHotKey.h in Headers */,
+				F94ACA6AA0DD416E5BF05E2425E5F2A6 /* MASKeyCodes.h in Headers */,
+				76537FCDFF46E2EAA84E9632DB6A21ED /* MASKeyMasks.h in Headers */,
+				751AC207B038ADC338015FD80AA54B76 /* MASLocalization.h in Headers */,
+				3076DFAD05E4F7F0356153478F071D74 /* MASShortcut-umbrella.h in Headers */,
+				7E20F5346ADC8F4F5C069EDDE10897FD /* MASShortcut.h in Headers */,
+				81B6397FECC803695902CEDB37CB4DFA /* MASShortcutBinder.h in Headers */,
+				5FF7D42F51FEAEB192E61355AAEAC6DE /* MASShortcutMonitor.h in Headers */,
+				8C5EA18EEE22A60BF10955E38F0D3A75 /* MASShortcutValidator.h in Headers */,
+				E97573A653DE3A4CB8BAC26FB7B3E9A9 /* MASShortcutView+Bindings.h in Headers */,
+				51358F3E24AC8F1A4172E388769FF1FA /* MASShortcutView.h in Headers */,
+				DFA6E4455415B3EB3BB38A9F48EEB044 /* Shortcut.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		90412C817E881100D9688B9054CC3588 /* Pods-Penc */ = {
+		00C94ED0B49A44FBF0C4E2F6C875CFFC /* MASShortcut */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 36BC2B99AAFBD1C78730011FA1DD82F0 /* Build configuration list for PBXNativeTarget "Pods-Penc" */;
+			buildConfigurationList = 3F916C3627231C409340EF9C88C37F7E /* Build configuration list for PBXNativeTarget "MASShortcut" */;
 			buildPhases = (
-				8C45E4CEA1C1DACB618481ECB05D5CAA /* Sources */,
-				D61692E14C44658A10229F6638122C52 /* Frameworks */,
-				AEC01D68CBDF2A039615D2A5C7968CA7 /* Headers */,
+				2A63CAAD91A284BB01FE7A2D488ADAC4 /* Sources */,
+				CDE6AA439381DD5665018F889D1E5A6B /* Frameworks */,
+				BDD1FBDDF5D87D58DCD6110D44F7737E /* Resources */,
+				68FE8321E00587BF5072825A5E9B4704 /* Headers */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				D314D74E806A4987815C8244CACE8712 /* PBXTargetDependency */,
+				6D8935AB78317EC6C1ABBB09EA86C5FB /* PBXTargetDependency */,
+			);
+			name = MASShortcut;
+			productName = MASShortcut;
+			productReference = 254BFBB58F7B1E9118A214FD6B4928B0 /* MASShortcut.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		01BF73FCC286B13FE3FECCCA055AC531 /* Pods-Penc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D6B1E1465394749B4647B3CFC1E9D82 /* Build configuration list for PBXNativeTarget "Pods-Penc" */;
+			buildPhases = (
+				E01D18CF11C7832377A4B2290E758814 /* Sources */,
+				5BE7670D9E93BBFC25F4B19B92BE279E /* Frameworks */,
+				50786031BD2EBA73F93AEF41DB2DC0EB /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4E65AF3F1BD651E49ED1020C20A50F89 /* PBXTargetDependency */,
+				430678E30B13EB9FBCC1ED4D8E6A7155 /* PBXTargetDependency */,
 			);
 			name = "Pods-Penc";
 			productName = "Pods-Penc";
-			productReference = 072164CB64A1B85EB009497C5A7F62B0 /* Pods_Penc.framework */;
+			productReference = DBBB11AB122C06A7D300B873B26547BE /* Pods_Penc.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		D7D8EF0E06BA7CAFB70C39D7D46BC18F /* Silica */ = {
+		907BDFCC0A772B5D5EB4E809E83AAF57 /* Silica */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 80A9079BCF10867DDA6C33CB92ECCAE9 /* Build configuration list for PBXNativeTarget "Silica" */;
+			buildConfigurationList = 2E9F4ED819BCA168CD2B6AC62E2C395C /* Build configuration list for PBXNativeTarget "Silica" */;
 			buildPhases = (
-				0A4372AA6FD2A04FBE39E0BCDE2F553A /* Sources */,
-				A0020132E42F74EEE7C92D7D1AE2AF47 /* Frameworks */,
-				5F421DB5A275E5EAF7F1B8D2949EC55C /* Headers */,
+				E7F7ADAA4B4E2ADB166D5A782C348E9A /* Sources */,
+				9D6195BA4CD57E2FA41125F806A7DD29 /* Frameworks */,
+				3495E6E0E552061C20FDCE32E2B38E5B /* Headers */,
 			);
 			buildRules = (
 			);
@@ -284,8 +507,25 @@
 			);
 			name = Silica;
 			productName = Silica;
-			productReference = 433E60299D723A67ABDDB9BAC4BAF867 /* Silica.framework */;
+			productReference = 032E0EEF89A0C6BCC79653F7694D273F /* Silica.framework */;
 			productType = "com.apple.product-type.framework";
+		};
+		D6E5ED8DAF7CA937C8F68F342C48B26E /* MASShortcut-MASShortcut */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B2542ED88CE98D477B8D38769095CE5E /* Build configuration list for PBXNativeTarget "MASShortcut-MASShortcut" */;
+			buildPhases = (
+				C85081056E3DF73EFBB147D8F01CDE65 /* Sources */,
+				06DB63E0064B15C5B39BFF16CDD7970E /* Frameworks */,
+				B7977A817BCC9300C280AC3762FC58AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MASShortcut-MASShortcut";
+			productName = "MASShortcut-MASShortcut";
+			productReference = B5B782881A3DBB5C2AE2C049813F8D87 /* MASShortcut.bundle */;
+			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
 
@@ -304,84 +544,122 @@
 				en,
 			);
 			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
-			productRefGroup = 36FEE485B951DABA5070990CFCB1DFB9 /* Products */;
+			productRefGroup = EBF98F123CB396A47DEF1BE2AC1C8CCB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				90412C817E881100D9688B9054CC3588 /* Pods-Penc */,
-				D7D8EF0E06BA7CAFB70C39D7D46BC18F /* Silica */,
+				00C94ED0B49A44FBF0C4E2F6C875CFFC /* MASShortcut */,
+				D6E5ED8DAF7CA937C8F68F342C48B26E /* MASShortcut-MASShortcut */,
+				01BF73FCC286B13FE3FECCCA055AC531 /* Pods-Penc */,
+				907BDFCC0A772B5D5EB4E809E83AAF57 /* Silica */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXSourcesBuildPhase section */
-		0A4372AA6FD2A04FBE39E0BCDE2F553A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
+/* Begin PBXResourcesBuildPhase section */
+		B7977A817BCC9300C280AC3762FC58AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8ECDF03A2A651D0A3C413C9305D423EC /* NSRunningApplication+Silica.m in Sources */,
-				EF2BC43EEAE858D0DBAD73BAABEE9C91 /* NSScreen+Silica.m in Sources */,
-				974E6564778F40FFD3F62E0997E8E4EE /* SIAccessibilityElement.m in Sources */,
-				E41CD0ACDB88C64D1D92731A032710A1 /* SIApplication.m in Sources */,
-				A381C8F5BFA1B51E21FED21ED8F76732 /* Silica-dummy.m in Sources */,
-				B5A06CCC8E772A32E09D0584FA1707E4 /* SISystemWideElement.m in Sources */,
-				179CEA74035B89BA16F32ED654200A13 /* SIUniversalAccessHelper.m in Sources */,
-				A99DE663A875CAE56BA2B399851899CC /* SIWindow.m in Sources */,
+				EFFA4247C90B98FD9160F30905A64569 /* cs.lproj in Resources */,
+				66DEB394C39F5DCCD70A27ECEF274983 /* de.lproj in Resources */,
+				E560A21728B29AF234BD0F37AFE16F36 /* en.lproj in Resources */,
+				D6EA93219364CDC135BAFE63084F6361 /* es.lproj in Resources */,
+				C06EE84D23391E9FA94864DEDE34F548 /* fr.lproj in Resources */,
+				E66F7AFACFC665B23022A09E46815B5C /* it.lproj in Resources */,
+				5F1FA9D431587CD257C703AF16134030 /* ja.lproj in Resources */,
+				12149EA10608B7DE38879E6242D2826C /* ko.lproj in Resources */,
+				97B374490F695A6ECB06271EF080EB6C /* nl.lproj in Resources */,
+				DE24C629B3DB152EE4924B56E3CC59F5 /* pl.lproj in Resources */,
+				A4DBF0AB2E88B1A9D1078042F47618B0 /* ru.lproj in Resources */,
+				F44386819D44846A436139CEF3D372A5 /* zh-Hans.lproj in Resources */,
+				20887597017160017549465EBFB7E977 /* zh-Hant.lproj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8C45E4CEA1C1DACB618481ECB05D5CAA /* Sources */ = {
+		BDD1FBDDF5D87D58DCD6110D44F7737E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F8815ECB42FCF09BBC99D3730DFD577C /* MASShortcut.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2A63CAAD91A284BB01FE7A2D488ADAC4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08643C09AE237576F0FDFACAAB2C3CE7 /* Pods-Penc-dummy.m in Sources */,
+				4A6AF0A712D4C473177BE88389D15D2A /* MASDictionaryTransformer.m in Sources */,
+				8FFA3A6A77962B3A36B009A49634D081 /* MASHotKey.m in Sources */,
+				C50FA5B211B8916770FBE55623B83DA4 /* MASLocalization.m in Sources */,
+				6B4361F5ADC6268E7953732371174FE9 /* MASShortcut-dummy.m in Sources */,
+				157AE1FBA8F6C3B710CDE90F86492010 /* MASShortcut.m in Sources */,
+				5A30DAB76BB1814664FA7DC30939DA24 /* MASShortcutBinder.m in Sources */,
+				74EFCC6DC65CEBCF60B106F7FBB14EA2 /* MASShortcutMonitor.m in Sources */,
+				58CE04D9C6CAC7243825ABF4AB20EF32 /* MASShortcutValidator.m in Sources */,
+				ACBE29C4BF8BAEA483D6EEA940FE5314 /* MASShortcutView+Bindings.m in Sources */,
+				E5312C0FED7C61135F252D3A7A112990 /* MASShortcutView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C85081056E3DF73EFBB147D8F01CDE65 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E01D18CF11C7832377A4B2290E758814 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B79FF88A755DA948AAD198C5CEC80E75 /* Pods-Penc-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7F7ADAA4B4E2ADB166D5A782C348E9A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3594A4815E18F8019B17CEA0823304A6 /* NSRunningApplication+Silica.m in Sources */,
+				1E2DB82357E8AB4D2C93E4293BF83679 /* NSScreen+Silica.m in Sources */,
+				85D07DDE65C97F4BEFE10979E1AEBBC2 /* SIAccessibilityElement.m in Sources */,
+				0B3B49028FECAE7CBA05187BBFE154DB /* SIApplication.m in Sources */,
+				590F223387B03165CC1DC30CA1F73991 /* Silica-dummy.m in Sources */,
+				50404A7A52BAD08BD184A6FD3AE3DC86 /* SISystemWideElement.m in Sources */,
+				81A13A0920D234FF6BBE2FE87899B750 /* SIUniversalAccessHelper.m in Sources */,
+				B30AF847896E373838AAF5BC69089F12 /* SIWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		D314D74E806A4987815C8244CACE8712 /* PBXTargetDependency */ = {
+		430678E30B13EB9FBCC1ED4D8E6A7155 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Silica;
-			target = D7D8EF0E06BA7CAFB70C39D7D46BC18F /* Silica */;
-			targetProxy = A74720A044798F3A4A66BE775D823B1F /* PBXContainerItemProxy */;
+			target = 907BDFCC0A772B5D5EB4E809E83AAF57 /* Silica */;
+			targetProxy = C6B47D6D17D21E4C1C41CE907977ED0B /* PBXContainerItemProxy */;
+		};
+		4E65AF3F1BD651E49ED1020C20A50F89 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MASShortcut;
+			target = 00C94ED0B49A44FBF0C4E2F6C875CFFC /* MASShortcut */;
+			targetProxy = 3E25939CFCA6230D52E2EEEDDEFF2850 /* PBXContainerItemProxy */;
+		};
+		6D8935AB78317EC6C1ABBB09EA86C5FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "MASShortcut-MASShortcut";
+			target = D6E5ED8DAF7CA937C8F68F342C48B26E /* MASShortcut-MASShortcut */;
+			targetProxy = A7708F6CFFF6E4FD2E6FDB5109CDF5E7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		08711F3A105985EC4230759274EF829D /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F501A37BC0A34CCB96BA795B91D771A7 /* Silica.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_VERSION = A;
-				GCC_PREFIX_HEADER = "Target Support Files/Silica/Silica-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Silica/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				MODULEMAP_FILE = "Target Support Files/Silica/Silica.modulemap";
-				PRODUCT_NAME = Silica;
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 4.0;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		2B89725AED030EF9AC7379B8FE437E09 /* Release */ = {
+		00512CEE9A68973B4D4A4B6F5307BC4D /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 508AC161B937E517D90849FB852F5AAD /* Pods-Penc.release.xcconfig */;
 			buildSettings = {
@@ -414,9 +692,9 @@
 			};
 			name = Release;
 		};
-		45725C0D37B552AC66BC9107777204D4 /* Debug */ = {
+		04DAF75E3A1D049A3513D4DC47EE3855 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F501A37BC0A34CCB96BA795B91D771A7 /* Silica.xcconfig */;
+			baseConfigurationReference = 88399401DC4BF0559A96A2FED2C90FF1 /* Silica.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -445,7 +723,24 @@
 			};
 			name = Debug;
 		};
-		478149CBDA1D35AFDF8950AAFC0FB462 /* Debug */ = {
+		312ACE5D8CB6F9064A5725F7C4CF9B12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F6DBF9252DB5344AEBF08A896DC21905 /* MASShortcut.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/MASShortcut";
+				INFOPLIST_FILE = "Target Support Files/MASShortcut/ResourceBundle-MASShortcut-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				PRODUCT_NAME = MASShortcut;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		5E02355E64EC8316B3361F881CBC32D2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4E9682D4123A0F21A732246831B353FB /* Pods-Penc.debug.xcconfig */;
 			buildSettings = {
@@ -473,6 +768,85 @@
 				PRODUCT_NAME = Pods_Penc;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		602E11CAE6E17BD0FB30DD5EE3E0E88A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F6DBF9252DB5344AEBF08A896DC21905 /* MASShortcut.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/MASShortcut/MASShortcut-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/MASShortcut/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MODULEMAP_FILE = "Target Support Files/MASShortcut/MASShortcut.modulemap";
+				PRODUCT_NAME = MASShortcut;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7DDA088AC519B45C54DE31DD7B6A497F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F6DBF9252DB5344AEBF08A896DC21905 /* MASShortcut.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/MASShortcut";
+				INFOPLIST_FILE = "Target Support Files/MASShortcut/ResourceBundle-MASShortcut-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				PRODUCT_NAME = MASShortcut;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+		AB22803FF442FDA32B9017FBF80DF1A8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F6DBF9252DB5344AEBF08A896DC21905 /* MASShortcut.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/MASShortcut/MASShortcut-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/MASShortcut/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MODULEMAP_FILE = "Target Support Files/MASShortcut/MASShortcut.modulemap";
+				PRODUCT_NAME = MASShortcut;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -530,6 +904,37 @@
 				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
 				STRIP_INSTALLED_PRODUCT = NO;
 				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		DD2DF9199C3DE3D72A8E3146517A6737 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 88399401DC4BF0559A96A2FED2C90FF1 /* Silica.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/Silica/Silica-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Silica/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MODULEMAP_FILE = "Target Support Files/Silica/Silica.modulemap";
+				PRODUCT_NAME = Silica;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 4.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
@@ -596,6 +1001,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1D6B1E1465394749B4647B3CFC1E9D82 /* Build configuration list for PBXNativeTarget "Pods-Penc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5E02355E64EC8316B3361F881CBC32D2 /* Debug */,
+				00512CEE9A68973B4D4A4B6F5307BC4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -605,20 +1019,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		36BC2B99AAFBD1C78730011FA1DD82F0 /* Build configuration list for PBXNativeTarget "Pods-Penc" */ = {
+		2E9F4ED819BCA168CD2B6AC62E2C395C /* Build configuration list for PBXNativeTarget "Silica" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				478149CBDA1D35AFDF8950AAFC0FB462 /* Debug */,
-				2B89725AED030EF9AC7379B8FE437E09 /* Release */,
+				04DAF75E3A1D049A3513D4DC47EE3855 /* Debug */,
+				DD2DF9199C3DE3D72A8E3146517A6737 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		80A9079BCF10867DDA6C33CB92ECCAE9 /* Build configuration list for PBXNativeTarget "Silica" */ = {
+		3F916C3627231C409340EF9C88C37F7E /* Build configuration list for PBXNativeTarget "MASShortcut" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				45725C0D37B552AC66BC9107777204D4 /* Debug */,
-				08711F3A105985EC4230759274EF829D /* Release */,
+				AB22803FF442FDA32B9017FBF80DF1A8 /* Debug */,
+				602E11CAE6E17BD0FB30DD5EE3E0E88A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B2542ED88CE98D477B8D38769095CE5E /* Build configuration list for PBXNativeTarget "MASShortcut-MASShortcut" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				312ACE5D8CB6F9064A5725F7C4CF9B12 /* Debug */,
+				7DDA088AC519B45C54DE31DD7B6A497F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
