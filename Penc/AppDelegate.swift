@@ -95,14 +95,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
         
         if type == .RESIZE_ANCHOR_TOP_LEFT && self.focusedWindow!.isResizable() && delta != nil {
             let rect = self.placeholderWindow.frame
-            let newRect = CGRect(x: rect.origin.x, y: rect.origin.y + delta!.y, width: rect.size.width - delta!.x, height: rect.size.height - delta!.y)
+            let newRect = CGRect(x: rect.origin.x, y: rect.origin.y + delta!.y, width: rect.size.width - delta!.x, height: rect.size.height - delta!.y).fitInVisibleFrame(self.focusedScreen!)
             self.placeholderWindow.setFrame(newRect, display: true, animate: false)
             self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
         }
         
         if type == .MOVE && self.focusedWindow!.isMovable() && delta != nil {
             let rect = self.placeholderWindow.frame
-            let newRect = CGRect(x: rect.origin.x - delta!.x, y: rect.origin.y + delta!.y, width: rect.size.width, height: rect.size.height)
+            let newRect = CGRect(x: rect.origin.x - delta!.x, y: rect.origin.y + delta!.y, width: rect.size.width, height: rect.size.height).fitInVisibleFrame(self.focusedScreen!)
             self.placeholderWindow.setFrame(newRect, display: true, animate: false)
             self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
         }
