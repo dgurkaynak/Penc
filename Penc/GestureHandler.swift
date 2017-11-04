@@ -17,7 +17,8 @@ enum GestureHandlerPhase {
 
 enum GestureType {
     case MOVE
-    case RESIZE
+    case RESIZE_DELTA
+    case RESIZE_FACTOR
     case SWIPE_TOP
     case SWIPE_TOP_RIGHT
     case SWIPE_RIGHT
@@ -30,17 +31,21 @@ enum GestureType {
 
 protocol GestureHandlerDelegate: class {
     func onGestureBegan(gestureHandler: GestureHandler)
-    func onGestureChanged(gestureHandler: GestureHandler, type: GestureType, delta: (x: CGFloat, y: CGFloat)?)
+    func onMoveGesture(gestureHandler: GestureHandler, delta: (x: CGFloat, y: CGFloat))
+    func onSwipeGesture(gestureHandler: GestureHandler, type: GestureType)
+    func onResizeDeltaGesture(gestureHandler: GestureHandler, delta: (x: CGFloat, y: CGFloat))
+    func onResizeFactorGesture(gestureHandler: GestureHandler, factor: (x: CGFloat, y: CGFloat))
     func onGestureEnded(gestureHandler: GestureHandler)
 }
 
-class GestureHandler: ScrollHandlerDelegate {
+class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
     weak var delegate: GestureHandlerDelegate?
     private var globalModifierKeyMonitor: Any?
     private var localModifierKeyMonitor: Any?
     private let scrollHandler = ScrollHandler()
     var pressedKeys = NSEvent.ModifierFlags.init(rawValue: 0)
     var phase = GestureHandlerPhase.ENDED
+    var shouldBeginEarly = false
     
     init() {
         self.scrollHandler.setDelegate(self)
@@ -65,6 +70,7 @@ class GestureHandler: ScrollHandlerDelegate {
             self.scrollHandler.pause()
             self.end()
         } else {
+            if self.shouldBeginEarly { self.begin() }
             self.scrollHandler.resume()
         }
     }
@@ -76,9 +82,11 @@ class GestureHandler: ScrollHandlerDelegate {
     func onScrollChanged(scrollHandler: ScrollHandler, delta: (x: CGFloat, y: CGFloat)) {
         // Determine gesture
         if self.pressedKeys == [.command] {
-            self.change(GestureType.MOVE, delta: delta)
+            self.phase = .CHANGED
+            self.delegate?.onMoveGesture(gestureHandler: self, delta: delta)
         } else if self.pressedKeys == [.command, .option] {
-            self.change(GestureType.RESIZE, delta: delta)
+            self.phase = .CHANGED
+            self.delegate?.onResizeDeltaGesture(gestureHandler: self, delta: delta)
         }
     }
     
@@ -135,24 +143,38 @@ class GestureHandler: ScrollHandlerDelegate {
             }
             
             if swipeType != nil {
-                self.change(swipeType!, delta: nil)
+                self.phase = .CHANGED
+                self.delegate?.onSwipeGesture(gestureHandler: self, type: swipeType!)
             }
         }
     }
     
+    func onMagnifyBegan(overlayWindow: OverlayWindow) {
+        self.begin()
+    }
+    
+    func onMagnifyChanged(overlayWindow: OverlayWindow, magnification: CGFloat, angle: CGFloat) {
+        guard self.pressedKeys == [.command] else { return }
+        self.phase = .CHANGED
+        self.delegate?.onResizeFactorGesture(gestureHandler: self, factor: (x: -1 * magnification * cos(angle), y: -1 * magnification * sin(angle)))
+    }
+    
+    func onMagnifyCancelled(overlayWindow: OverlayWindow) {
+        // Do nothing
+    }
+    
+    func onMagnifyEnded(overlayWindow: OverlayWindow) {
+        // Do nothing
+    }
+    
     private func begin() {
-        if self.phase != .ENDED { return } // Can be called multiple times, but begin at just the first one
+        guard self.phase == .ENDED else { return } // Can be called multiple times, but begin at just the first one
         self.phase = .BEGAN
         self.delegate?.onGestureBegan(gestureHandler: self)
     }
     
-    private func change(_ gestureType: GestureType, delta: (x: CGFloat, y: CGFloat)?) {
-        self.phase = .CHANGED
-        self.delegate?.onGestureChanged(gestureHandler: self, type: gestureType, delta: delta)
-    }
-    
     private func end() {
-        if self.phase == .ENDED { return }
+        guard self.phase != .ENDED else { return }
         self.phase = .ENDED
         self.delegate?.onGestureEnded(gestureHandler: self)
     }

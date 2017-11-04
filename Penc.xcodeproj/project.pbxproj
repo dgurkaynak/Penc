@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		002029BBAAD3F763E4802CFB /* Pods_Penc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86BC15AF2221EE6872E73AA3 /* Pods_Penc.framework */; };
+		9417B7C11FADB16300749BC8 /* OverlayWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9417B7C01FADB16300749BC8 /* OverlayWindow.swift */; };
 		945195A41FA88B8B00FA53B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945195A31FA88B8B00FA53B4 /* AppDelegate.swift */; };
 		945195A81FA88B8B00FA53B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 945195A71FA88B8B00FA53B4 /* Assets.xcassets */; };
 		945195AB1FA88B8B00FA53B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 945195A91FA88B8B00FA53B4 /* Main.storyboard */; };
@@ -20,6 +21,7 @@
 /* Begin PBXFileReference section */
 		286EA375C63E4401015BCE4C /* Pods-Penc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Penc.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Penc/Pods-Penc.debug.xcconfig"; sourceTree = "<group>"; };
 		86BC15AF2221EE6872E73AA3 /* Pods_Penc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Penc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9417B7C01FADB16300749BC8 /* OverlayWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayWindow.swift; sourceTree = "<group>"; };
 		945195A01FA88B8B00FA53B4 /* Penc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Penc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		945195A31FA88B8B00FA53B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		945195A71FA88B8B00FA53B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				94763F701FA8A1E400D60C27 /* GestureHandler.swift */,
 				94763F721FA8DE5800D60C27 /* CGRectExtension.swift */,
 				94763F7E1FA9095E00D60C27 /* PreferencesViewController.swift */,
+				9417B7C01FADB16300749BC8 /* OverlayWindow.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 				94763F711FA8A1E400D60C27 /* GestureHandler.swift in Sources */,
 				94763F6F1FA895BD00D60C27 /* ScrollHandler.swift in Sources */,
 				945195A41FA88B8B00FA53B4 /* AppDelegate.swift in Sources */,
+				9417B7C11FADB16300749BC8 /* OverlayWindow.swift in Sources */,
 				94763F7F1FA9095E00D60C27 /* PreferencesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
