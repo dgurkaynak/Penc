@@ -37,7 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
             self.setupPreferencesWindow()
         } else {
             let warnAlert = NSAlert();
-            warnAlert.messageText = "Resizr relies upon having permission to 'control your computer'. If the permission prompt did not appear automatically, go to System Preferences, Security & Privacy, Privacy, Accessibility, and add Resizr to the list of allowed apps. Then relaunch Resizr.";
+            warnAlert.messageText = "Penc relies upon having permission to 'control your computer'. If the permission prompt did not appear automatically, go to System Preferences, Security & Privacy, Privacy, Accessibility, and add Penc to the list of allowed apps. Then relaunch Penc.";
             warnAlert.layout()
             warnAlert.runModal()
             NSApplication.shared.terminate(self)
@@ -55,7 +55,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         
-        statusItem.menu = menu
+        self.statusItem.menu = menu
     }
     
     @objc func openPreferencesWindow(_ sender: Any?) {
@@ -75,9 +75,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
     }
     
     func setupPlaceholderWindow() {
-        placeholderWindow.level = .floating
-        placeholderWindow.isOpaque = false
-        placeholderWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.25)
+        self.placeholderWindow.level = .floating
+        self.placeholderWindow.isOpaque = false
+        self.placeholderWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.25)
     }
     
     func setupPreferencesWindow() {
