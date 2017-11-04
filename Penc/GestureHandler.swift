@@ -43,9 +43,14 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
     private var globalModifierKeyMonitor: Any?
     private var localModifierKeyMonitor: Any?
     private let scrollHandler = ScrollHandler()
-    var pressedKeys = NSEvent.ModifierFlags.init(rawValue: 0)
+    var modifierFlags = NSEvent.ModifierFlags.init(rawValue: 0)
+    var moveModifierFlags: NSEvent.ModifierFlags = [.command]
+    var resizeDeltaModifierFlags: NSEvent.ModifierFlags = [.command, .option]
+    var resizeFactorModifierFlags: NSEvent.ModifierFlags = [.command]
+    var swipeModifierFlags: NSEvent.ModifierFlags = [.command]
     var phase = GestureHandlerPhase.ENDED
     var shouldBeginEarly = false
+    var swipeThreshold: CGFloat = 30
     
     init() {
         self.scrollHandler.setDelegate(self)
@@ -64,12 +69,15 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
     }
     
     private func onModifierKeyEvent(_ event: NSEvent) {
-        self.pressedKeys = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        self.modifierFlags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         
-        if self.pressedKeys.rawValue == 0 {
+        if self.modifierFlags.rawValue == 0 {
             self.scrollHandler.pause()
             self.end()
-        } else {
+        } else if self.modifierFlags == self.moveModifierFlags ||
+            self.modifierFlags == self.resizeDeltaModifierFlags ||
+            self.modifierFlags == self.resizeFactorModifierFlags ||
+            self.modifierFlags == self.swipeModifierFlags {
             if self.shouldBeginEarly { self.begin() }
             self.scrollHandler.resume()
         }
@@ -81,10 +89,10 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
     
     func onScrollChanged(scrollHandler: ScrollHandler, delta: (x: CGFloat, y: CGFloat)) {
         // Determine gesture
-        if self.pressedKeys == [.command] {
+        if self.modifierFlags == self.moveModifierFlags {
             self.phase = .CHANGED
             self.delegate?.onMoveGesture(gestureHandler: self, delta: delta)
-        } else if self.pressedKeys == [.command, .option] {
+        } else if self.modifierFlags == self.resizeDeltaModifierFlags {
             self.phase = .CHANGED
             self.delegate?.onResizeDeltaGesture(gestureHandler: self, delta: delta)
         }
@@ -95,15 +103,14 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
     }
     
     func onScrollEnded(scrollHandler: ScrollHandler, delta: (x: CGFloat, y: CGFloat)?) {
-        if self.pressedKeys == [.command] && delta != nil {
-            let threshold: CGFloat = 30
+        if self.modifierFlags == self.swipeModifierFlags && delta != nil {
             var swipe = (x: 0, y: 0)
             
-            if abs(delta!.x) > threshold {
+            if abs(delta!.x) > self.swipeThreshold {
                 swipe.x = delta!.x > 0 ? 1 : -1
             }
             
-            if abs(delta!.y) > threshold {
+            if abs(delta!.y) > self.swipeThreshold {
                 swipe.y = delta!.y > 0 ? 1 : -1
             }
             
@@ -154,7 +161,7 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
     }
     
     func onMagnifyChanged(overlayWindow: OverlayWindow, magnification: CGFloat, angle: CGFloat) {
-        guard self.pressedKeys == [.command] else { return }
+        guard self.modifierFlags == self.resizeFactorModifierFlags else { return }
         self.phase = .CHANGED
         self.delegate?.onResizeFactorGesture(gestureHandler: self, factor: (x: -1 * magnification * cos(angle), y: -1 * magnification * sin(angle)))
     }
