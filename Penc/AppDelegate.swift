@@ -103,12 +103,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
         
         var rect: CGRect? = nil
         
-        if type == .RESIZE_ANCHOR_TOP_LEFT && self.focusedWindow!.isResizable() && delta != nil {
+        if type == .RESIZE && self.focusedWindow!.isResizable() && delta != nil {
             rect = CGRect(
-                x: self.placeholderWindow.frame.origin.x,
+                x: self.placeholderWindow.frame.origin.x + delta!.x,
                 y: self.placeholderWindow.frame.origin.y + delta!.y,
-                width: self.placeholderWindow.frame.size.width - delta!.x,
-                height: self.placeholderWindow.frame.size.height - delta!.y
+                width: self.placeholderWindow.frame.size.width - (delta!.x * 2),
+                height: self.placeholderWindow.frame.size.height - (delta!.y * 2)
             ).fitInVisibleFrame(self.focusedScreen!)
         } else if type == .MOVE && self.focusedWindow!.isMovable() && delta != nil {
             rect = CGRect(

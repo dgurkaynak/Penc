@@ -17,7 +17,7 @@ enum GestureHandlerPhase {
 
 enum GestureType {
     case MOVE
-    case RESIZE_ANCHOR_TOP_LEFT
+    case RESIZE
     case SWIPE_TOP
     case SWIPE_TOP_RIGHT
     case SWIPE_RIGHT
@@ -78,7 +78,7 @@ class GestureHandler: ScrollHandlerDelegate {
         if self.pressedKeys == [.command] {
             self.change(GestureType.MOVE, delta: delta)
         } else if self.pressedKeys == [.command, .option] {
-            self.change(GestureType.RESIZE_ANCHOR_TOP_LEFT, delta: delta)
+            self.change(GestureType.RESIZE, delta: delta)
         }
     }
     
