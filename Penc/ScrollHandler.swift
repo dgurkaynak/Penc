@@ -77,7 +77,8 @@ class ScrollHandler {
             if self.phase != .BEGAN && self.phase != .CHANGED {
                 return
             }
-            self.latestDelta = (x: event.scrollingDeltaX, y: event.scrollingDeltaY)
+            let factor: CGFloat = event.isDirectionInvertedFromDevice ? -1 : 1;
+            self.latestDelta = (x: factor * event.scrollingDeltaX, y: factor * event.scrollingDeltaY)
             self.change()
         } else if event.phase == NSEvent.Phase.ended {
             self.end()
