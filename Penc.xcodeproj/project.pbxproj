@@ -106,6 +106,7 @@
 				1511972E9472443215AEFDD1 /* [CP] Check Pods Manifest.lock */,
 				9451959C1FA88B8B00FA53B4 /* Sources */,
 				9451959D1FA88B8B00FA53B4 /* Frameworks */,
+				9417B7BF1FADAEED00749BC8 /* Run Script */,
 				9451959E1FA88B8B00FA53B4 /* Resources */,
 				3E396F0A92C23C8B987D6383 /* [CP] Embed Pods Frameworks */,
 				5EA852D97CDD8F2E7E0F872D /* [CP] Copy Pods Resources */,
@@ -218,6 +219,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Penc/Pods-Penc-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		9417B7BF1FADAEED00749BC8 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
