@@ -84,11 +84,13 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
     }
     
     func onScrollBegan(scrollHandler: ScrollHandler) {
+        guard self.modifierFlags.rawValue != 0 else { return }
         self.begin()
     }
     
     func onScrollChanged(scrollHandler: ScrollHandler, delta: (x: CGFloat, y: CGFloat)) {
-        // Determine gesture
+        guard self.modifierFlags.rawValue != 0 else { return }
+        
         if self.modifierFlags == self.moveModifierFlags {
             self.phase = .CHANGED
             self.delegate?.onMoveGesture(gestureHandler: self, delta: delta)
@@ -103,6 +105,8 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
     }
     
     func onScrollEnded(scrollHandler: ScrollHandler, delta: (x: CGFloat, y: CGFloat)?) {
+        guard self.modifierFlags.rawValue != 0 else { return }
+        
         if self.modifierFlags == self.swipeModifierFlags && delta != nil {
             var swipe = (x: 0, y: 0)
             
@@ -157,10 +161,12 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
     }
     
     func onMagnifyBegan(overlayWindow: OverlayWindow) {
+        guard self.modifierFlags.rawValue != 0 else { return }
         self.begin()
     }
     
     func onMagnifyChanged(overlayWindow: OverlayWindow, magnification: CGFloat, angle: CGFloat) {
+        guard self.modifierFlags.rawValue != 0 else { return }
         guard self.modifierFlags == self.resizeFactorModifierFlags else { return }
         self.phase = .CHANGED
         self.delegate?.onResizeFactorGesture(gestureHandler: self, factor: (x: -1 * magnification * cos(angle), y: -1 * magnification * sin(angle)))
