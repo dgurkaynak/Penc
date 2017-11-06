@@ -27,7 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
         // Insert code here to initialize your application
         
         if let button = statusItem.button {
-            button.image = NSImage(named:NSImage.Name("StatusBarButtonImage"))
+            button.image = NSImage(named:NSImage.Name("penc-menu-icon"))
         }
         
         if checkPermissions() {
