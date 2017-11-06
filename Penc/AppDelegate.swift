@@ -20,6 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
     let overlayWindow = OverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
     let placeholderWindow = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
     let preferencesWindow = NSWindow(contentViewController: PreferencesViewController.freshController())
+    let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
     var focusedWindow: SIWindow? = nil
     var focusedScreen: NSScreen? = nil
     
@@ -39,6 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
             self.setupPlaceholderWindow()
             self.setupOverlayWindow()
             self.setupPreferencesWindow()
+            self.setupAboutWindow()
             self.onPreferencesChanged(preferences: Preferences.shared)
         } else {
             let warnAlert = NSAlert();
@@ -68,7 +70,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
     func constructMenu() {
         let menu = NSMenu()
         
-        menu.addItem(NSMenuItem(title: "Preferences", action: #selector(AppDelegate.openPreferencesWindow(_:)), keyEquivalent: ","))
+        menu.addItem(NSMenuItem(title: "Preferences...", action: #selector(AppDelegate.openPreferencesWindow(_:)), keyEquivalent: ","))
+        menu.addItem(NSMenuItem(title: "About Penc", action: #selector(AppDelegate.openAboutWindow(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         
@@ -93,11 +96,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
         self.preferencesWindow.title = "Penc Preferences"
         self.preferencesWindow.styleMask.remove(.resizable)
         self.preferencesWindow.styleMask.remove(.miniaturizable)
-        
     }
     
     @objc func openPreferencesWindow(_ sender: Any?) {
         self.preferencesWindow.makeKeyAndOrderFront(self.preferencesWindow)
+        NSApplication.shared.activate(ignoringOtherApps: true)
+    }
+    
+    func setupAboutWindow() {
+        self.aboutWindow.titleVisibility = .hidden
+        self.aboutWindow.styleMask.remove(.resizable)
+        self.aboutWindow.styleMask.remove(.miniaturizable)
+    }
+    
+    @objc func openAboutWindow(_ sender: Any?) {
+        self.aboutWindow.makeKeyAndOrderFront(self.aboutWindow)
         NSApplication.shared.activate(ignoringOtherApps: true)
     }
     

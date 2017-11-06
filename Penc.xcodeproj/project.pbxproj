@@ -17,6 +17,7 @@
 		94763F711FA8A1E400D60C27 /* GestureHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94763F701FA8A1E400D60C27 /* GestureHandler.swift */; };
 		94763F731FA8DE5800D60C27 /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94763F721FA8DE5800D60C27 /* CGRectExtension.swift */; };
 		94763F7F1FA9095E00D60C27 /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94763F7E1FA9095E00D60C27 /* PreferencesViewController.swift */; };
+		949553E21FB0BDC60025E22C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949553E11FB0BDC60025E22C /* AboutViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		94763F701FA8A1E400D60C27 /* GestureHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureHandler.swift; sourceTree = "<group>"; };
 		94763F721FA8DE5800D60C27 /* CGRectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		94763F7E1FA9095E00D60C27 /* PreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewController.swift; sourceTree = "<group>"; };
+		949553E11FB0BDC60025E22C /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		EC736EAB9572887E33DE2C99 /* Pods-Penc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Penc.release.xcconfig"; path = "Pods/Target Support Files/Pods-Penc/Pods-Penc.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,6 +92,7 @@
 				94763F7E1FA9095E00D60C27 /* PreferencesViewController.swift */,
 				9417B7C01FADB16300749BC8 /* OverlayWindow.swift */,
 				9417B7CA1FB04A0100749BC8 /* Preferences.swift */,
+				949553E11FB0BDC60025E22C /* AboutViewController.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 				94763F6F1FA895BD00D60C27 /* ScrollHandler.swift in Sources */,
 				945195A41FA88B8B00FA53B4 /* AppDelegate.swift in Sources */,
 				9417B7C11FADB16300749BC8 /* OverlayWindow.swift in Sources */,
+				949553E21FB0BDC60025E22C /* AboutViewController.swift in Sources */,
 				94763F7F1FA9095E00D60C27 /* PreferencesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
