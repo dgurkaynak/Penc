@@ -14,7 +14,7 @@ import MASShortcut
 
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, PreferencesDelegate {
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
     let gestureHandler = GestureHandler()
     let overlayWindow = OverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
@@ -33,11 +33,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
         if checkPermissions() {
             constructMenu()
             self.gestureHandler.setDelegate(self)
+            Preferences.shared.setDelegate(self)
             self.overlayWindow.setMagnificationDelegate(self.gestureHandler)
             
             self.setupPlaceholderWindow()
             self.setupOverlayWindow()
             self.setupPreferencesWindow()
+            self.onPreferencesChanged(preferences: Preferences.shared)
         } else {
             let warnAlert = NSAlert();
             warnAlert.messageText = "Penc relies upon having permission to 'control your computer'. If the permission prompt did not appear automatically, go to System Preferences, Security & Privacy, Privacy, Accessibility, and add Penc to the list of allowed apps. Then relaunch Penc.";
@@ -51,21 +53,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
         // Insert code here to tear down your application
     }
     
-    func constructMenu() {
-        let menu = NSMenu()
-        
-        menu.addItem(NSMenuItem(title: "Preferences", action: #selector(AppDelegate.openPreferencesWindow(_:)), keyEquivalent: ","))
-        menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
-        
-        self.statusItem.menu = menu
-    }
-    
-    @objc func openPreferencesWindow(_ sender: Any?) {
-        self.preferencesWindow.makeKeyAndOrderFront(self.preferencesWindow)
-        NSApplication.shared.activate(ignoringOtherApps: true)
-    }
-    
     func checkPermissions() -> Bool {
         if AXIsProcessTrusted() {
             return true
@@ -75,6 +62,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
             let accessibilityEnabled = AXIsProcessTrustedWithOptions(options)
             return accessibilityEnabled
         }
+    }
+    
+    func constructMenu() {
+        let menu = NSMenu()
+        
+        menu.addItem(NSMenuItem(title: "Preferences", action: #selector(AppDelegate.openPreferencesWindow(_:)), keyEquivalent: ","))
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        
+        self.statusItem.menu = menu
     }
     
     func setupPlaceholderWindow() {
@@ -95,7 +92,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate {
         self.preferencesWindow.title = "Penc Preferences"
         self.preferencesWindow.styleMask.remove(.resizable)
         self.preferencesWindow.styleMask.remove(.miniaturizable)
-
+        
+    }
+    
+    @objc func openPreferencesWindow(_ sender: Any?) {
+        self.preferencesWindow.makeKeyAndOrderFront(self.preferencesWindow)
+        NSApplication.shared.activate(ignoringOtherApps: true)
+    }
+    
+    func onPreferencesChanged(preferences: Preferences) {
+        self.gestureHandler.moveModifierFlags = preferences.modifierKey1Mask
+        self.gestureHandler.resizeFactorModifierFlags = preferences.modifierKey1Mask
+        self.gestureHandler.swipeModifierFlags = preferences.modifierKey1Mask
+        self.gestureHandler.earlyBeginDelay = Double(preferences.activationDelay)
+        self.overlayWindow.shouldInferMagnificationAngle = preferences.inferMagnificationAngle
     }
     
     func onGestureBegan(gestureHandler: GestureHandler) {

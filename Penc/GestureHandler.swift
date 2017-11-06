@@ -52,7 +52,7 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
     var shouldBeginEarly = true
     var earlyBeginDelay = 0.5
     var earlyBeginTimer: Timer? = nil
-    var swipeThreshold: CGFloat = 30
+    var swipeThreshold: CGFloat = 20
     
     init() {
         self.scrollHandler.setDelegate(self)
