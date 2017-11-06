@@ -49,7 +49,9 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
     var resizeFactorModifierFlags: NSEvent.ModifierFlags = [.command]
     var swipeModifierFlags: NSEvent.ModifierFlags = [.command]
     var phase = GestureHandlerPhase.ENDED
-    var shouldBeginEarly = false
+    var shouldBeginEarly = true
+    var earlyBeginDelay = 0.5
+    var earlyBeginTimer: Timer? = nil
     var swipeThreshold: CGFloat = 30
     
     init() {
@@ -73,12 +75,15 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
         
         if self.modifierFlags.rawValue == 0 {
             self.scrollHandler.pause()
+            self.earlyBeginTimer?.invalidate()
             self.end()
         } else if self.modifierFlags == self.moveModifierFlags ||
             self.modifierFlags == self.resizeDeltaModifierFlags ||
             self.modifierFlags == self.resizeFactorModifierFlags ||
             self.modifierFlags == self.swipeModifierFlags {
-            if self.shouldBeginEarly { self.begin() }
+            if self.shouldBeginEarly && (self.earlyBeginTimer == nil || !self.earlyBeginTimer!.isValid) {
+                self.earlyBeginTimer = Timer.scheduledTimer(timeInterval: self.earlyBeginDelay, target: self, selector: #selector(begin), userInfo: nil, repeats: false)
+            }
             self.scrollHandler.resume()
         }
     }
@@ -180,7 +185,7 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
         // Do nothing
     }
     
-    private func begin() {
+    @objc private func begin() {
         guard self.phase == .ENDED else { return } // Can be called multiple times, but begin at just the first one
         self.phase = .BEGAN
         self.delegate?.onGestureBegan(gestureHandler: self)
