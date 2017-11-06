@@ -124,9 +124,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
     
     func onGestureBegan(gestureHandler: GestureHandler) {
         self.focusedWindow = SIWindow.focused()
-        if self.focusedWindow == nil { return }
+        guard self.focusedWindow != nil else { return }
         self.focusedScreen = self.focusedWindow!.screen()
-        if self.focusedScreen == nil { return }
+        guard self.focusedScreen != nil else { return }
+        guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
         
         let focusedWindowRect = self.focusedWindow!.frame().topLeft2bottomLeft(self.focusedScreen!)
         self.placeholderWindow.setFrame(focusedWindowRect, display: true, animate: false)
@@ -143,6 +144,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
         guard self.focusedWindow!.isMovable() else { return }
+        guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
         
         let rect = CGRect(
             x: self.placeholderWindow.frame.origin.x - delta.x,
@@ -158,6 +160,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
         guard self.focusedWindow!.isMovable() else { return } // TODO: Check resizeable also
+        guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
         
         var rect: CGRect? = nil
         
@@ -197,6 +200,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
         guard self.focusedWindow!.isResizable() else { return }
+        guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
         
         let rect = CGRect(
             x: self.placeholderWindow.frame.origin.x + delta.x,
@@ -212,6 +216,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
         guard self.focusedWindow!.isResizable() else { return }
+        guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
         
         let delta = (
             x: self.placeholderWindow.frame.size.width * factor.x,
@@ -228,14 +233,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
     }
     
     func onGestureEnded(gestureHandler: GestureHandler) {
-        if self.focusedWindow == nil { return }
-        if self.focusedScreen == nil { return }
+        guard self.focusedWindow != nil else { return }
+        guard self.focusedScreen != nil else { return }
         
         let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(self.focusedScreen!)
         self.focusedWindow!.setFrame(newRect)
         self.focusedWindow!.focus()
         self.placeholderWindow.orderOut(self.placeholderWindow)
         self.overlayWindow.orderOut(self.overlayWindow)
+        
+        self.focusedWindow = nil
+        self.focusedScreen = nil
     }
     
     
