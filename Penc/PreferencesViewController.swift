@@ -140,7 +140,14 @@ class PreferencesViewController: NSViewController {
     }
     
     @objc private func onLaunchAtLoginCheckboxChange() {
-        Preferences.shared.launchAtLogin = self.launchAtLoginCheckbox.state == .on
+        if !Preferences.shared.setLaunchAtLogin(self.launchAtLoginCheckbox.state == .on) {
+            let warnAlert = NSAlert();
+            warnAlert.messageText = "Could not add Penc to login items";
+            warnAlert.informativeText = "Please move Penc app into Applications folder and relaunch."
+            warnAlert.layout()
+            warnAlert.runModal()
+        }
+        
         self.launchAtLoginCheckbox.state = Preferences.shared.launchAtLogin ? .on : .off
     }
     

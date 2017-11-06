@@ -58,10 +58,6 @@ final class Preferences {
             guard let jobDicts = SMCopyAllJobDictionaries( kSMDomainUserLaunchd ).takeRetainedValue() as? [[String:Any]] else { return false }
             return jobDicts.first(where: { $0["Label"] as! String == Bundle.main.bundleIdentifier! }) != nil
         }
-        
-        set {
-            SMLoginItemSetEnabled(Bundle.main.bundleIdentifier! as CFString, newValue)
-        }
     }
     
     private init() {
@@ -110,5 +106,9 @@ final class Preferences {
         self.activationDelay = 1.0
         self.swipeThreshold = 20.0
         self.inferMagnificationAngle = true
+    }
+    
+    func setLaunchAtLogin(_ value: Bool) -> Bool {
+        return SMLoginItemSetEnabled(Bundle.main.bundleIdentifier! as CFString, value)
     }
 }
