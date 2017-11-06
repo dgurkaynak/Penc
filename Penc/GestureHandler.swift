@@ -44,10 +44,10 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
     private var localModifierKeyMonitor: Any?
     private let scrollHandler = ScrollHandler()
     var modifierFlags = NSEvent.ModifierFlags.init(rawValue: 0)
-    var moveModifierFlags: NSEvent.ModifierFlags = [.command]
-    var resizeDeltaModifierFlags: NSEvent.ModifierFlags = [.command, .option]
-    var resizeFactorModifierFlags: NSEvent.ModifierFlags = [.command]
-    var swipeModifierFlags: NSEvent.ModifierFlags = [.command]
+    var moveModifierFlags: NSEvent.ModifierFlags = [.function]
+    var resizeDeltaModifierFlags: NSEvent.ModifierFlags = []
+    var resizeFactorModifierFlags: NSEvent.ModifierFlags = [.function]
+    var swipeModifierFlags: NSEvent.ModifierFlags = [.function]
     var phase = GestureHandlerPhase.ENDED
     var shouldBeginEarly = true
     var earlyBeginDelay = 0.5
