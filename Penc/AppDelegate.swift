@@ -42,7 +42,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
             self.onPreferencesChanged(preferences: Preferences.shared)
         } else {
             let warnAlert = NSAlert();
-            warnAlert.messageText = "Penc relies upon having permission to 'control your computer'. If the permission prompt did not appear automatically, go to System Preferences, Security & Privacy, Privacy, Accessibility, and add Penc to the list of allowed apps. Then relaunch Penc.";
+            warnAlert.messageText = "Accessibility permissions needed";
+            warnAlert.informativeText = "Penc relies upon having permission to 'control your computer'. If the permission prompt did not appear automatically, go to System Preferences, Security & Privacy, Accessibility, and add Penc to the list of allowed apps. Then relaunch Penc."
             warnAlert.layout()
             warnAlert.runModal()
             NSApplication.shared.terminate(self)
