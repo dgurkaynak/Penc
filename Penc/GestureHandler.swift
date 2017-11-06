@@ -85,6 +85,10 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
                 self.earlyBeginTimer = Timer.scheduledTimer(timeInterval: self.earlyBeginDelay, target: self, selector: #selector(begin), userInfo: nil, repeats: false)
             }
             self.scrollHandler.resume()
+        } else {
+            self.scrollHandler.pause()
+            self.earlyBeginTimer?.invalidate()
+            self.end()
         }
     }
     
