@@ -174,11 +174,15 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
         self.begin()
     }
     
-    func onMagnifyChanged(overlayWindow: OverlayWindow, magnification: CGFloat, angle: CGFloat) {
+    func onMagnifyChanged(overlayWindow: OverlayWindow, magnification: CGFloat, angle: CGFloat?) {
         guard self.modifierFlags.rawValue != 0 else { return }
         guard self.modifierFlags == self.resizeFactorModifierFlags else { return }
         self.phase = .CHANGED
-        self.delegate?.onResizeFactorGesture(gestureHandler: self, factor: (x: -1 * magnification * cos(angle), y: -1 * magnification * sin(angle)))
+        
+        let xFactor = angle == nil ? (-1 * magnification) : (-1 * magnification * cos(angle!))
+        let yFactor = angle == nil ? (-1 * magnification) : (-1 * magnification * sin(angle!))
+        
+        self.delegate?.onResizeFactorGesture(gestureHandler: self, factor: (x: xFactor, y: yFactor))
     }
     
     func onMagnifyCancelled(overlayWindow: OverlayWindow) {

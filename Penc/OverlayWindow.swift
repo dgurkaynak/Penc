@@ -11,7 +11,7 @@ import Cocoa
 
 protocol OverlayWindowMagnifyDelegate: class {
     func onMagnifyBegan(overlayWindow: OverlayWindow)
-    func onMagnifyChanged(overlayWindow: OverlayWindow, magnification: CGFloat, angle: CGFloat)
+    func onMagnifyChanged(overlayWindow: OverlayWindow, magnification: CGFloat, angle: CGFloat?)
     func onMagnifyCancelled(overlayWindow: OverlayWindow)
     func onMagnifyEnded(overlayWindow: OverlayWindow)
 }
@@ -34,7 +34,8 @@ class OverlayWindow: NSWindow {
             self.magnifying = false
             self.magnificationDelegate?.onMagnifyCancelled(overlayWindow: self)
         } else if event.phase == NSEvent.Phase.changed {
-            self.magnificationDelegate?.onMagnifyChanged(overlayWindow: self, magnification: event.magnification, angle: self.magnificationAngle)
+            let angle = self.shouldInferMagnificationAngle ? self.magnificationAngle : nil
+            self.magnificationDelegate?.onMagnifyChanged(overlayWindow: self, magnification: event.magnification, angle: angle)
         } else if event.phase == NSEvent.Phase.ended {
             self.magnifying = false
             self.magnificationDelegate?.onMagnifyEnded(overlayWindow: self)
