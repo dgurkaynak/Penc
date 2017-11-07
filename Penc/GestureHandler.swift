@@ -38,7 +38,7 @@ protocol GestureHandlerDelegate: class {
     func onGestureEnded(gestureHandler: GestureHandler)
 }
 
-class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
+class GestureHandler: ScrollHandlerDelegate, OverlayWindowDelegate {
     weak var delegate: GestureHandlerDelegate?
     private var globalModifierKeyMonitor: Any?
     private var localModifierKeyMonitor: Any?
@@ -191,6 +191,15 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowMagnifyDelegate {
     
     func onMagnifyEnded(overlayWindow: OverlayWindow) {
         // Do nothing
+    }
+    
+    func onMouseDragged(overlayWindow: OverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
+        guard self.modifierFlags.rawValue != 0 else { return }
+        guard self.modifierFlags == self.moveModifierFlags else { return }
+        
+        self.phase = .CHANGED
+        let invertDelta = (x: delta.x * -1, y: delta.y * -1)
+        self.delegate?.onMoveGesture(gestureHandler: self, delta: invertDelta)
     }
     
     @objc private func begin() {

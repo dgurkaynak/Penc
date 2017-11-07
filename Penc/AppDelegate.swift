@@ -35,7 +35,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
             constructMenu()
             self.gestureHandler.setDelegate(self)
             Preferences.shared.setDelegate(self)
-            self.overlayWindow.setMagnificationDelegate(self.gestureHandler)
+            self.overlayWindow.setDelegate(self.gestureHandler)
             
             self.setupPlaceholderWindow()
             self.setupOverlayWindow()

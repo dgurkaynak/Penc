@@ -9,36 +9,37 @@
 import Cocoa
 
 
-protocol OverlayWindowMagnifyDelegate: class {
+protocol OverlayWindowDelegate: class {
     func onMagnifyBegan(overlayWindow: OverlayWindow)
     func onMagnifyChanged(overlayWindow: OverlayWindow, magnification: CGFloat, angle: CGFloat?)
     func onMagnifyCancelled(overlayWindow: OverlayWindow)
     func onMagnifyEnded(overlayWindow: OverlayWindow)
+    func onMouseDragged(overlayWindow: OverlayWindow, delta: (x: CGFloat, y: CGFloat))
 }
 
 class OverlayWindow: NSWindow {
-    weak var magnificationDelegate: OverlayWindowMagnifyDelegate?
+    weak var delegate_: OverlayWindowDelegate?
     var magnifying = false
-    var shouldInferMagnificationAngle = true
+    var shouldInferMagnificationAngle = false
     var magnificationAngle = CGFloat.pi / 4
     
-    func setMagnificationDelegate(_ delegate: OverlayWindowMagnifyDelegate?) {
-        self.magnificationDelegate = delegate
+    func setDelegate(_ delegate: OverlayWindowDelegate?) {
+        self.delegate_ = delegate
     }
     
     override func magnify(with event: NSEvent) {
         if event.phase == NSEvent.Phase.began {
             self.magnifying = true
-            self.magnificationDelegate?.onMagnifyBegan(overlayWindow: self)
+            self.delegate_?.onMagnifyBegan(overlayWindow: self)
         } else if event.phase == NSEvent.Phase.cancelled {
             self.magnifying = false
-            self.magnificationDelegate?.onMagnifyCancelled(overlayWindow: self)
+            self.delegate_?.onMagnifyCancelled(overlayWindow: self)
         } else if event.phase == NSEvent.Phase.changed {
             let angle = self.shouldInferMagnificationAngle ? self.magnificationAngle : nil
-            self.magnificationDelegate?.onMagnifyChanged(overlayWindow: self, magnification: event.magnification, angle: angle)
+            self.delegate_?.onMagnifyChanged(overlayWindow: self, magnification: event.magnification, angle: angle)
         } else if event.phase == NSEvent.Phase.ended {
             self.magnifying = false
-            self.magnificationDelegate?.onMagnifyEnded(overlayWindow: self)
+            self.delegate_?.onMagnifyEnded(overlayWindow: self)
         }
     }
     
@@ -58,5 +59,9 @@ class OverlayWindow: NSWindow {
     
     override var canBecomeKey: Bool {
         return true
+    }
+    
+    override func mouseDragged(with event: NSEvent) {
+        self.delegate_?.onMouseDragged(overlayWindow: self, delta: (x: event.deltaX, y: event.deltaY))
     }
 }
