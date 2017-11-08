@@ -85,6 +85,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.placeholderWindow.isOpaque = false
         self.placeholderWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
         self.placeholderWindow.contentViewController = self.placeholderWindowViewController
+        self.placeholderWindow.delegate = self.placeholderWindowViewController
         
     }
     
@@ -251,10 +252,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     }
     
     func onModeChange(gestureOverlayWindow: GestureOverlayWindow, mode: GestureMode) {
+        guard self.placeholderWindowViewController.mode != .NONE else { return }
+        
         if mode == .MOVE {
-            self.placeholderWindowViewController.moveMode()
+            self.placeholderWindowViewController.changeMode(.MOVE)
         } else if mode == .RESIZE {
-            self.placeholderWindowViewController.resizeMode()
+            self.placeholderWindowViewController.changeMode(.RESIZE)
         }
     }
     
