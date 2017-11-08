@@ -38,7 +38,7 @@ protocol GestureHandlerDelegate: class {
     func onGestureEnded(gestureHandler: GestureHandler)
 }
 
-class GestureHandler: ScrollHandlerDelegate, OverlayWindowDelegate {
+class GestureHandler: ScrollHandlerDelegate, GestureOverlayWindowDelegate {
     weak var delegate: GestureHandlerDelegate?
     private var globalModifierKeyMonitor: Any?
     private var localModifierKeyMonitor: Any?
@@ -169,12 +169,12 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowDelegate {
         }
     }
     
-    func onMagnifyBegan(overlayWindow: OverlayWindow) {
+    func onMagnifyBegan(overlayWindow: GestureOverlayWindow) {
         guard self.modifierFlags.rawValue != 0 else { return }
         self.begin()
     }
     
-    func onMagnifyChanged(overlayWindow: OverlayWindow, magnification: CGFloat, angle: CGFloat?) {
+    func onMagnifyChanged(overlayWindow: GestureOverlayWindow, magnification: CGFloat, angle: CGFloat?) {
         guard self.modifierFlags.rawValue != 0 else { return }
         guard self.modifierFlags == self.resizeFactorModifierFlags else { return }
         self.phase = .CHANGED
@@ -185,15 +185,15 @@ class GestureHandler: ScrollHandlerDelegate, OverlayWindowDelegate {
         self.delegate?.onResizeFactorGesture(gestureHandler: self, factor: (x: xFactor, y: yFactor))
     }
     
-    func onMagnifyCancelled(overlayWindow: OverlayWindow) {
+    func onMagnifyCancelled(overlayWindow: GestureOverlayWindow) {
         // Do nothing
     }
     
-    func onMagnifyEnded(overlayWindow: OverlayWindow) {
+    func onMagnifyEnded(overlayWindow: GestureOverlayWindow) {
         // Do nothing
     }
     
-    func onMouseDragged(overlayWindow: OverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
+    func onMouseDragged(overlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
         guard self.modifierFlags.rawValue != 0 else { return }
         guard self.modifierFlags == self.moveModifierFlags else { return }
         

@@ -9,21 +9,21 @@
 import Cocoa
 
 
-protocol OverlayWindowDelegate: class {
-    func onMagnifyBegan(overlayWindow: OverlayWindow)
-    func onMagnifyChanged(overlayWindow: OverlayWindow, magnification: CGFloat, angle: CGFloat?)
-    func onMagnifyCancelled(overlayWindow: OverlayWindow)
-    func onMagnifyEnded(overlayWindow: OverlayWindow)
-    func onMouseDragged(overlayWindow: OverlayWindow, delta: (x: CGFloat, y: CGFloat))
+protocol GestureOverlayWindowDelegate: class {
+    func onMagnifyBegan(overlayWindow: GestureOverlayWindow)
+    func onMagnifyChanged(overlayWindow: GestureOverlayWindow, magnification: CGFloat, angle: CGFloat?)
+    func onMagnifyCancelled(overlayWindow: GestureOverlayWindow)
+    func onMagnifyEnded(overlayWindow: GestureOverlayWindow)
+    func onMouseDragged(overlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat))
 }
 
-class OverlayWindow: NSWindow {
-    weak var delegate_: OverlayWindowDelegate?
+class GestureOverlayWindow: NSWindow {
+    weak var delegate_: GestureOverlayWindowDelegate?
     var magnifying = false
     var shouldInferMagnificationAngle = false
     var magnificationAngle = CGFloat.pi / 4
     
-    func setDelegate(_ delegate: OverlayWindowDelegate?) {
+    func setDelegate(_ delegate: GestureOverlayWindowDelegate?) {
         self.delegate_ = delegate
     }
     
