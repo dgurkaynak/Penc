@@ -14,9 +14,9 @@ import MASShortcut
 
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, PreferencesDelegate, ActivationHandlerDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate, ActivationHandlerDelegate, PreferencesDelegate {
+    
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
-    let gestureHandler = GestureHandler()
     let gestureOverlayWindow = GestureOverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
     let placeholderWindow = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
     let preferencesWindow = NSWindow(contentViewController: PreferencesViewController.freshController())
@@ -34,9 +34,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
         
         if checkPermissions() {
             constructMenu()
-            self.gestureHandler.setDelegate(self)
             Preferences.shared.setDelegate(self)
-            self.gestureOverlayWindow.setDelegate(self.gestureHandler)
+            self.gestureOverlayWindow.setDelegate(self)
             self.activationHandler.setDelegate(self)
             
             self.setupPlaceholderWindow()
@@ -117,14 +116,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
     }
     
     func onPreferencesChanged(preferences: Preferences) {
-        self.gestureHandler.moveModifierFlags = preferences.modifierKey1Mask
-        self.gestureHandler.resizeFactorModifierFlags = preferences.modifierKey1Mask
-        self.gestureHandler.swipeModifierFlags = preferences.modifierKey1Mask
-        self.gestureHandler.earlyBeginDelay = Double(preferences.activationDelay)
+//        self.gestureHandler.moveModifierFlags = preferences.modifierKey1Mask
+//        self.gestureHandler.resizeFactorModifierFlags = preferences.modifierKey1Mask
+//        self.gestureHandler.swipeModifierFlags = preferences.modifierKey1Mask
+//        self.gestureHandler.earlyBeginDelay = Double(preferences.activationDelay)
         self.gestureOverlayWindow.shouldInferMagnificationAngle = preferences.inferMagnificationAngle
     }
     
-    func onGestureBegan(gestureHandler: GestureHandler) {
+    func onActivated(activationHandler: ActivationHandler) {
         self.focusedWindow = SIWindow.focused()
         guard self.focusedWindow != nil else { return }
         self.focusedScreen = self.focusedWindow!.screen()
@@ -142,7 +141,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
         NSApplication.shared.activate(ignoringOtherApps: true)
     }
     
-    func onMoveGesture(gestureHandler: GestureHandler, delta: (x: CGFloat, y: CGFloat)) {
+    func onDeactivated(activationHandler: ActivationHandler) {
+        guard self.focusedWindow != nil else { return }
+        guard self.focusedScreen != nil else { return }
+        
+        let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(self.focusedScreen!)
+        self.focusedWindow!.setFrame(newRect)
+        self.focusedWindow!.focus()
+        self.placeholderWindow.orderOut(self.placeholderWindow)
+        self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
+        
+        self.focusedWindow = nil
+        self.focusedScreen = nil
+    }
+    
+    func onMoveGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
         guard self.focusedWindow!.isMovable() else { return }
@@ -158,7 +171,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }
     
-    func onSwipeGesture(gestureHandler: GestureHandler, type: GestureType) {
+    func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: GestureType) {
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
         guard self.focusedWindow!.isMovable() else { return } // TODO: Check resizeable also
@@ -198,7 +211,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
         }
     }
     
-    func onResizeDeltaGesture(gestureHandler: GestureHandler, delta: (x: CGFloat, y: CGFloat)) {
+    func onResizeDeltaGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
         guard self.focusedWindow!.isResizable() else { return }
@@ -214,7 +227,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }
     
-    func onResizeFactorGesture(gestureHandler: GestureHandler, factor: (x: CGFloat, y: CGFloat)) {
+    func onResizeFactorGesture(gestureOverlayWindow: GestureOverlayWindow, factor: (x: CGFloat, y: CGFloat)) {
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
         guard self.focusedWindow!.isResizable() else { return }
@@ -232,52 +245,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
             ).fitInVisibleFrame(self.focusedScreen!)
         
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
-    }
-    
-    func onGestureEnded(gestureHandler: GestureHandler) {
-        guard self.focusedWindow != nil else { return }
-        guard self.focusedScreen != nil else { return }
-        
-        let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(self.focusedScreen!)
-        self.focusedWindow!.setFrame(newRect)
-        self.focusedWindow!.focus()
-        self.placeholderWindow.orderOut(self.placeholderWindow)
-        self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
-        
-        self.focusedWindow = nil
-        self.focusedScreen = nil
-    }
-    
-    func onActivated(activationHandler: ActivationHandler) {
-        self.focusedWindow = SIWindow.focused()
-        guard self.focusedWindow != nil else { return }
-        self.focusedScreen = self.focusedWindow!.screen()
-        guard self.focusedScreen != nil else { return }
-        guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
-        
-        let focusedWindowRect = self.focusedWindow!.frame().topLeft2bottomLeft(self.focusedScreen!)
-        self.placeholderWindow.setFrame(focusedWindowRect, display: true, animate: false)
-        self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
-        
-        let focusedScreenRect = self.focusedScreen!.frame.topLeft2bottomLeft(self.focusedScreen!)
-        self.gestureOverlayWindow.setFrame(focusedScreenRect, display: true, animate: false)
-        self.gestureOverlayWindow.makeKeyAndOrderFront(self.gestureOverlayWindow)
-        
-        NSApplication.shared.activate(ignoringOtherApps: true)
-    }
-    
-    func onDeactivated(activationHandler: ActivationHandler) {
-        guard self.focusedWindow != nil else { return }
-        guard self.focusedScreen != nil else { return }
-        
-        let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(self.focusedScreen!)
-        self.focusedWindow!.setFrame(newRect)
-        self.focusedWindow!.focus()
-        self.placeholderWindow.orderOut(self.placeholderWindow)
-        self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
-        
-        self.focusedWindow = nil
-        self.focusedScreen = nil
     }
     
     

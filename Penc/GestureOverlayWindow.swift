@@ -8,20 +8,36 @@
 
 import Cocoa
 
+enum GestureType {
+    case MOVE
+    case RESIZE_DELTA
+    case RESIZE_FACTOR
+    case SWIPE_TOP
+    case SWIPE_TOP_RIGHT
+    case SWIPE_RIGHT
+    case SWIPE_BOTTOM_RIGHT
+    case SWIPE_BOTTOM
+    case SWIPE_BOTTOM_LEFT
+    case SWIPE_LEFT
+    case SWIPE_TOP_LEFT
+}
 
 protocol GestureOverlayWindowDelegate: class {
-    func onMagnifyBegan(overlayWindow: GestureOverlayWindow)
-    func onMagnifyChanged(overlayWindow: GestureOverlayWindow, magnification: CGFloat, angle: CGFloat?)
-    func onMagnifyCancelled(overlayWindow: GestureOverlayWindow)
-    func onMagnifyEnded(overlayWindow: GestureOverlayWindow)
-    func onMouseDragged(overlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat))
+    func onMoveGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat))
+    func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: GestureType)
+    func onResizeFactorGesture(gestureOverlayWindow: GestureOverlayWindow, factor: (x: CGFloat, y: CGFloat))
 }
 
 class GestureOverlayWindow: NSWindow {
     weak var delegate_: GestureOverlayWindowDelegate?
-    var magnifying = false
+    
     var shouldInferMagnificationAngle = false
-    var magnificationAngle = CGFloat.pi / 4
+    private var magnifying = false
+    private var magnificationAngle = CGFloat.pi / 4
+    
+    var swipeThreshold: CGFloat = 20
+    private var latestScrollingDelta: (x: CGFloat, y: CGFloat)?
+    
     
     func setDelegate(_ delegate: GestureOverlayWindowDelegate?) {
         self.delegate_ = delegate
@@ -30,20 +46,23 @@ class GestureOverlayWindow: NSWindow {
     override func magnify(with event: NSEvent) {
         if event.phase == NSEvent.Phase.began {
             self.magnifying = true
-            self.delegate_?.onMagnifyBegan(overlayWindow: self)
         } else if event.phase == NSEvent.Phase.cancelled {
             self.magnifying = false
-            self.delegate_?.onMagnifyCancelled(overlayWindow: self)
         } else if event.phase == NSEvent.Phase.changed {
+            // Resizing with factor
             let angle = self.shouldInferMagnificationAngle ? self.magnificationAngle : nil
-            self.delegate_?.onMagnifyChanged(overlayWindow: self, magnification: event.magnification, angle: angle)
+            let magnification = event.magnification
+            let xFactor = angle == nil ? (-1 * magnification) : (-1 * magnification * cos(angle!))
+            let yFactor = angle == nil ? (-1 * magnification) : (-1 * magnification * sin(angle!))
+        
+            self.delegate_?.onResizeFactorGesture(gestureOverlayWindow: self, factor: (x: xFactor, y: yFactor))
         } else if event.phase == NSEvent.Phase.ended {
             self.magnifying = false
-            self.delegate_?.onMagnifyEnded(overlayWindow: self)
         }
     }
     
     override func touchesMoved(with event: NSEvent) {
+        // Infer pinch angle
         guard self.magnifying == true else { return }
         guard self.shouldInferMagnificationAngle == true else { return }
         let touches = event.allTouches()
@@ -62,6 +81,76 @@ class GestureOverlayWindow: NSWindow {
     }
     
     override func mouseDragged(with event: NSEvent) {
-        self.delegate_?.onMouseDragged(overlayWindow: self, delta: (x: event.deltaX, y: event.deltaY))
+        // Moving the window
+        let delta = (x: -1 * event.deltaX, y: -1 * event.deltaY)
+        self.delegate_?.onMoveGesture(gestureOverlayWindow: self, delta: delta)
+    }
+    
+    override func scrollWheel(with event: NSEvent) {
+        if event.phase == NSEvent.Phase.began {
+            self.latestScrollingDelta = nil
+        } else if event.phase == NSEvent.Phase.cancelled {
+            self.latestScrollingDelta = nil
+        } else if event.phase == NSEvent.Phase.changed {
+            // Moving the window
+            let factor: CGFloat = event.isDirectionInvertedFromDevice ? -1 : 1;
+            let delta = (x: factor * event.scrollingDeltaX, y: factor * event.scrollingDeltaY)
+            self.latestScrollingDelta = delta
+            self.delegate_?.onMoveGesture(gestureOverlayWindow: self, delta: delta)
+        } else if event.phase == NSEvent.Phase.ended {
+            // Maybe swiping?
+            if self.latestScrollingDelta == nil { return }
+            let delta = self.latestScrollingDelta!
+            var swipe = (x: 0, y: 0)
+            
+            if abs(delta.x) > self.swipeThreshold {
+                swipe.x = delta.x > 0 ? 1 : -1
+            }
+            
+            if abs(delta.y) > self.swipeThreshold {
+                swipe.y = delta.y > 0 ? 1 : -1
+            }
+            
+            var swipeType: GestureType? = nil
+            
+            switch swipe {
+            case (x: -1, y: -1):
+                swipeType = GestureType.SWIPE_BOTTOM_RIGHT
+                break
+            case (x: -1, y: 0):
+                swipeType = GestureType.SWIPE_RIGHT
+                break
+            case (x: -1, y: 1):
+                swipeType = GestureType.SWIPE_TOP_RIGHT
+                break
+            case (x: 0, y: -1):
+                swipeType = GestureType.SWIPE_BOTTOM
+                break
+            case (x: 0, y: 0):
+                swipeType = nil
+                break
+            case (x: 0, y: 1):
+                swipeType = GestureType.SWIPE_TOP
+                break
+            case (x: 1, y: -1):
+                swipeType = GestureType.SWIPE_BOTTOM_LEFT
+                break
+            case (x: 1, y: 0):
+                swipeType = GestureType.SWIPE_LEFT
+                break
+            case (x: 1, y: 1):
+                swipeType = GestureType.SWIPE_TOP_LEFT
+                break
+            default:
+                swipeType = nil
+                break
+            }
+            
+            if swipeType != nil {
+                self.delegate_?.onSwipeGesture(gestureOverlayWindow: self, type: swipeType!)
+            }
+            
+            self.latestScrollingDelta = nil
+        }
     }
 }
