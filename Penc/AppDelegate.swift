@@ -14,7 +14,7 @@ import MASShortcut
 
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate, ActivationHandlerDelegate, PreferencesDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate, ActivationHandlerDelegate, PreferencesDelegate, NSMenuDelegate {
     
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
     let gestureOverlayWindow = GestureOverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
@@ -25,11 +25,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     var focusedWindow: SIWindow? = nil
     var focusedScreen: NSScreen? = nil
     let activationHandler = ActivationHandler()
+    var disabled = false
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         
-        if let button = statusItem.button {
+        if let button = self.statusItem.button {
             button.image = NSImage(named:NSImage.Name("penc-menu-icon"))
         }
         
@@ -71,13 +72,38 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     func constructMenu() {
         let menu = NSMenu()
+        menu.autoenablesItems = false
         
-        menu.addItem(NSMenuItem(title: "Preferences...", action: #selector(AppDelegate.openPreferencesWindow(_:)), keyEquivalent: ","))
-        menu.addItem(NSMenuItem(title: "About Penc", action: #selector(AppDelegate.openAboutWindow(_:)), keyEquivalent: ""))
+        let aboutMenuItem = NSMenuItem(title: "About Penc", action: #selector(AppDelegate.openAboutWindow(_:)), keyEquivalent: "")
+        menu.addItem(aboutMenuItem)
+        
+        let checkForUpdatesMenuItem = NSMenuItem(title: "Check for updates", action: #selector(AppDelegate.openAboutWindow(_:)), keyEquivalent: "")
+        checkForUpdatesMenuItem.isEnabled = false
+        menu.addItem(checkForUpdatesMenuItem)
+        
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        
+        let disableToggleMenuItem = NSMenuItem(title: "Disable", action: #selector(AppDelegate.openAboutWindow(_:)), keyEquivalent: "")
+        disableToggleMenuItem.tag = 1
+        disableToggleMenuItem.isEnabled = false
+        menu.addItem(disableToggleMenuItem)
+        
+        let disableAppToggleMenuItem = NSMenuItem(title: "Disable for current app", action: #selector(AppDelegate.openAboutWindow(_:)), keyEquivalent: "")
+        disableAppToggleMenuItem.tag = 2
+        menu.addItem(disableAppToggleMenuItem)
+        
+        menu.addItem(NSMenuItem.separator())
+        
+        let preferencesMenuItem = NSMenuItem(title: "Preferences...", action: #selector(AppDelegate.openPreferencesWindow(_:)), keyEquivalent: ",")
+        menu.addItem(preferencesMenuItem)
+        
+        menu.addItem(NSMenuItem.separator())
+        
+        let quitMenuItem = NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        menu.addItem(quitMenuItem)
         
         self.statusItem.menu = menu
+        self.statusItem.menu?.delegate = self
     }
     
     func setupPlaceholderWindow() {
@@ -259,6 +285,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             self.placeholderWindowViewController.changeMode(.MOVE)
         } else if mode == .RESIZE {
             self.placeholderWindowViewController.changeMode(.RESIZE)
+        }
+    }
+    
+    func menuWillOpen(_ menu: NSMenu) {
+        let disableToggleMenuItem = menu.item(withTag: 1)
+        disableToggleMenuItem!.title = self.disabled ? "Enable" : "Disable"
+        
+        let disableAppToggleMenuItem = menu.item(withTag: 2)
+        if let app = NSWorkspace.shared.frontmostApplication {
+            if let appName = app.localizedName {
+                // TODO: Check we need to enable or disable
+                disableAppToggleMenuItem!.title = "Disable for \"\(appName)\""
+                disableAppToggleMenuItem!.isEnabled = false
+            }
+        } else {
+            disableAppToggleMenuItem!.title = "Disable for current app"
+            disableAppToggleMenuItem!.isEnabled = false
         }
     }
     
