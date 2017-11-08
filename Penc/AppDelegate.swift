@@ -83,9 +83,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         menu.addItem(NSMenuItem.separator())
         
-        let disableToggleMenuItem = NSMenuItem(title: "Disable", action: #selector(AppDelegate.openAboutWindow(_:)), keyEquivalent: "")
+        let disableToggleMenuItem = NSMenuItem(title: "Disable", action: #selector(AppDelegate.toggleDisable(_:)), keyEquivalent: "")
         disableToggleMenuItem.tag = 1
-        disableToggleMenuItem.isEnabled = false
         menu.addItem(disableToggleMenuItem)
         
         let disableAppToggleMenuItem = NSMenuItem(title: "Disable for current app", action: #selector(AppDelegate.openAboutWindow(_:)), keyEquivalent: "")
@@ -154,6 +153,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     }
     
     func onActivated(activationHandler: ActivationHandler) {
+        guard !self.disabled else { return }
         self.focusedWindow = SIWindow.focused()
         guard self.focusedWindow != nil else { return }
         self.focusedScreen = self.focusedWindow!.screen()
@@ -303,6 +303,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             disableAppToggleMenuItem!.title = "Disable for current app"
             disableAppToggleMenuItem!.isEnabled = false
         }
+    }
+    
+    @objc func toggleDisable(_ sender: Any?) {
+        self.disabled = !self.disabled
     }
     
     
