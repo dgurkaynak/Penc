@@ -22,6 +22,7 @@ final class Preferences {
     private static let key_swipeThreshold = "swipeThreshold"
     private static let key_inferMagnificationAngle = "inferMagnificationAngle"
     private static let key_showGestureInfo = "showGestureInfo"
+    private static let key_disabledApps = "disabledApps"
     
     weak var delegate: PreferencesDelegate?
     
@@ -56,6 +57,13 @@ final class Preferences {
     var showGestureInfo: Bool {
         didSet {
             UserDefaults.standard.set(self.showGestureInfo, forKey: Preferences.key_showGestureInfo)
+            self.delegate?.onPreferencesChanged(preferences: self)
+        }
+    }
+    
+    var disabledApps: [String] {
+        didSet {
+            UserDefaults.standard.set(self.disabledApps, forKey: Preferences.key_disabledApps)
             self.delegate?.onPreferencesChanged(preferences: self)
         }
     }
@@ -110,6 +118,14 @@ final class Preferences {
         } else {
             self.showGestureInfo = showGestureInfo!
         }
+        
+        let disabledApps = defaults.object(forKey: Preferences.key_disabledApps) as? [String]
+        if disabledApps == nil {
+            self.disabledApps = []
+            UserDefaults.standard.set(self.disabledApps, forKey: Preferences.key_disabledApps)
+        } else {
+            self.disabledApps = disabledApps!
+        }
     }
     
     func setDelegate(_ delegate: PreferencesDelegate?) {
@@ -123,6 +139,7 @@ final class Preferences {
         self.swipeThreshold = 15.0
         self.inferMagnificationAngle = false
         self.showGestureInfo = true
+        self.disabledApps = []
     }
     
     func setLaunchAtLogin(_ value: Bool) -> Bool {

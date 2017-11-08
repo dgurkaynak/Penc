@@ -87,7 +87,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         disableToggleMenuItem.tag = 1
         menu.addItem(disableToggleMenuItem)
         
-        let disableAppToggleMenuItem = NSMenuItem(title: "Disable for current app", action: #selector(AppDelegate.openAboutWindow(_:)), keyEquivalent: "")
+        let disableAppToggleMenuItem = NSMenuItem(title: "Disable for current app", action: #selector(AppDelegate.toggleDisableApp(_:)), keyEquivalent: "")
+        disableAppToggleMenuItem.isEnabled = false
         disableAppToggleMenuItem.tag = 2
         menu.addItem(disableAppToggleMenuItem)
         
@@ -159,6 +160,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.focusedScreen = self.focusedWindow!.screen()
         guard self.focusedScreen != nil else { return }
         guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
+        if let app = NSWorkspace.shared.frontmostApplication {
+            if let appBundleId = app.bundleIdentifier {
+                if Preferences.shared.disabledApps.contains(appBundleId) { return }
+            }
+        }
         
         let focusedWindowRect = self.focusedWindow!.frame().topLeft2bottomLeft(self.focusedScreen!)
         self.placeholderWindow.setFrame(focusedWindowRect, display: true, animate: false)
@@ -172,8 +178,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     }
     
     func onDeactivated(activationHandler: ActivationHandler) {
+        guard !self.disabled else { return }
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
+        if let app = NSWorkspace.shared.frontmostApplication {
+            if let appBundleId = app.bundleIdentifier {
+                if Preferences.shared.disabledApps.contains(appBundleId) { return }
+            }
+        }
         
         let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(self.focusedScreen!)
         self.focusedWindow!.setFrame(newRect)
@@ -294,10 +306,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         let disableAppToggleMenuItem = menu.item(withTag: 2)
         if let app = NSWorkspace.shared.frontmostApplication {
-            if let appName = app.localizedName {
-                // TODO: Check we need to enable or disable
-                disableAppToggleMenuItem!.title = "Disable for \"\(appName)\""
-                disableAppToggleMenuItem!.isEnabled = false
+            if let appName = app.localizedName, let appBundleId = app.bundleIdentifier {
+                if Preferences.shared.disabledApps.contains(appBundleId) {
+                    disableAppToggleMenuItem!.title = "Enable for \"\(appName)\""
+                } else {
+                    disableAppToggleMenuItem!.title = "Disable for \"\(appName)\""
+                }
+                
+                disableAppToggleMenuItem!.isEnabled = true
             }
         } else {
             disableAppToggleMenuItem!.title = "Disable for current app"
@@ -307,6 +323,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     @objc func toggleDisable(_ sender: Any?) {
         self.disabled = !self.disabled
+    }
+    
+    @objc func toggleDisableApp(_ sender: Any?) {
+        if let app = NSWorkspace.shared.frontmostApplication {
+            if let appBundleId = app.bundleIdentifier {
+                if Preferences.shared.disabledApps.contains(appBundleId) {
+                    let i = Preferences.shared.disabledApps.index(of: appBundleId)
+                    Preferences.shared.disabledApps.remove(at: i!)
+                } else {
+                    Preferences.shared.disabledApps.append(appBundleId)
+                }
+                
+                Preferences.shared.disabledApps = Preferences.shared.disabledApps
+            }
+        }
     }
     
     
