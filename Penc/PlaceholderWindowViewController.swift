@@ -32,20 +32,22 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
     
     func changeMode(_ mode: PlaceholderWindowInfoMode) {
         if mode == .MOVE {
+            self.mode = .MOVE
             self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.5)
             self.dragLabel1.stringValue = "Two finger drag to move"
             self.dragLabel2.stringValue = "Two finger swipe to snap"
             self.dragLabel2.alphaValue = 1
-            self.mode = .MOVE
+            self.showInfoIfApplicable()
         } else if mode == .RESIZE {
+            self.mode = .RESIZE
             self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.5)
             self.dragLabel1.stringValue = "Two finger scroll to resize"
             self.dragLabel2.alphaValue = 0
-            self.mode = PlaceholderWindowInfoMode.RESIZE
+            self.showInfoIfApplicable()
         } else {
+            self.mode = PlaceholderWindowInfoMode.NONE
             self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.25)
             self.hideInfo()
-            self.mode = PlaceholderWindowInfoMode.NONE
         }
     }
     
@@ -66,8 +68,7 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
         self.pinchLabel.alphaValue = 1
     }
     
-    func windowDidResize(_ notification: Notification) {
-        guard self.mode != .NONE else { return }
+    func showInfoIfApplicable() {
         if let window = self.view.window {
             let show = window.frame.height > 300 && window.frame.width > 500
             if show {
@@ -76,6 +77,11 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
                 self.hideInfo()
             }
         }
+    }
+    
+    func windowDidResize(_ notification: Notification) {
+        guard self.mode != .NONE else { return }
+        self.showInfoIfApplicable()
     }
 }
 

@@ -21,6 +21,7 @@ final class Preferences {
     private static let key_activationSensitivity = "activationSensitivity"
     private static let key_swipeThreshold = "swipeThreshold"
     private static let key_inferMagnificationAngle = "inferMagnificationAngle"
+    private static let key_showGestureInfo = "showGestureInfo"
     
     weak var delegate: PreferencesDelegate?
     
@@ -48,6 +49,13 @@ final class Preferences {
     var inferMagnificationAngle: Bool {
         didSet {
             UserDefaults.standard.set(self.inferMagnificationAngle, forKey: Preferences.key_inferMagnificationAngle)
+            self.delegate?.onPreferencesChanged(preferences: self)
+        }
+    }
+    
+    var showGestureInfo: Bool {
+        didSet {
+            UserDefaults.standard.set(self.showGestureInfo, forKey: Preferences.key_showGestureInfo)
             self.delegate?.onPreferencesChanged(preferences: self)
         }
     }
@@ -81,7 +89,7 @@ final class Preferences {
         
         let swipeThreshold = defaults.object(forKey: Preferences.key_swipeThreshold) as? CGFloat
         if swipeThreshold == nil {
-            self.swipeThreshold = 20.0
+            self.swipeThreshold = 15.0
             UserDefaults.standard.set(self.swipeThreshold, forKey: Preferences.key_swipeThreshold)
         } else {
             self.swipeThreshold = swipeThreshold!
@@ -89,10 +97,18 @@ final class Preferences {
         
         let inferMagnificationAngle = defaults.object(forKey: Preferences.key_inferMagnificationAngle) as? Bool
         if inferMagnificationAngle == nil {
-            self.inferMagnificationAngle = true
+            self.inferMagnificationAngle = false
             UserDefaults.standard.set(self.inferMagnificationAngle, forKey: Preferences.key_inferMagnificationAngle)
         } else {
             self.inferMagnificationAngle = inferMagnificationAngle!
+        }
+        
+        let showGestureInfo = defaults.object(forKey: Preferences.key_showGestureInfo) as? Bool
+        if showGestureInfo == nil {
+            self.showGestureInfo = true
+            UserDefaults.standard.set(self.showGestureInfo, forKey: Preferences.key_showGestureInfo)
+        } else {
+            self.showGestureInfo = showGestureInfo!
         }
     }
     
@@ -104,8 +120,9 @@ final class Preferences {
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
         self.activationModifierKey = .command
         self.activationSensitivity = 0.3
-        self.swipeThreshold = 20.0
+        self.swipeThreshold = 15.0
         self.inferMagnificationAngle = false
+        self.showGestureInfo = true
     }
     
     func setLaunchAtLogin(_ value: Bool) -> Bool {

@@ -18,6 +18,7 @@ class PreferencesViewController: NSViewController {
     @IBOutlet var launchAtLoginCheckbox: NSButton!
     @IBOutlet var resetDefaultsButton: NSButton!
     @IBOutlet var modifierKeyPopUpButton: NSPopUpButton!
+    @IBOutlet var showGestureInfoCheckbox: NSButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +41,9 @@ class PreferencesViewController: NSViewController {
         
         self.inferPinchAngleCheckbox.target = self
         self.inferPinchAngleCheckbox.action = #selector(onInferPinchAngleCheckboxChange)
+        
+        self.showGestureInfoCheckbox.target = self
+        self.showGestureInfoCheckbox.action = #selector(onShowGestureInfoCheckboxChange)
         
         self.launchAtLoginCheckbox.target = self
         self.launchAtLoginCheckbox.action = #selector(onLaunchAtLoginCheckboxChange)
@@ -74,6 +78,9 @@ class PreferencesViewController: NSViewController {
         self.swipeSensitivitySlider.floatValue = sliderValue
         self.swipeSensitivityLabel.stringValue = String(format: "%.2f", sliderValue)
         
+        self.showGestureInfoCheckbox.state = Preferences.shared.showGestureInfo ? .on : .off
+        self.showGestureInfoCheckbox.state = Preferences.shared.showGestureInfo ? .on : .off
+        
         self.inferPinchAngleCheckbox.state = Preferences.shared.inferMagnificationAngle ? .on : .off
         self.launchAtLoginCheckbox.state = Preferences.shared.launchAtLogin ? .on : .off
     }
@@ -105,6 +112,10 @@ class PreferencesViewController: NSViewController {
     
     @objc private func onInferPinchAngleCheckboxChange() {
         Preferences.shared.inferMagnificationAngle = self.inferPinchAngleCheckbox.state == .on
+    }
+    
+    @objc private func onShowGestureInfoCheckboxChange() {
+        Preferences.shared.showGestureInfo = self.showGestureInfoCheckbox.state == .on
     }
     
     @objc private func onLaunchAtLoginCheckboxChange() {
