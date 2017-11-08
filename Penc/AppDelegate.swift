@@ -14,7 +14,7 @@ import MASShortcut
 
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, PreferencesDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, PreferencesDelegate, ActivationHandlerDelegate {
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
     let gestureHandler = GestureHandler()
     let overlayWindow = OverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
@@ -23,6 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
     let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
     var focusedWindow: SIWindow? = nil
     var focusedScreen: NSScreen? = nil
+    let activationHandler = ActivationHandler()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -36,6 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
             self.gestureHandler.setDelegate(self)
             Preferences.shared.setDelegate(self)
             self.overlayWindow.setDelegate(self.gestureHandler)
+            self.activationHandler.setDelegate(self)
             
             self.setupPlaceholderWindow()
             self.setupOverlayWindow()
@@ -233,6 +235,38 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureHandlerDelegate, Pref
     }
     
     func onGestureEnded(gestureHandler: GestureHandler) {
+        guard self.focusedWindow != nil else { return }
+        guard self.focusedScreen != nil else { return }
+        
+        let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(self.focusedScreen!)
+        self.focusedWindow!.setFrame(newRect)
+        self.focusedWindow!.focus()
+        self.placeholderWindow.orderOut(self.placeholderWindow)
+        self.overlayWindow.orderOut(self.overlayWindow)
+        
+        self.focusedWindow = nil
+        self.focusedScreen = nil
+    }
+    
+    func onActivated(activationHandler: ActivationHandler) {
+        self.focusedWindow = SIWindow.focused()
+        guard self.focusedWindow != nil else { return }
+        self.focusedScreen = self.focusedWindow!.screen()
+        guard self.focusedScreen != nil else { return }
+        guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
+        
+        let focusedWindowRect = self.focusedWindow!.frame().topLeft2bottomLeft(self.focusedScreen!)
+        self.placeholderWindow.setFrame(focusedWindowRect, display: true, animate: false)
+        self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
+        
+        let focusedScreenRect = self.focusedScreen!.frame.topLeft2bottomLeft(self.focusedScreen!)
+        self.overlayWindow.setFrame(focusedScreenRect, display: true, animate: false)
+        self.overlayWindow.makeKeyAndOrderFront(self.overlayWindow)
+        
+        NSApplication.shared.activate(ignoringOtherApps: true)
+    }
+    
+    func onDeactivated(activationHandler: ActivationHandler) {
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
         

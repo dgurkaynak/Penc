@@ -18,6 +18,8 @@
 		94763F731FA8DE5800D60C27 /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94763F721FA8DE5800D60C27 /* CGRectExtension.swift */; };
 		94763F7F1FA9095E00D60C27 /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94763F7E1FA9095E00D60C27 /* PreferencesViewController.swift */; };
 		949553E21FB0BDC60025E22C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949553E11FB0BDC60025E22C /* AboutViewController.swift */; };
+		94C5FCCB1FB2201200916D97 /* ActivationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCA1FB2201200916D97 /* ActivationHandler.swift */; };
+		94C5FCCD1FB222CA00916D97 /* PTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCC1FB222CA00916D97 /* PTimer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		94763F721FA8DE5800D60C27 /* CGRectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		94763F7E1FA9095E00D60C27 /* PreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewController.swift; sourceTree = "<group>"; };
 		949553E11FB0BDC60025E22C /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		94C5FCCA1FB2201200916D97 /* ActivationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationHandler.swift; sourceTree = "<group>"; };
+		94C5FCCC1FB222CA00916D97 /* PTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTimer.swift; sourceTree = "<group>"; };
 		EC736EAB9572887E33DE2C99 /* Pods-Penc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Penc.release.xcconfig"; path = "Pods/Target Support Files/Pods-Penc/Pods-Penc.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -93,6 +97,8 @@
 				9417B7C01FADB16300749BC8 /* OverlayWindow.swift */,
 				9417B7CA1FB04A0100749BC8 /* Preferences.swift */,
 				949553E11FB0BDC60025E22C /* AboutViewController.swift */,
+				94C5FCCA1FB2201200916D97 /* ActivationHandler.swift */,
+				94C5FCCC1FB222CA00916D97 /* PTimer.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -253,7 +259,9 @@
 				94763F731FA8DE5800D60C27 /* CGRectExtension.swift in Sources */,
 				9417B7CB1FB04A0100749BC8 /* Preferences.swift in Sources */,
 				94763F711FA8A1E400D60C27 /* GestureHandler.swift in Sources */,
+				94C5FCCD1FB222CA00916D97 /* PTimer.swift in Sources */,
 				94763F6F1FA895BD00D60C27 /* ScrollHandler.swift in Sources */,
+				94C5FCCB1FB2201200916D97 /* ActivationHandler.swift in Sources */,
 				945195A41FA88B8B00FA53B4 /* AppDelegate.swift in Sources */,
 				9417B7C11FADB16300749BC8 /* OverlayWindow.swift in Sources */,
 				949553E21FB0BDC60025E22C /* AboutViewController.swift in Sources */,
