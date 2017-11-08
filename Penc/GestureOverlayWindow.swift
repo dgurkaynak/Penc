@@ -22,11 +22,17 @@ enum GestureType {
     case SWIPE_TOP_LEFT
 }
 
+enum GestureMode {
+    case MOVE
+    case RESIZE
+}
+
 protocol GestureOverlayWindowDelegate: class {
     func onMoveGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat))
     func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: GestureType)
     func onResizeDeltaGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat))
     func onResizeFactorGesture(gestureOverlayWindow: GestureOverlayWindow, factor: (x: CGFloat, y: CGFloat))
+    func onModeChange(gestureOverlayWindow: GestureOverlayWindow, mode: GestureMode)
 }
 
 class GestureOverlayWindow: NSWindow {
@@ -170,6 +176,7 @@ class GestureOverlayWindow: NSWindow {
         }
         
         self.resizeDeltaActivated = true
+        self.delegate_?.onModeChange(gestureOverlayWindow: self, mode: .RESIZE)
     }
     
     override func keyUp(with event: NSEvent) {
@@ -179,11 +186,13 @@ class GestureOverlayWindow: NSWindow {
         }
         
         self.resizeDeltaActivated = false
+        self.delegate_?.onModeChange(gestureOverlayWindow: self, mode: .MOVE)
     }
     
     func clear() {
         self.magnifying = false
         self.latestScrollingDelta = nil
         self.resizeDeltaActivated = false
+        self.delegate_?.onModeChange(gestureOverlayWindow: self, mode: .MOVE)
     }
 }
