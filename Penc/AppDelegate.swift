@@ -150,6 +150,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.focusedWindow!.focus()
         self.placeholderWindow.orderOut(self.placeholderWindow)
         self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
+        self.gestureOverlayWindow.clear()
         
         self.focusedWindow = nil
         self.focusedScreen = nil

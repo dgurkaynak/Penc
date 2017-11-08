@@ -25,6 +25,7 @@ enum GestureType {
 protocol GestureOverlayWindowDelegate: class {
     func onMoveGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat))
     func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: GestureType)
+    func onResizeDeltaGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat))
     func onResizeFactorGesture(gestureOverlayWindow: GestureOverlayWindow, factor: (x: CGFloat, y: CGFloat))
 }
 
@@ -34,9 +35,12 @@ class GestureOverlayWindow: NSWindow {
     var shouldInferMagnificationAngle = false
     private var magnifying = false
     private var magnificationAngle = CGFloat.pi / 4
-    
+
     var swipeThreshold: CGFloat = 20
     private var latestScrollingDelta: (x: CGFloat, y: CGFloat)?
+    
+    var resizeDeltaActivationKey = "r"
+    private var resizeDeltaActivated = false
     
     
     func setDelegate(_ delegate: GestureOverlayWindowDelegate?) {
@@ -92,14 +96,19 @@ class GestureOverlayWindow: NSWindow {
         } else if event.phase == NSEvent.Phase.cancelled {
             self.latestScrollingDelta = nil
         } else if event.phase == NSEvent.Phase.changed {
-            // Moving the window
+            // Moving or resizing (delta) window
             let factor: CGFloat = event.isDirectionInvertedFromDevice ? -1 : 1;
             let delta = (x: factor * event.scrollingDeltaX, y: factor * event.scrollingDeltaY)
             self.latestScrollingDelta = delta
-            self.delegate_?.onMoveGesture(gestureOverlayWindow: self, delta: delta)
+            if self.resizeDeltaActivated {
+                self.delegate_?.onResizeDeltaGesture(gestureOverlayWindow: self, delta: delta)
+            } else {
+                self.delegate_?.onMoveGesture(gestureOverlayWindow: self, delta: delta)
+            }
         } else if event.phase == NSEvent.Phase.ended {
             // Maybe swiping?
             if self.latestScrollingDelta == nil { return }
+            if self.resizeDeltaActivated { return }
             let delta = self.latestScrollingDelta!
             var swipe = (x: 0, y: 0)
             
@@ -152,5 +161,29 @@ class GestureOverlayWindow: NSWindow {
             
             self.latestScrollingDelta = nil
         }
+    }
+    
+    override func keyDown(with event: NSEvent) {
+        guard event.charactersIgnoringModifiers == self.resizeDeltaActivationKey else {
+            super.keyDown(with: event)
+            return
+        }
+        
+        self.resizeDeltaActivated = true
+    }
+    
+    override func keyUp(with event: NSEvent) {
+        guard event.charactersIgnoringModifiers == self.resizeDeltaActivationKey else {
+            super.keyDown(with: event)
+            return
+        }
+        
+        self.resizeDeltaActivated = false
+    }
+    
+    func clear() {
+        self.magnifying = false
+        self.latestScrollingDelta = nil
+        self.resizeDeltaActivated = false
     }
 }
