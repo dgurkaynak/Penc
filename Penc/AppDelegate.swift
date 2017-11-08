@@ -82,7 +82,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     func setupPlaceholderWindow() {
         self.placeholderWindow.level = .floating
         self.placeholderWindow.isOpaque = false
-        self.placeholderWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 1.0, blue: 0.0, alpha: 0.25)
+        self.placeholderWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
+        
+        let boxView = NSBox()
+        boxView.boxType = .custom
+        boxView.borderColor = NSColor(calibratedRed: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        boxView.borderWidth = 2.5
+        boxView.fillColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.25)
+        boxView.cornerRadius = 5
+        
+        self.placeholderWindow.contentView = boxView
     }
     
     func setupOverlayWindow() {
