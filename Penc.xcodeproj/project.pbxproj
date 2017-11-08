@@ -19,6 +19,7 @@
 		94C5FCCB1FB2201200916D97 /* ActivationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCA1FB2201200916D97 /* ActivationHandler.swift */; };
 		94C5FCCD1FB222CA00916D97 /* PTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCC1FB222CA00916D97 /* PTimer.swift */; };
 		94C5FCCF1FB3025200916D97 /* PApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCE1FB3025200916D97 /* PApplication.swift */; };
+		94C5FCD11FB347DA00916D97 /* PlaceholderWindowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		94C5FCCA1FB2201200916D97 /* ActivationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationHandler.swift; sourceTree = "<group>"; };
 		94C5FCCC1FB222CA00916D97 /* PTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTimer.swift; sourceTree = "<group>"; };
 		94C5FCCE1FB3025200916D97 /* PApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PApplication.swift; sourceTree = "<group>"; };
+		94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderWindowViewController.swift; sourceTree = "<group>"; };
 		EC736EAB9572887E33DE2C99 /* Pods-Penc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Penc.release.xcconfig"; path = "Pods/Target Support Files/Pods-Penc/Pods-Penc.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,6 +98,7 @@
 				94C5FCCA1FB2201200916D97 /* ActivationHandler.swift */,
 				94C5FCCC1FB222CA00916D97 /* PTimer.swift */,
 				94C5FCCE1FB3025200916D97 /* PApplication.swift */,
+				94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 				94C5FCCB1FB2201200916D97 /* ActivationHandler.swift in Sources */,
 				945195A41FA88B8B00FA53B4 /* AppDelegate.swift in Sources */,
 				9417B7C11FADB16300749BC8 /* GestureOverlayWindow.swift in Sources */,
+				94C5FCD11FB347DA00916D97 /* PlaceholderWindowViewController.swift in Sources */,
 				949553E21FB0BDC60025E22C /* AboutViewController.swift in Sources */,
 				94C5FCCF1FB3025200916D97 /* PApplication.swift in Sources */,
 				94763F7F1FA9095E00D60C27 /* PreferencesViewController.swift in Sources */,

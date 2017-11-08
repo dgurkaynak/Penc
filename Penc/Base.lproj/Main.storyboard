@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -801,7 +802,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="57.5" y="621"/>
+            <point key="canvasLocation" x="75" y="194"/>
         </scene>
         <!--About View Controller-->
         <scene sceneID="4jQ-lK-m5Y">
@@ -869,7 +870,37 @@
                 </viewController>
                 <customObject id="P71-yi-YO2" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-61" y="1032.5"/>
+            <point key="canvasLocation" x="74" y="497"/>
+        </scene>
+        <!--Placeholder Window View Controller-->
+        <scene sceneID="FbH-cw-KfJ">
+            <objects>
+                <viewController storyboardIdentifier="PlaceholderWindowViewController" id="mHg-jc-tPh" customClass="PlaceholderWindowViewController" customModule="Penc" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="FY6-iE-YxS">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <box boxType="custom" borderWidth="3" cornerRadius="5" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="VYT-K1-tfH">
+                                <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                                <view key="contentView" id="cI5-e1-jMR">
+                                    <rect key="frame" x="3" y="3" width="444" height="294"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <color key="borderColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="fillColor" red="0.0" green="0.0" blue="0.0" alpha="0.24689150528169015" colorSpace="custom" customColorSpace="sRGB"/>
+                            </box>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="VYT-K1-tfH" secondAttribute="trailing" id="Gkb-Sx-jmt"/>
+                            <constraint firstItem="VYT-K1-tfH" firstAttribute="leading" secondItem="FY6-iE-YxS" secondAttribute="leading" id="Oe0-tn-eAT"/>
+                            <constraint firstItem="VYT-K1-tfH" firstAttribute="top" secondItem="FY6-iE-YxS" secondAttribute="top" id="pwG-Bk-ese"/>
+                            <constraint firstAttribute="bottom" secondItem="VYT-K1-tfH" secondAttribute="bottom" id="yOY-ko-Oxh"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <customObject id="wYq-Lv-GOz" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="47" y="870"/>
         </scene>
     </scenes>
     <resources>
