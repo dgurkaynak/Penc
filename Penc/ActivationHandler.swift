@@ -19,7 +19,7 @@ class ActivationHandler {
     weak var delegate: ActivationHandlerDelegate?
     private var globalModifierKeyMonitor: Any?
     private var localModifierKeyMonitor: Any?
-    var activationModifierFlag = NSEvent.ModifierFlags.command
+    var activationModifierKey = NSEvent.ModifierFlags.command
     var activationTimeout = 0.3
     private var activationTimer: PTimer? = nil
     private var active = false
@@ -44,7 +44,7 @@ class ActivationHandler {
         
         if flags == [] {
             self.deactivate()
-        } else if flags == [self.activationModifierFlag] {
+        } else if flags == [self.activationModifierKey] {
             if self.activationTimer == nil {
                 self.activationTimer = PTimer()
             } else {

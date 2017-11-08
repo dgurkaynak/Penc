@@ -17,23 +17,23 @@ protocol PreferencesDelegate: class {
 final class Preferences {
     static let shared = Preferences()
     
-    private static let key_modifierKey1Mask = "modifierKey1Mask"
-    private static let key_activationDelay = "activationDelay"
+    private static let key_activationModifierKey = "activationModifierKey"
+    private static let key_activationSensitivity = "activationSensitivity"
     private static let key_swipeThreshold = "swipeThreshold"
     private static let key_inferMagnificationAngle = "inferMagnificationAngle"
     
     weak var delegate: PreferencesDelegate?
     
-    var modifierKey1Mask: NSEvent.ModifierFlags {
+    var activationModifierKey: NSEvent.ModifierFlags {
         didSet {
-            UserDefaults.standard.set(self.modifierKey1Mask.rawValue, forKey: Preferences.key_modifierKey1Mask)
+            UserDefaults.standard.set(self.activationModifierKey.rawValue, forKey: Preferences.key_activationModifierKey)
             self.delegate?.onPreferencesChanged(preferences: self)
         }
     }
     
-    var activationDelay: Float {
+    var activationSensitivity: Float {
         didSet {
-            UserDefaults.standard.set(self.activationDelay, forKey: Preferences.key_activationDelay)
+            UserDefaults.standard.set(self.activationSensitivity, forKey: Preferences.key_activationSensitivity)
             self.delegate?.onPreferencesChanged(preferences: self)
         }
     }
@@ -63,20 +63,20 @@ final class Preferences {
     private init() {
         let defaults = UserDefaults.standard
         
-        let modifierKey1Mask_int = defaults.object(forKey: Preferences.key_modifierKey1Mask) as? Int
-        if modifierKey1Mask_int == nil {
-            self.modifierKey1Mask = [.function]
-            UserDefaults.standard.set(self.modifierKey1Mask.rawValue, forKey: Preferences.key_modifierKey1Mask)
+        let activationModifierKey_int = defaults.object(forKey: Preferences.key_activationModifierKey) as? Int
+        if activationModifierKey_int == nil {
+            self.activationModifierKey = .command
+            UserDefaults.standard.set(self.activationModifierKey.rawValue, forKey: Preferences.key_activationModifierKey)
         } else {
-            self.modifierKey1Mask = NSEvent.ModifierFlags.init(rawValue: UInt(modifierKey1Mask_int!))
+            self.activationModifierKey = NSEvent.ModifierFlags.init(rawValue: UInt(activationModifierKey_int!))
         }
         
-        let activationDelay = defaults.object(forKey: Preferences.key_activationDelay) as? Float
-        if activationDelay == nil {
-            self.activationDelay = 1.0
-            UserDefaults.standard.set(self.activationDelay, forKey: Preferences.key_activationDelay)
+        let activationSensitivity = defaults.object(forKey: Preferences.key_activationSensitivity) as? Float
+        if activationSensitivity == nil {
+            self.activationSensitivity = 0.3
+            UserDefaults.standard.set(self.activationSensitivity, forKey: Preferences.key_activationSensitivity)
         } else {
-            self.activationDelay = activationDelay!
+            self.activationSensitivity = activationSensitivity!
         }
         
         let swipeThreshold = defaults.object(forKey: Preferences.key_swipeThreshold) as? CGFloat
@@ -102,10 +102,10 @@ final class Preferences {
     
     func reset() {
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
-        self.modifierKey1Mask = [.function]
-        self.activationDelay = 1.0
+        self.activationModifierKey = .command
+        self.activationSensitivity = 0.3
         self.swipeThreshold = 20.0
-        self.inferMagnificationAngle = true
+        self.inferMagnificationAngle = false
     }
     
     func setLaunchAtLogin(_ value: Bool) -> Bool {

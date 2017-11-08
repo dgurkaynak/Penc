@@ -9,35 +9,31 @@
 import Cocoa
 
 class PreferencesViewController: NSViewController {
-    @IBOutlet var modifierKey1CommandCheckbox: NSButton!
-    @IBOutlet var modifierKey1OptionCheckbox: NSButton!
-    @IBOutlet var modifierKey1ControlCheckbox: NSButton!
-    @IBOutlet var modifierKey1ShiftCheckbox: NSButton!
-    @IBOutlet var modifierKey1FunctionCheckbox: NSButton!
-    @IBOutlet var activationDelaySlider: NSSlider!
-    @IBOutlet var activationDelayLabel: NSTextField!
+    
+    @IBOutlet var doublePressSensitivitySider: NSSlider!
+    @IBOutlet var doublePressSensitivityLabel: NSTextField!
     @IBOutlet var swipeSensitivitySlider: NSSlider!
     @IBOutlet var swipeSensitivityLabel: NSTextField!
     @IBOutlet var inferPinchAngleCheckbox: NSButton!
     @IBOutlet var launchAtLoginCheckbox: NSButton!
     @IBOutlet var resetDefaultsButton: NSButton!
+    @IBOutlet var modifierKeyPopUpButton: NSPopUpButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.modifierKey1CommandCheckbox.target = self
-        self.modifierKey1CommandCheckbox.action = #selector(onModifierKey1CommandCheckboxChange)
-        self.modifierKey1OptionCheckbox.target = self
-        self.modifierKey1OptionCheckbox.action = #selector(onModifierKey1OptionCheckboxChange)
-        self.modifierKey1ControlCheckbox.target = self
-        self.modifierKey1ControlCheckbox.action = #selector(onModifierKey1ControlCheckboxChange)
-        self.modifierKey1ShiftCheckbox.target = self
-        self.modifierKey1ShiftCheckbox.action = #selector(onModifierKey1ShiftCheckboxChange)
-        self.modifierKey1FunctionCheckbox.target = self
-        self.modifierKey1FunctionCheckbox.action = #selector(onModifierKey1FunctionCheckboxChange)
+        self.modifierKeyPopUpButton.removeAllItems()
+        self.modifierKeyPopUpButton.addItems(withTitles: [
+            "⌘ Command",
+            "⌥ Option",
+            "^ Control",
+            "⇧ Shift"
+        ])
+        self.modifierKeyPopUpButton.target = self
+        self.modifierKeyPopUpButton.action = #selector(onModifierKeyPopUpButtonChange)
         
-        self.activationDelaySlider.target = self
-        self.activationDelaySlider.action = #selector(onActivationDelaySliderChange)
+        self.doublePressSensitivitySider.target = self
+        self.doublePressSensitivitySider.action = #selector(onDoublePressSensitivitySliderChange)
         
         self.swipeSensitivitySlider.target = self
         self.swipeSensitivitySlider.action = #selector(onSwipeSensitivitySliderChange)
@@ -55,16 +51,23 @@ class PreferencesViewController: NSViewController {
     }
     
     func update() {
-        let modifierKey1Mask = Preferences.shared.modifierKey1Mask
-        self.modifierKey1CommandCheckbox.state = modifierKey1Mask.contains(.command) ? .on : .off
-        self.modifierKey1OptionCheckbox.state = modifierKey1Mask.contains(.option) ? .on : .off
-        self.modifierKey1ControlCheckbox.state = modifierKey1Mask.contains(.control) ? .on : .off
-        self.modifierKey1ShiftCheckbox.state = modifierKey1Mask.contains(.shift) ? .on : .off
-        self.modifierKey1FunctionCheckbox.state = modifierKey1Mask.contains(.function) ? .on : .off
+        let activationModifierKey = Preferences.shared.activationModifierKey
+        switch activationModifierKey {
+        case .command:
+            self.modifierKeyPopUpButton.selectItem(at: 0)
+        case .option:
+            self.modifierKeyPopUpButton.selectItem(at: 1)
+        case .control:
+            self.modifierKeyPopUpButton.selectItem(at: 2)
+        case .shift:
+            self.modifierKeyPopUpButton.selectItem(at: 3)
+        default:
+            self.modifierKeyPopUpButton.selectItem(at: 0)
+        }
         
-        let activationDelay = Int(Preferences.shared.activationDelay * 1000)
-        self.activationDelaySlider.integerValue = activationDelay
-        self.activationDelayLabel.stringValue = "\(activationDelay) ms"
+        let activationSensitivity = Int(Preferences.shared.activationSensitivity * 1000)
+        self.doublePressSensitivitySider.integerValue = activationSensitivity
+        self.doublePressSensitivityLabel.stringValue = "\(activationSensitivity) ms"
         
         let swipeThreshold = Float(Preferences.shared.swipeThreshold)
         let sliderValue = 55 - swipeThreshold
@@ -75,59 +78,24 @@ class PreferencesViewController: NSViewController {
         self.launchAtLoginCheckbox.state = Preferences.shared.launchAtLogin ? .on : .off
     }
     
-    @objc private func onModifierKey1CommandCheckboxChange() {
-        if self.modifierKey1CommandCheckbox.state == .on {
-            Preferences.shared.modifierKey1Mask.insert(.command)
-            Preferences.shared.modifierKey1Mask = Preferences.shared.modifierKey1Mask // triggering didSet observer
-        } else if self.modifierKey1CommandCheckbox.state == .off {
-            Preferences.shared.modifierKey1Mask.remove(.command)
-            Preferences.shared.modifierKey1Mask = Preferences.shared.modifierKey1Mask
+    @objc private func onModifierKeyPopUpButtonChange() {
+        switch self.modifierKeyPopUpButton.indexOfSelectedItem {
+        case 0:
+            Preferences.shared.activationModifierKey = .command
+        case 1:
+            Preferences.shared.activationModifierKey = .option
+        case 2:
+            Preferences.shared.activationModifierKey = .control
+        case 3:
+            Preferences.shared.activationModifierKey = .shift
+        default:
+            Preferences.shared.activationModifierKey = .command
         }
     }
     
-    @objc private func onModifierKey1OptionCheckboxChange() {
-        if self.modifierKey1OptionCheckbox.state == .on {
-            Preferences.shared.modifierKey1Mask.insert(.option)
-            Preferences.shared.modifierKey1Mask = Preferences.shared.modifierKey1Mask // triggering didSet observer
-        } else if self.modifierKey1OptionCheckbox.state == .off {
-            Preferences.shared.modifierKey1Mask.remove(.option)
-            Preferences.shared.modifierKey1Mask = Preferences.shared.modifierKey1Mask
-        }
-    }
-    
-    @objc private func onModifierKey1ControlCheckboxChange() {
-        if self.modifierKey1ControlCheckbox.state == .on {
-            Preferences.shared.modifierKey1Mask.insert(.control)
-            Preferences.shared.modifierKey1Mask = Preferences.shared.modifierKey1Mask // triggering didSet observer
-        } else if self.modifierKey1ControlCheckbox.state == .off {
-            Preferences.shared.modifierKey1Mask.remove(.control)
-            Preferences.shared.modifierKey1Mask = Preferences.shared.modifierKey1Mask
-        }
-    }
-    
-    @objc private func onModifierKey1ShiftCheckboxChange() {
-        if self.modifierKey1ShiftCheckbox.state == .on {
-            Preferences.shared.modifierKey1Mask.insert(.shift)
-            Preferences.shared.modifierKey1Mask = Preferences.shared.modifierKey1Mask // triggering didSet observer
-        } else if self.modifierKey1ShiftCheckbox.state == .off {
-            Preferences.shared.modifierKey1Mask.remove(.shift)
-            Preferences.shared.modifierKey1Mask = Preferences.shared.modifierKey1Mask
-        }
-    }
-    
-    @objc private func onModifierKey1FunctionCheckboxChange() {
-        if self.modifierKey1FunctionCheckbox.state == .on {
-            Preferences.shared.modifierKey1Mask.insert(.function)
-            Preferences.shared.modifierKey1Mask = Preferences.shared.modifierKey1Mask // triggering didSet observer
-        } else if self.modifierKey1FunctionCheckbox.state == .off {
-            Preferences.shared.modifierKey1Mask.remove(.function)
-            Preferences.shared.modifierKey1Mask = Preferences.shared.modifierKey1Mask
-        }
-    }
-    
-    @objc private func onActivationDelaySliderChange() {
-        self.activationDelayLabel.stringValue = "\(self.activationDelaySlider.integerValue) ms"
-        Preferences.shared.activationDelay = self.activationDelaySlider.floatValue / 1000
+    @objc private func onDoublePressSensitivitySliderChange() {
+        self.doublePressSensitivityLabel.stringValue = "\(self.doublePressSensitivitySider.integerValue) ms"
+        Preferences.shared.activationSensitivity = self.doublePressSensitivitySider.floatValue / 1000
     }
     
     @objc private func onSwipeSensitivitySliderChange() {

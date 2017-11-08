@@ -116,11 +116,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     }
     
     func onPreferencesChanged(preferences: Preferences) {
-//        self.gestureHandler.moveModifierFlags = preferences.modifierKey1Mask
-//        self.gestureHandler.resizeFactorModifierFlags = preferences.modifierKey1Mask
-//        self.gestureHandler.swipeModifierFlags = preferences.modifierKey1Mask
-//        self.gestureHandler.earlyBeginDelay = Double(preferences.activationDelay)
+        self.activationHandler.activationModifierKey = preferences.activationModifierKey
+        self.activationHandler.activationTimeout = Double(preferences.activationSensitivity)
         self.gestureOverlayWindow.shouldInferMagnificationAngle = preferences.inferMagnificationAngle
+        self.gestureOverlayWindow.swipeThreshold = preferences.swipeThreshold
     }
     
     func onActivated(activationHandler: ActivationHandler) {
