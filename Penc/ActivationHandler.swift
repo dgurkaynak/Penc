@@ -19,6 +19,8 @@ class ActivationHandler {
     weak var delegate: ActivationHandlerDelegate?
     private var globalModifierKeyMonitor: Any?
     private var localModifierKeyMonitor: Any?
+    private var globalKeyDownMonitor: Any?
+    private var localKeyDownMonitor: Any?
     var activationModifierKey = NSEvent.ModifierFlags.command
     var activationTimeout = 0.3
     private var activationTimer: PTimer? = nil
@@ -31,6 +33,13 @@ class ActivationHandler {
         }
         self.localModifierKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { (event) in
             self.onModifierKeyEvent(event)
+            return event
+        }
+        self.globalKeyDownMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { (event) in
+            self.onKeyDown(event)
+        }
+        self.localKeyDownMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (event) in
+            self.onKeyDown(event)
             return event
         }
     }
@@ -64,6 +73,11 @@ class ActivationHandler {
         }
     }
     
+    private func onKeyDown(_ event: NSEvent) {
+        guard !self.active else { return }
+        self.activationTimer = nil
+    }
+    
     private func activate() {
         guard !self.active else { return }
         self.active = true
@@ -81,5 +95,7 @@ class ActivationHandler {
     deinit {
         NSEvent.removeMonitor(self.localModifierKeyMonitor as Any)
         NSEvent.removeMonitor(self.globalModifierKeyMonitor as Any)
+        NSEvent.removeMonitor(self.localKeyDownMonitor as Any)
+        NSEvent.removeMonitor(self.globalKeyDownMonitor as Any)
     }
 }
