@@ -10,7 +10,6 @@ import Cocoa
 import Foundation
 import ApplicationServices
 import Silica
-import MASShortcut
 
 
 @NSApplicationMain
