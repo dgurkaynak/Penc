@@ -10,6 +10,7 @@ import Cocoa
 
 class PlaceholderWindow: NSWindow {
     override func constrainFrameRect(_ frameRect: NSRect, to screen: NSScreen?) -> NSRect {
+        // TODO: Prevent moving further from highest screen
         return frameRect
     }
 }

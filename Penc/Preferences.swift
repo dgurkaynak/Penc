@@ -97,7 +97,7 @@ final class Preferences {
         
         let swipeThreshold = defaults.object(forKey: Preferences.key_swipeThreshold) as? CGFloat
         if swipeThreshold == nil {
-            self.swipeThreshold = 15.0
+            self.swipeThreshold = 25.0
             UserDefaults.standard.set(self.swipeThreshold, forKey: Preferences.key_swipeThreshold)
         } else {
             self.swipeThreshold = swipeThreshold!
@@ -136,7 +136,7 @@ final class Preferences {
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
         self.activationModifierKey = .command
         self.activationSensitivity = 0.3
-        self.swipeThreshold = 15.0
+        self.swipeThreshold = 25.0
         self.inferMagnificationAngle = false
         self.showGestureInfo = true
         self.disabledApps = []
