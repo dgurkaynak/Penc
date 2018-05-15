@@ -17,7 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
     let gestureOverlayWindow = GestureOverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
-    let placeholderWindow = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
+    let placeholderWindow = PlaceholderWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
     let placeholderWindowViewController = PlaceholderWindowViewController.freshController()
     let preferencesWindow = NSWindow(contentViewController: PreferencesViewController.freshController())
     let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
@@ -112,7 +112,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.placeholderWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
         self.placeholderWindow.contentViewController = self.placeholderWindowViewController
         self.placeholderWindow.delegate = self.placeholderWindowViewController
-        
     }
     
     func setupOverlayWindow() {
@@ -213,7 +212,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             y: self.placeholderWindow.frame.origin.y + delta.y,
             width: self.placeholderWindow.frame.size.width,
             height: self.placeholderWindow.frame.size.height
-        ).fitInVisibleFrame(self.focusedScreen!)
+        )
         
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }

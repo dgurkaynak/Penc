@@ -20,6 +20,7 @@
 		94C5FCCD1FB222CA00916D97 /* PTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCC1FB222CA00916D97 /* PTimer.swift */; };
 		94C5FCCF1FB3025200916D97 /* PApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCE1FB3025200916D97 /* PApplication.swift */; };
 		94C5FCD11FB347DA00916D97 /* PlaceholderWindowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */; };
+		94C88E9220AB6E5600F4B83E /* PlaceholderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		94C5FCCC1FB222CA00916D97 /* PTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTimer.swift; sourceTree = "<group>"; };
 		94C5FCCE1FB3025200916D97 /* PApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PApplication.swift; sourceTree = "<group>"; };
 		94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderWindowViewController.swift; sourceTree = "<group>"; };
+		94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderWindow.swift; sourceTree = "<group>"; };
 		EC736EAB9572887E33DE2C99 /* Pods-Penc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Penc.release.xcconfig"; path = "Pods/Target Support Files/Pods-Penc/Pods-Penc.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -99,6 +101,7 @@
 				94C5FCCC1FB222CA00916D97 /* PTimer.swift */,
 				94C5FCCE1FB3025200916D97 /* PApplication.swift */,
 				94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */,
+				94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -255,6 +258,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				94763F731FA8DE5800D60C27 /* CGRectExtension.swift in Sources */,
+				94C88E9220AB6E5600F4B83E /* PlaceholderWindow.swift in Sources */,
 				9417B7CB1FB04A0100749BC8 /* Preferences.swift in Sources */,
 				94C5FCCD1FB222CA00916D97 /* PTimer.swift in Sources */,
 				94C5FCCB1FB2201200916D97 /* ActivationHandler.swift in Sources */,
