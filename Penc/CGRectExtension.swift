@@ -12,8 +12,8 @@ import Cocoa
 
 extension CGRect {
     // Works both ways
-    func topLeft2bottomLeft(_ screen: NSScreen) -> CGRect {
-        return CGRect(x: self.origin.x, y: screen.frame.height - self.height - self.origin.y, width: self.width, height: self.height)
+    func topLeft2bottomLeft(_ mainScreen: NSScreen) -> CGRect {
+        return CGRect(x: self.origin.x, y: mainScreen.frame.height - self.height - self.origin.y, width: self.width, height: self.height)
     }
     
     // Works for bottom-left

@@ -23,6 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
     var focusedWindow: SIWindow? = nil
     var focusedScreen: NSScreen? = nil
+    var mainScreen: NSScreen? = nil
     let activationHandler = ActivationHandler()
     var disabled = false
     
@@ -158,6 +159,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.focusedWindow != nil else { return }
         self.focusedScreen = self.focusedWindow!.screen()
         guard self.focusedScreen != nil else { return }
+        guard NSScreen.screens.indices.contains(0) else { return }
+        self.mainScreen = NSScreen.screens[0]
         guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
         if let app = NSWorkspace.shared.frontmostApplication {
             if let appBundleId = app.bundleIdentifier {
@@ -165,12 +168,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             }
         }
         
-        let focusedWindowRect = self.focusedWindow!.frame().topLeft2bottomLeft(self.focusedScreen!)
+        let focusedWindowRect = self.focusedWindow!.frame().topLeft2bottomLeft(self.mainScreen!)
         self.placeholderWindow.setFrame(focusedWindowRect, display: true, animate: false)
         self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
         
-        let focusedScreenRect = self.focusedScreen!.frame.topLeft2bottomLeft(self.focusedScreen!)
-        self.gestureOverlayWindow.setFrame(focusedScreenRect, display: true, animate: false)
+        self.gestureOverlayWindow.setFrame(self.focusedScreen!.frame, display: true, animate: false)
         self.gestureOverlayWindow.makeKeyAndOrderFront(self.gestureOverlayWindow)
         
         NSApplication.shared.activate(ignoringOtherApps: true)
@@ -180,13 +182,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard !self.disabled else { return }
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
+        guard self.mainScreen != nil else { return }
         if let app = NSWorkspace.shared.frontmostApplication {
             if let appBundleId = app.bundleIdentifier {
                 if Preferences.shared.disabledApps.contains(appBundleId) { return }
             }
         }
         
-        let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(self.focusedScreen!)
+        let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(self.mainScreen!)
         self.focusedWindow!.setFrame(newRect)
         self.focusedWindow!.focus()
         self.placeholderWindow.orderOut(self.placeholderWindow)
@@ -195,11 +198,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         self.focusedWindow = nil
         self.focusedScreen = nil
+        self.mainScreen = nil
     }
     
     func onMoveGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
+        guard self.mainScreen != nil else { return }
         guard self.focusedWindow!.isMovable() else { return }
         guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
         
@@ -216,6 +221,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: GestureType) {
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
+        guard self.mainScreen != nil else { return }
         guard self.focusedWindow!.isMovable() else { return } // TODO: Check resizeable also
         guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
         
