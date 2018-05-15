@@ -26,6 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     var mainScreen: NSScreen? = nil
     let activationHandler = ActivationHandler()
     var disabled = false
+    let snapHelper = SnapHelper()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -198,6 +199,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.focusedWindow = nil
         self.focusedScreen = nil
         self.mainScreen = nil
+        
+        self.snapHelper.reset()
     }
     
     func onMoveGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
@@ -207,13 +210,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.focusedWindow!.isMovable() else { return }
         guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
         
-        let rect = CGRect(
-            x: self.placeholderWindow.frame.origin.x - delta.x,
-            y: self.placeholderWindow.frame.origin.y + delta.y,
-            width: self.placeholderWindow.frame.size.width,
-            height: self.placeholderWindow.frame.size.height
-        )
-        
+        let rect = snapHelper.constrainWindow(self.placeholderWindow, delta: delta)
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }
     
