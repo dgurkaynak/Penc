@@ -254,16 +254,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
     }
     
-    func onResizeDeltaGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
-        guard self.focusedWindow != nil else { return }
-        guard self.focusedScreen != nil else { return }
-        guard self.focusedWindow!.isResizable() else { return }
-        guard self.placeholderWindow.screen != nil else { return }
-        
-        let rect = self.windowHelper.resize(self.placeholderWindow, delta: delta)
-        self.placeholderWindow.setFrame(rect, display: true, animate: false)
-    }
-    
     func onResizeFactorGesture(gestureOverlayWindow: GestureOverlayWindow, factor: (x: CGFloat, y: CGFloat)) {
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
@@ -272,16 +262,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         let rect = self.windowHelper.resize(self.placeholderWindow, factor: factor)
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
-    }
-    
-    func onModeChange(gestureOverlayWindow: GestureOverlayWindow, mode: GestureMode) {
-        guard self.placeholderWindowViewController.mode != .NONE else { return }
-        
-        if mode == .MOVE {
-            self.placeholderWindowViewController.changeMode(.MOVE)
-        } else if mode == .RESIZE {
-            self.placeholderWindowViewController.changeMode(.RESIZE)
-        }
     }
     
     func menuWillOpen(_ menu: NSMenu) {

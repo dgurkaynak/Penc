@@ -11,7 +11,6 @@ import Cocoa
 enum PlaceholderWindowInfoMode {
     case NONE
     case MOVE
-    case RESIZE
 }
 
 class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
@@ -38,12 +37,6 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
             self.dragLabel2.stringValue = "Two finger swipe to snap"
             self.dragLabel2.alphaValue = 1
             self.showInfoIfApplicable()
-        } else if mode == .RESIZE {
-            self.mode = .RESIZE
-            self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.5)
-            self.dragLabel1.stringValue = "Two finger scroll to resize"
-            self.dragLabel2.alphaValue = 0
-            self.showInfoIfApplicable()
         } else {
             self.mode = PlaceholderWindowInfoMode.NONE
             self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.25)
@@ -63,7 +56,7 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
         self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.5)
         self.dragImage.alphaValue = 1
         self.dragLabel1.alphaValue = 1
-        if self.mode == .MOVE { self.dragLabel2.alphaValue = 1 }
+        self.dragLabel2.alphaValue = 1
         self.pinchImage.alphaValue = 1
         self.pinchLabel.alphaValue = 1
     }
