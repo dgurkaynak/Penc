@@ -220,31 +220,32 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.mainScreen != nil else { return }
         guard self.focusedWindow!.isMovable() else { return } // TODO: Check resizeable also
         guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
+        guard self.placeholderWindow.screen != nil else { return }
         
         var rect: CGRect? = nil
         
         if [GestureType.SWIPE_TOP, GestureType.SWIPE_BOTTOM].contains(type) {
-            let newHeight = self.focusedScreen!.visibleFrame.height / 2
+            let newHeight = self.placeholderWindow.screen!.visibleFrame.height / 2
             rect = CGRect(
-                x: self.focusedScreen!.visibleFrame.origin.x,
-                y: self.focusedScreen!.visibleFrame.origin.y + (type == .SWIPE_TOP ? newHeight : 0),
-                width: self.focusedScreen!.visibleFrame.width,
+                x: self.placeholderWindow.screen!.visibleFrame.origin.x,
+                y: self.placeholderWindow.screen!.visibleFrame.origin.y + (type == .SWIPE_TOP ? newHeight : 0),
+                width: self.placeholderWindow.screen!.visibleFrame.width,
                 height: newHeight
             )
         } else if [GestureType.SWIPE_LEFT, GestureType.SWIPE_RIGHT].contains(type) {
-            let newWidth = self.focusedScreen!.visibleFrame.width / 2
+            let newWidth = self.placeholderWindow.screen!.visibleFrame.width / 2
             rect = CGRect(
-                x: self.focusedScreen!.visibleFrame.origin.x + (type == .SWIPE_RIGHT ? newWidth : 0),
-                y: self.focusedScreen!.visibleFrame.origin.y,
+                x: self.placeholderWindow.screen!.visibleFrame.origin.x + (type == .SWIPE_RIGHT ? newWidth : 0),
+                y: self.placeholderWindow.screen!.visibleFrame.origin.y,
                 width: newWidth,
-                height: self.focusedScreen!.visibleFrame.height
+                height: self.placeholderWindow.screen!.visibleFrame.height
             )
         } else if [GestureType.SWIPE_TOP_LEFT, GestureType.SWIPE_TOP_RIGHT, GestureType.SWIPE_BOTTOM_LEFT, GestureType.SWIPE_BOTTOM_RIGHT].contains(type) {
-            let newHeight = self.focusedScreen!.visibleFrame.height / 2
-            let newWidth = self.focusedScreen!.visibleFrame.width / 2
+            let newHeight = self.placeholderWindow.screen!.visibleFrame.height / 2
+            let newWidth = self.placeholderWindow.screen!.visibleFrame.width / 2
             rect = CGRect(
-                x: self.focusedScreen!.visibleFrame.origin.x + (type == .SWIPE_TOP_RIGHT || type == .SWIPE_BOTTOM_RIGHT ? newWidth : 0),
-                y: self.focusedScreen!.visibleFrame.origin.y + (type == .SWIPE_TOP_LEFT || type == .SWIPE_TOP_RIGHT ? newHeight : 0),
+                x: self.placeholderWindow.screen!.visibleFrame.origin.x + (type == .SWIPE_TOP_RIGHT || type == .SWIPE_BOTTOM_RIGHT ? newWidth : 0),
+                y: self.placeholderWindow.screen!.visibleFrame.origin.y + (type == .SWIPE_TOP_LEFT || type == .SWIPE_TOP_RIGHT ? newHeight : 0),
                 width: newWidth,
                 height: newHeight
             )
@@ -260,13 +261,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.focusedScreen != nil else { return }
         guard self.focusedWindow!.isResizable() else { return }
         guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
+        guard self.placeholderWindow.screen != nil else { return }
         
         let rect = CGRect(
             x: self.placeholderWindow.frame.origin.x + delta.x,
             y: self.placeholderWindow.frame.origin.y + delta.y,
             width: self.placeholderWindow.frame.size.width - (delta.x * 2),
             height: self.placeholderWindow.frame.size.height - (delta.y * 2)
-        ).fitInVisibleFrame(self.focusedScreen!)
+        ).fitInVisibleFrame(self.placeholderWindow.screen!)
         
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }
@@ -276,6 +278,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.focusedScreen != nil else { return }
         guard self.focusedWindow!.isResizable() else { return }
         guard self.focusedWindow!.frame() != self.focusedScreen!.frame else { return } // fullscreen
+        guard self.placeholderWindow.screen != nil else { return }
         
         let delta = (
             x: self.placeholderWindow.frame.size.width * factor.x,
@@ -286,7 +289,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             y: self.placeholderWindow.frame.origin.y + delta.y,
             width: self.placeholderWindow.frame.size.width - (delta.x * 2),
             height: self.placeholderWindow.frame.size.height - (delta.y * 2)
-            ).fitInVisibleFrame(self.focusedScreen!)
+        ).fitInVisibleFrame(self.placeholderWindow.screen!)
         
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }
