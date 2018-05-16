@@ -14,10 +14,10 @@ class WindowHelper {
     // Move+Snap properties
     private var ignoredDeltaXs: [CGFloat] = []
     private var ignoredDeltaYs: [CGFloat] = []
-    var maxIgnoredX: CGFloat = 60
-    var maxSnapDeltaX: CGFloat = 10
-    var maxIgnoredY: CGFloat = 60
-    var maxSnapDeltaY: CGFloat = 10
+    private static let maxIgnoredX: CGFloat = 60
+    private static let maxSnapDeltaX: CGFloat = 10
+    private static let maxIgnoredY: CGFloat = 60
+    private static let maxSnapDeltaY: CGFloat = 10
     
     
     func snapToLeftOfScreen(_ window: NSWindow, frame: NSRect?) -> CGRect {
@@ -114,12 +114,12 @@ class WindowHelper {
             
             // If max ignored reached
             let totalIgnoredX = self.ignoredDeltaXs.reduce(0, +)
-            if abs(totalIgnoredX) > self.maxIgnoredX {
+            if abs(totalIgnoredX) > WindowHelper.maxIgnoredX {
                 ignoredX = false
             }
             
             // If max delta
-            if abs(delta.x) >= self.maxSnapDeltaX {
+            if abs(delta.x) >= WindowHelper.maxSnapDeltaX {
                 ignoredX = false
             }
             
@@ -147,12 +147,12 @@ class WindowHelper {
             
             // If max ignored reached
             let totalIgnoredY = self.ignoredDeltaYs.reduce(0, +)
-            if abs(totalIgnoredY) > self.maxIgnoredY {
+            if abs(totalIgnoredY) > WindowHelper.maxIgnoredY {
                 ignoredY = false
             }
             
             // If max delta
-            if abs(delta.y) >= self.maxSnapDeltaY {
+            if abs(delta.y) >= WindowHelper.maxSnapDeltaY {
                 ignoredY = false
             }
             
@@ -170,5 +170,34 @@ class WindowHelper {
             width: window.frame.size.width,
             height: window.frame.size.height
         )
+    }
+    
+    func resize(_ window: NSWindow, factor: (x: CGFloat, y: CGFloat)) -> CGRect {
+        let delta = (
+            x: window.frame.size.width * factor.x,
+            y: window.frame.size.height * factor.y
+        )
+        
+        let wCandidate = window.frame.size.width - (delta.x * 2)
+        let hCandidate = window.frame.size.height - (delta.y * 2)
+        
+        return CGRect(
+            x: window.frame.origin.x + delta.x,
+            y: window.frame.origin.y + delta.y,
+            width: min(max(wCandidate, window.minSize.width), window.maxSize.width),
+            height: min(max(hCandidate, window.minSize.height), window.maxSize.height)
+        ).fitInVisibleFrame(window.screen!)
+    }
+    
+    func resize(_ window: NSWindow, delta: (x: CGFloat, y: CGFloat)) -> CGRect {
+        let wCandidate = window.frame.size.width - (delta.x * 2)
+        let hCandidate = window.frame.size.height - (delta.y * 2)
+        
+        return CGRect(
+            x: window.frame.origin.x + delta.x,
+            y: window.frame.origin.y + delta.y,
+            width: min(max(wCandidate, window.minSize.width), window.maxSize.width),
+            height: min(max(hCandidate, window.minSize.height), window.maxSize.height)
+        ).fitInVisibleFrame(window.screen!)
     }
 }

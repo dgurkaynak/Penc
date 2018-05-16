@@ -260,13 +260,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.focusedWindow!.isResizable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
         
-        let rect = CGRect(
-            x: self.placeholderWindow.frame.origin.x + delta.x,
-            y: self.placeholderWindow.frame.origin.y + delta.y,
-            width: self.placeholderWindow.frame.size.width - (delta.x * 2),
-            height: self.placeholderWindow.frame.size.height - (delta.y * 2)
-        ).fitInVisibleFrame(self.placeholderWindow.screen!)
-        
+        let rect = self.windowHelper.resize(self.placeholderWindow, delta: delta)
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }
     
@@ -276,17 +270,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.focusedWindow!.isResizable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
         
-        let delta = (
-            x: self.placeholderWindow.frame.size.width * factor.x,
-            y: self.placeholderWindow.frame.size.height * factor.y
-        )
-        let rect = CGRect(
-            x: self.placeholderWindow.frame.origin.x + delta.x,
-            y: self.placeholderWindow.frame.origin.y + delta.y,
-            width: self.placeholderWindow.frame.size.width - (delta.x * 2),
-            height: self.placeholderWindow.frame.size.height - (delta.y * 2)
-        ).fitInVisibleFrame(self.placeholderWindow.screen!)
-        
+        let rect = self.windowHelper.resize(self.placeholderWindow, factor: factor)
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }
     
