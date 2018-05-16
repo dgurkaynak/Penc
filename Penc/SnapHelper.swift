@@ -13,9 +13,9 @@ import Cocoa
 class SnapHelper {
     private var ignoredDeltaXs: [CGFloat] = []
     private var ignoredDeltaYs: [CGFloat] = []
-    var maxIgnoredX: CGFloat = 50
+    var maxIgnoredX: CGFloat = 60
     var maxSnapDeltaX: CGFloat = 10
-    var maxIgnoredY: CGFloat = 50
+    var maxIgnoredY: CGFloat = 60
     var maxSnapDeltaY: CGFloat = 10
     
     
