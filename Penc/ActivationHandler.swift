@@ -13,6 +13,7 @@ import Cocoa
 protocol ActivationHandlerDelegate: class {
     func onActivated(activationHandler: ActivationHandler)
     func onDeactivated(activationHandler: ActivationHandler)
+    func onCancelled(activationHandler: ActivationHandler)
 }
 
 class ActivationHandler {
@@ -68,14 +69,16 @@ class ActivationHandler {
                 }
             }
         } else {
-            self.activationTimer = nil
-            self.deactivate()
+            self.cancel()
         }
     }
     
     private func onKeyDown(_ event: NSEvent) {
-        guard !self.active else { return }
-        self.activationTimer = nil
+        if self.active {
+            self.cancel()
+        } else {
+            self.activationTimer = nil
+        }
     }
     
     private func activate() {
@@ -90,6 +93,13 @@ class ActivationHandler {
         self.active = false
         self.activationTimer = nil
         self.delegate?.onDeactivated(activationHandler: self)
+    }
+    
+    private func cancel() {
+        guard self.active else { return }
+        self.active = false
+        self.activationTimer = nil
+        self.delegate?.onCancelled(activationHandler: self)
     }
     
     deinit {

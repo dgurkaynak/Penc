@@ -200,6 +200,27 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.mainScreen = nil
     }
     
+    func onCancelled(activationHandler: ActivationHandler) {
+        guard !self.disabled else { return }
+        guard self.focusedWindow != nil else { return }
+        guard self.focusedScreen != nil else { return }
+        guard self.mainScreen != nil else { return }
+        if let app = NSWorkspace.shared.frontmostApplication {
+            if let appBundleId = app.bundleIdentifier {
+                if Preferences.shared.disabledApps.contains(appBundleId) { return }
+            }
+        }
+        
+        self.focusedWindow!.focus()
+        self.placeholderWindow.orderOut(self.placeholderWindow)
+        self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
+        self.gestureOverlayWindow.clear()
+        
+        self.focusedWindow = nil
+        self.focusedScreen = nil
+        self.mainScreen = nil
+    }
+    
     func onMoveGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
