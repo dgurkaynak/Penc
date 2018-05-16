@@ -72,7 +72,7 @@ final class Preferences {
     @objc dynamic var launchAtLogin : Bool {
         get {
             guard let jobDicts = SMCopyAllJobDictionaries( kSMDomainUserLaunchd ).takeRetainedValue() as? [[String:Any]] else { return false }
-            return jobDicts.first(where: { $0["Label"] as! String == Bundle.main.bundleIdentifier! }) != nil
+            return jobDicts.first(where: { $0["Label"] as! String == "com.denizgurkaynak.PencLauncher" }) != nil
         }
     }
     
@@ -143,6 +143,6 @@ final class Preferences {
     }
     
     func setLaunchAtLogin(_ value: Bool) -> Bool {
-        return SMLoginItemSetEnabled(Bundle.main.bundleIdentifier! as CFString, value)
+        return SMLoginItemSetEnabled("com.denizgurkaynak.PencLauncher" as CFString, value)
     }
 }

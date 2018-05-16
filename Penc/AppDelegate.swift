@@ -12,6 +12,10 @@ import ApplicationServices
 import Silica
 
 
+extension Notification.Name {
+    static let killLauncher = Notification.Name("killLauncher")
+}
+
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate, ActivationHandlerDelegate, PreferencesDelegate, NSMenuDelegate {
     
@@ -30,6 +34,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
+        
+        let launcherAppId = "com.denizgurkaynak.PencLauncher"
+        let runningApps = NSWorkspace.shared.runningApplications
+        let isLauncherRunning = !runningApps.filter { $0.bundleIdentifier == launcherAppId }.isEmpty
+        if isLauncherRunning {
+            DistributedNotificationCenter.default().post(name: .killLauncher, object: Bundle.main.bundleIdentifier!)
+        }
         
         if let button = self.statusItem.button {
             button.image = NSImage(named:NSImage.Name("penc-menu-icon"))
