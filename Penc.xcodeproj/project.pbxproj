@@ -21,7 +21,7 @@
 		94C5FCCF1FB3025200916D97 /* PApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCE1FB3025200916D97 /* PApplication.swift */; };
 		94C5FCD11FB347DA00916D97 /* PlaceholderWindowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */; };
 		94C88E9220AB6E5600F4B83E /* PlaceholderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */; };
-		94C88E9420AB77C400F4B83E /* SnapHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C88E9320AB77C400F4B83E /* SnapHelper.swift */; };
+		94C88E9620AC189A00F4B83E /* WindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C88E9520AC189A00F4B83E /* WindowHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,7 +43,7 @@
 		94C5FCCE1FB3025200916D97 /* PApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PApplication.swift; sourceTree = "<group>"; };
 		94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderWindowViewController.swift; sourceTree = "<group>"; };
 		94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderWindow.swift; sourceTree = "<group>"; };
-		94C88E9320AB77C400F4B83E /* SnapHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapHelper.swift; sourceTree = "<group>"; };
+		94C88E9520AC189A00F4B83E /* WindowHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowHelper.swift; sourceTree = "<group>"; };
 		EC736EAB9572887E33DE2C99 /* Pods-Penc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Penc.release.xcconfig"; path = "Pods/Target Support Files/Pods-Penc/Pods-Penc.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,7 +104,7 @@
 				94C5FCCE1FB3025200916D97 /* PApplication.swift */,
 				94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */,
 				94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */,
-				94C88E9320AB77C400F4B83E /* SnapHelper.swift */,
+				94C88E9520AC189A00F4B83E /* WindowHelper.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -260,6 +260,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94C88E9620AC189A00F4B83E /* WindowHelper.swift in Sources */,
 				94763F731FA8DE5800D60C27 /* CGRectExtension.swift in Sources */,
 				94C88E9220AB6E5600F4B83E /* PlaceholderWindow.swift in Sources */,
 				9417B7CB1FB04A0100749BC8 /* Preferences.swift in Sources */,
@@ -269,7 +270,6 @@
 				9417B7C11FADB16300749BC8 /* GestureOverlayWindow.swift in Sources */,
 				94C5FCD11FB347DA00916D97 /* PlaceholderWindowViewController.swift in Sources */,
 				949553E21FB0BDC60025E22C /* AboutViewController.swift in Sources */,
-				94C88E9420AB77C400F4B83E /* SnapHelper.swift in Sources */,
 				94C5FCCF1FB3025200916D97 /* PApplication.swift in Sources */,
 				94763F7F1FA9095E00D60C27 /* PreferencesViewController.swift in Sources */,
 			);

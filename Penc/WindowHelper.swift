@@ -1,8 +1,8 @@
 //
-//  SnapHelper.swift
+//  WindowHelper.swift
 //  Penc
 //
-//  Created by Deniz Gurkaynak on 15.05.2018.
+//  Created by Deniz Gurkaynak on 16.05.2018.
 //  Copyright © 2018 Deniz Gurkaynak. All rights reserved.
 //
 
@@ -10,7 +10,8 @@ import Foundation
 import Cocoa
 
 
-class SnapHelper {
+class WindowHelper {
+    // Move+Snap properties
     private var ignoredDeltaXs: [CGFloat] = []
     private var ignoredDeltaYs: [CGFloat] = []
     var maxIgnoredX: CGFloat = 60
@@ -19,7 +20,79 @@ class SnapHelper {
     var maxSnapDeltaY: CGFloat = 10
     
     
-    func constrainWindow(_ window: NSWindow, delta: (x: CGFloat, y: CGFloat)) -> CGRect {
+    func snapToLeftOfScreen(_ window: NSWindow, frame: NSRect?) -> CGRect {
+        var frame_ = window.frame
+        if frame != nil { frame_ = frame! }
+        
+        return CGRect(
+            x: window.screen!.visibleFrame.origin.x,
+            y: frame_.origin.y,
+            width: frame_.size.width,
+            height: frame_.size.height
+        )
+    }
+    
+    func snapToRightOfScreen(_ window: NSWindow, frame: NSRect?) -> CGRect {
+        var frame_ = window.frame
+        if frame != nil { frame_ = frame! }
+        
+        return CGRect(
+            x: window.screen!.visibleFrame.origin.x + window.screen!.visibleFrame.size.width - frame_.size.width,
+            y: frame_.origin.y,
+            width: frame_.size.width,
+            height: frame_.size.height
+        )
+    }
+    
+    func snapToBottomOfScreen(_ window: NSWindow, frame: NSRect?) -> CGRect {
+        var frame_ = window.frame
+        if frame != nil { frame_ = frame! }
+        
+        return CGRect(
+            x: frame_.origin.x,
+            y: window.screen!.visibleFrame.origin.y,
+            width: frame_.size.width,
+            height: frame_.size.height
+        )
+    }
+    
+    func snapToTopOfScreen(_ window: NSWindow, frame: NSRect?) -> CGRect {
+        var frame_ = window.frame
+        if frame != nil { frame_ = frame! }
+        
+        return CGRect(
+            x: frame_.origin.x,
+            y: window.screen!.visibleFrame.origin.y + window.screen!.visibleFrame.size.height - frame_.size.height,
+            width: frame_.size.width,
+            height: frame_.size.height
+        )
+    }
+    
+    func resizeToScreenWidth(_ window: NSWindow, frame: NSRect?, factor: CGFloat = 1) -> CGRect {
+        var frame_ = window.frame
+        if frame != nil { frame_ = frame! }
+        
+        return CGRect(
+            x: frame_.origin.x,
+            y: frame_.origin.y,
+            width: window.screen!.visibleFrame.size.width * factor,
+            height: frame_.size.height
+        )
+    }
+    
+    func resizeToScreenHeight(_ window: NSWindow, frame: NSRect?, factor: CGFloat = 1) -> CGRect {
+        var frame_ = window.frame
+        if frame != nil { frame_ = frame! }
+        
+        return CGRect(
+            x: frame_.origin.x,
+            y: frame_.origin.y,
+            width: frame_.size.width,
+            height: window.screen!.visibleFrame.size.height * factor
+        )
+    }
+    
+    func moveWithSnappingScreenBoundaries(_ window: NSWindow, delta: (x: CGFloat, y: CGFloat)) -> CGRect {
         var deltaX: CGFloat = delta.x
         var deltaY: CGFloat = delta.y
         
@@ -97,10 +170,5 @@ class SnapHelper {
             width: window.frame.size.width,
             height: window.frame.size.height
         )
-    }
-    
-    func reset() {
-        self.ignoredDeltaXs = []
-        self.ignoredDeltaYs = []
     }
 }

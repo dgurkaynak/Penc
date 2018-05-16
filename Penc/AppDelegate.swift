@@ -26,7 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     var mainScreen: NSScreen? = nil
     let activationHandler = ActivationHandler()
     var disabled = false
-    let snapHelper = SnapHelper()
+    let windowHelper = WindowHelper()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -198,8 +198,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.focusedWindow = nil
         self.focusedScreen = nil
         self.mainScreen = nil
-        
-        self.snapHelper.reset()
     }
     
     func onMoveGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
@@ -208,7 +206,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.mainScreen != nil else { return }
         guard self.focusedWindow!.isMovable() else { return }
         
-        let rect = snapHelper.constrainWindow(self.placeholderWindow, delta: delta)
+        let rect = self.windowHelper.moveWithSnappingScreenBoundaries(self.placeholderWindow, delta: delta)
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }
     
@@ -216,36 +214,39 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.focusedWindow != nil else { return }
         guard self.focusedScreen != nil else { return }
         guard self.mainScreen != nil else { return }
-        guard self.focusedWindow!.isMovable() else { return } // TODO: Check resizeable also
+        guard self.focusedWindow!.isMovable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
         
         var rect: CGRect? = nil
         
-        if [GestureType.SWIPE_TOP, GestureType.SWIPE_BOTTOM].contains(type) {
-            let newHeight = self.placeholderWindow.screen!.visibleFrame.height / 2
-            rect = CGRect(
-                x: self.placeholderWindow.screen!.visibleFrame.origin.x,
-                y: self.placeholderWindow.screen!.visibleFrame.origin.y + (type == .SWIPE_TOP ? newHeight : 0),
-                width: self.placeholderWindow.screen!.visibleFrame.width,
-                height: newHeight
-            )
-        } else if [GestureType.SWIPE_LEFT, GestureType.SWIPE_RIGHT].contains(type) {
-            let newWidth = self.placeholderWindow.screen!.visibleFrame.width / 2
-            rect = CGRect(
-                x: self.placeholderWindow.screen!.visibleFrame.origin.x + (type == .SWIPE_RIGHT ? newWidth : 0),
-                y: self.placeholderWindow.screen!.visibleFrame.origin.y,
-                width: newWidth,
-                height: self.placeholderWindow.screen!.visibleFrame.height
-            )
-        } else if [GestureType.SWIPE_TOP_LEFT, GestureType.SWIPE_TOP_RIGHT, GestureType.SWIPE_BOTTOM_LEFT, GestureType.SWIPE_BOTTOM_RIGHT].contains(type) {
-            let newHeight = self.placeholderWindow.screen!.visibleFrame.height / 2
-            let newWidth = self.placeholderWindow.screen!.visibleFrame.width / 2
-            rect = CGRect(
-                x: self.placeholderWindow.screen!.visibleFrame.origin.x + (type == .SWIPE_TOP_RIGHT || type == .SWIPE_BOTTOM_RIGHT ? newWidth : 0),
-                y: self.placeholderWindow.screen!.visibleFrame.origin.y + (type == .SWIPE_TOP_LEFT || type == .SWIPE_TOP_RIGHT ? newHeight : 0),
-                width: newWidth,
-                height: newHeight
-            )
+        if self.focusedWindow!.isResizable() {
+            if [GestureType.SWIPE_TOP, GestureType.SWIPE_BOTTOM].contains(type) {
+                rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: 1.0)
+                rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: 0.5)
+            } else if [GestureType.SWIPE_LEFT, GestureType.SWIPE_RIGHT].contains(type) {
+                rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: 0.5)
+                rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: 1.0)
+            } else if [GestureType.SWIPE_TOP_LEFT, GestureType.SWIPE_TOP_RIGHT, GestureType.SWIPE_BOTTOM_LEFT, GestureType.SWIPE_BOTTOM_RIGHT].contains(type) {
+                rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: 0.5)
+                rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: 0.5)
+            }
+        }
+        
+        switch type {
+        case .SWIPE_TOP, .SWIPE_LEFT, .SWIPE_TOP_LEFT:
+            rect = self.windowHelper.snapToTopOfScreen(self.placeholderWindow, frame: rect)
+            rect = self.windowHelper.snapToLeftOfScreen(self.placeholderWindow, frame: rect)
+        case .SWIPE_BOTTOM, .SWIPE_BOTTOM_LEFT:
+            rect = self.windowHelper.snapToBottomOfScreen(self.placeholderWindow, frame: rect)
+            rect = self.windowHelper.snapToLeftOfScreen(self.placeholderWindow, frame: rect)
+        case .SWIPE_RIGHT, .SWIPE_TOP_RIGHT:
+            rect = self.windowHelper.snapToTopOfScreen(self.placeholderWindow, frame: rect)
+            rect = self.windowHelper.snapToRightOfScreen(self.placeholderWindow, frame: rect)
+        case .SWIPE_BOTTOM_RIGHT:
+            rect = self.windowHelper.snapToBottomOfScreen(self.placeholderWindow, frame: rect)
+            rect = self.windowHelper.snapToRightOfScreen(self.placeholderWindow, frame: rect)
+        default:
+            print("Unsupported swipe type")
         }
         
         if rect != nil {
