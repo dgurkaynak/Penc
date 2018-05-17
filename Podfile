@@ -7,4 +7,5 @@ target 'Penc' do
 
   # Pods for Penc
   pod 'Silica', :git => 'https://github.com/ianyh/Silica.git', :tag => '0.1.5'
+  pod 'Sparkle'
 end
