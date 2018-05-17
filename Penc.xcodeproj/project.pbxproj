@@ -27,6 +27,7 @@
 		94C5FCD11FB347DA00916D97 /* PlaceholderWindowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */; };
 		94C88E9220AB6E5600F4B83E /* PlaceholderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */; };
 		94C88E9620AC189A00F4B83E /* WindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C88E9520AC189A00F4B83E /* WindowHelper.swift */; };
+		94EF64CB20AD5A070041E4BC /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 94EF64CA20AD5A070041E4BC /* dsa_pub.pem */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -69,6 +70,7 @@
 		94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderWindowViewController.swift; sourceTree = "<group>"; };
 		94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderWindow.swift; sourceTree = "<group>"; };
 		94C88E9520AC189A00F4B83E /* WindowHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowHelper.swift; sourceTree = "<group>"; };
+		94EF64CA20AD5A070041E4BC /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		EC736EAB9572887E33DE2C99 /* Pods-Penc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Penc.release.xcconfig"; path = "Pods/Target Support Files/Pods-Penc/Pods-Penc.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -124,6 +126,7 @@
 		945195A21FA88B8B00FA53B4 /* Penc */ = {
 			isa = PBXGroup;
 			children = (
+				94EF64CA20AD5A070041E4BC /* dsa_pub.pem */,
 				945195A31FA88B8B00FA53B4 /* AppDelegate.swift */,
 				945195A71FA88B8B00FA53B4 /* Assets.xcassets */,
 				945195A91FA88B8B00FA53B4 /* Main.storyboard */,
@@ -262,6 +265,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				945195A81FA88B8B00FA53B4 /* Assets.xcassets in Resources */,
+				94EF64CB20AD5A070041E4BC /* dsa_pub.pem in Resources */,
 				945195AB1FA88B8B00FA53B4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

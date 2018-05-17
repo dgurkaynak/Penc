@@ -30,5 +30,7 @@
 	<string>Main</string>
 	<key>NSPrincipalClass</key>
 	<string>PApplication</string>
+	<key>SUPublicDSAKeyFile</key>
+	<string>dsa_pub.pem</string>
 </dict>
 </plist>
