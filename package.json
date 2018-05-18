@@ -2,8 +2,9 @@
   "name": "penc",
   "version": "0.3.0",
   "description": "Trackpad oriented window manager for macOS",
-  "main": "index.js",
+  "main": "",
   "scripts": {
+    "build-dmg": "appdmg appdmg/appdmg.json dist/Penc-$npm_package_version.dmg",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
