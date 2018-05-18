@@ -12,11 +12,12 @@ import Cocoa
 
 protocol ActivationHandlerDelegate: class {
     func onActivated(activationHandler: ActivationHandler)
-    func onDeactivated(activationHandler: ActivationHandler)
+    func onCompleted(activationHandler: ActivationHandler)
     func onCancelled(activationHandler: ActivationHandler)
 }
 
 class ActivationHandler {
+    
     weak var delegate: ActivationHandlerDelegate?
     private var globalModifierKeyMonitor: Any?
     private var localModifierKeyMonitor: Any?
@@ -26,7 +27,6 @@ class ActivationHandler {
     var activationTimeout = 0.3
     private var activationTimer: PTimer? = nil
     private var active = false
-    
     
     init() {
         self.globalModifierKeyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .flagsChanged) { (event) in
@@ -53,9 +53,11 @@ class ActivationHandler {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         
         if flags == [] {
-            self.deactivate()
+            // Modifier key released, it could be completion or gap between double press
+            self.complete()
         } else if flags == [self.activationModifierKey] {
             if self.activationTimer == nil {
+                // Start timer
                 self.activationTimer = PTimer()
             } else {
                 let elapsed = self.activationTimer!.end()
@@ -74,11 +76,7 @@ class ActivationHandler {
     }
     
     private func onKeyDown(_ event: NSEvent) {
-        if self.active {
-            self.cancel()
-        } else {
-            self.activationTimer = nil
-        }
+        self.cancel()
     }
     
     private func activate() {
@@ -88,17 +86,17 @@ class ActivationHandler {
         self.delegate?.onActivated(activationHandler: self)
     }
     
-    private func deactivate() {
+    private func complete() {
         guard self.active else { return }
         self.active = false
         self.activationTimer = nil
-        self.delegate?.onDeactivated(activationHandler: self)
+        self.delegate?.onCompleted(activationHandler: self)
     }
     
     private func cancel() {
+        self.activationTimer = nil
         guard self.active else { return }
         self.active = false
-        self.activationTimer = nil
         self.delegate?.onCancelled(activationHandler: self)
     }
     
@@ -108,4 +106,5 @@ class ActivationHandler {
         NSEvent.removeMonitor(self.localKeyDownMonitor as Any)
         NSEvent.removeMonitor(self.globalKeyDownMonitor as Any)
     }
+    
 }

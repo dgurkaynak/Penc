@@ -10,7 +10,10 @@ import Cocoa
 import Foundation
 import ApplicationServices
 import Silica
+import SwiftyBeaver
 
+
+let log = SwiftyBeaver.self
 
 extension Notification.Name {
     static let killLauncher = Notification.Name("killLauncher")
@@ -31,20 +34,43 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     let activationHandler = ActivationHandler()
     var disabled = false
     let windowHelper = WindowHelper()
+    var active = false
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
+        
+        if !Env.isProduction() {
+            let console = ConsoleDestination()
+            console.format = "$DHH:mm:ss.SSS$d $C$L$c: $M"
+            console.asynchronously = false
+            log.addDestination(console)
+        }
+        
+        let file = FileDestination()
+        file.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c: $M"
+        if Env.isProduction() {
+            file.logFileURL = URL(fileURLWithPath: "penc.log")
+        } else {
+            file.logFileURL = URL(fileURLWithPath: "/tmp/penc.log")
+            file.asynchronously = false
+        }
+        log.addDestination(file)
+        
+        log.info("Booting...")
         
         let launcherAppId = "com.denizgurkaynak.PencLauncher"
         let runningApps = NSWorkspace.shared.runningApplications
         let isLauncherRunning = !runningApps.filter { $0.bundleIdentifier == launcherAppId }.isEmpty
         if isLauncherRunning {
+            log.verbose("Launcher is running, killing it...")
             DistributedNotificationCenter.default().post(name: .killLauncher, object: Bundle.main.bundleIdentifier!)
         }
         
         if let button = self.statusItem.button {
             button.image = NSImage(named:NSImage.Name("penc-menu-icon"))
         }
+        
+        log.info("Checking accessibility permissions...")
         
         if checkPermissions() {
             constructMenu()
@@ -73,11 +99,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     func checkPermissions() -> Bool {
         if AXIsProcessTrusted() {
+            log.info("We're trusted accessibility client")
             return true
         } else {
             let options = NSDictionary(object: kCFBooleanTrue, forKey: kAXTrustedCheckOptionPrompt.takeUnretainedValue() as NSString) as CFDictionary
-            
             let accessibilityEnabled = AXIsProcessTrustedWithOptions(options)
+            log.warning("We're NOT trusted accessibility client, manual check result: \(accessibilityEnabled)")
             return accessibilityEnabled
         }
     }
@@ -165,18 +192,39 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     }
     
     func onActivated(activationHandler: ActivationHandler) {
-        guard !self.disabled else { return }
+        guard !self.disabled else {
+            log.debug("Not gonna activate, Penc is disabled globally")
+            return
+        }
+        
         self.focusedWindow = SIWindow.focused()
-        guard self.focusedWindow != nil else { return }
+        guard self.focusedWindow != nil else {
+            log.debug("Not gonna activate, there is no focused window")
+            return
+        }
+        
         self.focusedScreen = self.focusedWindow!.screen()
-        guard self.focusedScreen != nil else { return }
-        guard NSScreen.screens.indices.contains(0) else { return }
+        guard self.focusedScreen != nil else {
+            log.debug("Not gonna activate, there is no focused screen")
+            return
+        }
+        
+        guard NSScreen.screens.indices.contains(0) else {
+            log.debug("Not gonna activate, there is no screen at all")
+            return
+        }
         self.mainScreen = NSScreen.screens[0]
+        
         if let app = NSWorkspace.shared.frontmostApplication {
             if let appBundleId = app.bundleIdentifier {
-                if Preferences.shared.disabledApps.contains(appBundleId) { return }
+                if Preferences.shared.disabledApps.contains(appBundleId) {
+                    log.debug("Not gonna activate, Penc is disabled for \(appBundleId)")
+                    return
+                }
             }
         }
+        
+        self.active = true
         
         let focusedWindowRect = self.focusedWindow!.frame().topLeft2bottomLeft(self.mainScreen!)
         self.placeholderWindow.setFrame(focusedWindowRect, display: true, animate: false)
@@ -188,16 +236,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         NSApplication.shared.activate(ignoringOtherApps: true)
     }
     
-    func onDeactivated(activationHandler: ActivationHandler) {
-        guard !self.disabled else { return }
-        guard self.focusedWindow != nil else { return }
-        guard self.focusedScreen != nil else { return }
-        guard self.mainScreen != nil else { return }
-        if let app = NSWorkspace.shared.frontmostApplication {
-            if let appBundleId = app.bundleIdentifier {
-                if Preferences.shared.disabledApps.contains(appBundleId) { return }
-            }
-        }
+    func onCompleted(activationHandler: ActivationHandler) {
+        guard self.active else { return }
         
         let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(self.mainScreen!)
         self.focusedWindow!.setFrame(newRect)
@@ -209,18 +249,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.focusedWindow = nil
         self.focusedScreen = nil
         self.mainScreen = nil
+        self.active = false
     }
     
     func onCancelled(activationHandler: ActivationHandler) {
-        guard !self.disabled else { return }
-        guard self.focusedWindow != nil else { return }
-        guard self.focusedScreen != nil else { return }
-        guard self.mainScreen != nil else { return }
-        if let app = NSWorkspace.shared.frontmostApplication {
-            if let appBundleId = app.bundleIdentifier {
-                if Preferences.shared.disabledApps.contains(appBundleId) { return }
-            }
-        }
+        guard self.active else { return }
         
         self.focusedWindow!.focus()
         self.placeholderWindow.orderOut(self.placeholderWindow)
@@ -230,12 +263,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.focusedWindow = nil
         self.focusedScreen = nil
         self.mainScreen = nil
+        self.active = false
     }
     
     func onMoveGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
-        guard self.focusedWindow != nil else { return }
-        guard self.focusedScreen != nil else { return }
-        guard self.mainScreen != nil else { return }
+        guard self.active else { return }
         guard self.focusedWindow!.isMovable() else { return }
         
         let rect = self.windowHelper.moveWithSnappingScreenBoundaries(self.placeholderWindow, delta: delta)
@@ -243,9 +275,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     }
     
     func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: GestureType) {
-        guard self.focusedWindow != nil else { return }
-        guard self.focusedScreen != nil else { return }
-        guard self.mainScreen != nil else { return }
+        guard self.active else { return }
         guard self.focusedWindow!.isMovable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
         
@@ -287,8 +317,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     }
     
     func onResizeFactorGesture(gestureOverlayWindow: GestureOverlayWindow, factor: (x: CGFloat, y: CGFloat)) {
-        guard self.focusedWindow != nil else { return }
-        guard self.focusedScreen != nil else { return }
+        guard self.active else { return }
         guard self.focusedWindow!.isResizable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
         
@@ -319,6 +348,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     @objc func toggleDisable(_ sender: Any?) {
         self.disabled = !self.disabled
+        log.info(self.disabled ? "Disabled globally" : "Enabled globally")
     }
     
     @objc func toggleDisableApp(_ sender: Any?) {
@@ -327,15 +357,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                 if Preferences.shared.disabledApps.contains(appBundleId) {
                     let i = Preferences.shared.disabledApps.index(of: appBundleId)
                     Preferences.shared.disabledApps.remove(at: i!)
+                    log.info("Enabled back for \(appBundleId)")
                 } else {
                     Preferences.shared.disabledApps.append(appBundleId)
+                    log.info("Disabled for \(appBundleId)")
                 }
                 
                 Preferences.shared.disabledApps = Preferences.shared.disabledApps
             }
         }
     }
-    
     
 }
 

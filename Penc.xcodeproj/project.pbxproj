@@ -28,6 +28,7 @@
 		94C88E9220AB6E5600F4B83E /* PlaceholderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */; };
 		94C88E9620AC189A00F4B83E /* WindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C88E9520AC189A00F4B83E /* WindowHelper.swift */; };
 		94EF64CB20AD5A070041E4BC /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 94EF64CA20AD5A070041E4BC /* dsa_pub.pem */; };
+		94EF64CD20AE580F0041E4BC /* Env.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EF64CC20AE580F0041E4BC /* Env.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -71,6 +72,7 @@
 		94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderWindow.swift; sourceTree = "<group>"; };
 		94C88E9520AC189A00F4B83E /* WindowHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowHelper.swift; sourceTree = "<group>"; };
 		94EF64CA20AD5A070041E4BC /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
+		94EF64CC20AE580F0041E4BC /* Env.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Env.swift; sourceTree = "<group>"; };
 		EC736EAB9572887E33DE2C99 /* Pods-Penc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Penc.release.xcconfig"; path = "Pods/Target Support Files/Pods-Penc/Pods-Penc.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -143,6 +145,7 @@
 				94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */,
 				94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */,
 				94C88E9520AC189A00F4B83E /* WindowHelper.swift */,
+				94EF64CC20AE580F0041E4BC /* Env.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -361,6 +364,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				94C88E9620AC189A00F4B83E /* WindowHelper.swift in Sources */,
+				94EF64CD20AE580F0041E4BC /* Env.swift in Sources */,
 				94763F731FA8DE5800D60C27 /* CGRectExtension.swift in Sources */,
 				94C88E9220AB6E5600F4B83E /* PlaceholderWindow.swift in Sources */,
 				9417B7CB1FB04A0100749BC8 /* Preferences.swift in Sources */,
