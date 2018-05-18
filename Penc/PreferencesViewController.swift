@@ -89,37 +89,48 @@ class PreferencesViewController: NSViewController {
         switch self.modifierKeyPopUpButton.indexOfSelectedItem {
         case 0:
             Preferences.shared.activationModifierKey = .command
+            log.info("Set activation modifier key as Command")
         case 1:
             Preferences.shared.activationModifierKey = .option
+            log.info("Set activation modifier key as Option")
         case 2:
             Preferences.shared.activationModifierKey = .control
+            log.info("Set activation modifier key as Control")
         case 3:
             Preferences.shared.activationModifierKey = .shift
+            log.info("Set activation modifier key as Shift")
         default:
             Preferences.shared.activationModifierKey = .command
+            log.warning("Unknown activation modifier key index, set activation modifier key as Command anyway")
         }
     }
     
     @objc private func onDoublePressSensitivitySliderChange() {
         self.doublePressSensitivityLabel.stringValue = "\(self.doublePressSensitivitySider.integerValue) ms"
         Preferences.shared.activationSensitivity = self.doublePressSensitivitySider.floatValue / 1000
+        log.info("Set activation double press sensitivity \(Preferences.shared.activationSensitivity)")
     }
     
     @objc private func onSwipeSensitivitySliderChange() {
         self.swipeSensitivityLabel.stringValue = String(format: "%.2f", self.swipeSensitivitySlider.floatValue)
         Preferences.shared.swipeThreshold = CGFloat(55 - self.swipeSensitivitySlider.floatValue)
+        log.info("Set swipe threshold \(Preferences.shared.swipeThreshold)")
     }
     
     @objc private func onInferPinchAngleCheckboxChange() {
         Preferences.shared.inferMagnificationAngle = self.inferPinchAngleCheckbox.state == .on
+        log.info("Set infering magnification angle to \(Preferences.shared.inferMagnificationAngle)")
     }
     
     @objc private func onShowGestureInfoCheckboxChange() {
         Preferences.shared.showGestureInfo = self.showGestureInfoCheckbox.state == .on
+        log.info("Set showing display gesture info to \(Preferences.shared.showGestureInfo)")
     }
     
     @objc private func onLaunchAtLoginCheckboxChange() {
+        log.info("Setting launch at login to \(self.launchAtLoginCheckbox.state == .on)")
         if !Preferences.shared.setLaunchAtLogin(self.launchAtLoginCheckbox.state == .on) {
+            log.error("Could not add Penc to login items")
             let warnAlert = NSAlert();
             warnAlert.messageText = "Could not add Penc to login items";
             warnAlert.informativeText = "Please move Penc app into Applications folder and relaunch."
@@ -141,6 +152,7 @@ class PreferencesViewController: NSViewController {
         if alert.runModal() == .alertFirstButtonReturn {
             Preferences.shared.reset()
             self.update()
+            log.info("Reset all preferences to default")
         }
     }
 }
