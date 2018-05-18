@@ -1,0 +1,22 @@
+{
+  "name": "penc",
+  "version": "0.3.0",
+  "description": "Trackpad oriented window manager for macOS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dgurkaynak/Penc.git"
+  },
+  "author": "Deniz Gurkaynak <dgurkaynak@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dgurkaynak/Penc/issues"
+  },
+  "homepage": "https://github.com/dgurkaynak/Penc#readme",
+  "dependencies": {
+    "appdmg": "^0.5.2"
+  }
+}
