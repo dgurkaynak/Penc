@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.3.0</string>
+	<string>0.3.1</string>
 	<key>CFBundleVersion</key>
-	<string>504</string>
+	<string>545</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>LSUIElement</key>
@@ -30,6 +30,8 @@
 	<string>Main</string>
 	<key>NSPrincipalClass</key>
 	<string>PApplication</string>
+	<key>SUFeedURL</key>
+	<string>https://deniz.co/penc/appcast.xml</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 </dict>

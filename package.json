@@ -1,6 +1,6 @@
 {
   "name": "penc",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Trackpad oriented window manager for macOS",
   "main": "",
   "scripts": {
