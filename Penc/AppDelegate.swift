@@ -11,6 +11,7 @@ import Foundation
 import ApplicationServices
 import Silica
 import SwiftyBeaver
+import Sparkle
 
 
 let log = SwiftyBeaver.self
@@ -35,6 +36,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     var disabled = false
     let windowHelper = WindowHelper()
     var active = false
+    var updater = SUUpdater()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -116,8 +118,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         let aboutMenuItem = NSMenuItem(title: "About Penc", action: #selector(AppDelegate.openAboutWindow(_:)), keyEquivalent: "")
         menu.addItem(aboutMenuItem)
         
-        let checkForUpdatesMenuItem = NSMenuItem(title: "Check for updates", action: #selector(AppDelegate.openAboutWindow(_:)), keyEquivalent: "")
-        checkForUpdatesMenuItem.isEnabled = false
+        let checkForUpdatesMenuItem = NSMenuItem(title: "Check for updates", action: #selector(AppDelegate.checkForUpdates(_:)), keyEquivalent: "")
         menu.addItem(checkForUpdatesMenuItem)
         
         menu.addItem(NSMenuItem.separator())
@@ -366,6 +367,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                 Preferences.shared.disabledApps = Preferences.shared.disabledApps
             }
         }
+    }
+    
+    @objc func checkForUpdates(_ sender: Any?) {
+        log.info("Checking for updates")
+        self.updater.checkForUpdates(nil)
     }
     
 }
