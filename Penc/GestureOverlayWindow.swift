@@ -73,6 +73,15 @@ class GestureOverlayWindow: NSWindow {
         var angle = atan2(touch1.normalizedPosition.y - touch2.normalizedPosition.y, touch1.normalizedPosition.x - touch2.normalizedPosition.x)
         if angle < 0 { angle += CGFloat.pi }
         if angle > CGFloat.pi / 2 { angle = CGFloat.pi - angle }
+        
+        if angle <= CGFloat.pi / 8 {
+            angle = 0
+        } else if angle >= 3 * CGFloat.pi / 8 {
+            angle = CGFloat.pi / 2
+        } else {
+            angle = CGFloat.pi / 4
+        }
+        
         self.magnificationAngle = angle
     }
     
