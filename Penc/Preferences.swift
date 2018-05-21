@@ -20,7 +20,6 @@ final class Preferences {
     private static let key_activationModifierKey = "activationModifierKey"
     private static let key_activationSensitivity = "activationSensitivity"
     private static let key_swipeThreshold = "swipeThreshold"
-    private static let key_inferMagnificationAngle = "inferMagnificationAngle"
     private static let key_showGestureInfo = "showGestureInfo"
     private static let key_disabledApps = "disabledApps"
     
@@ -43,13 +42,6 @@ final class Preferences {
     var swipeThreshold: CGFloat {
         didSet {
             UserDefaults.standard.set(self.swipeThreshold, forKey: Preferences.key_swipeThreshold)
-            self.delegate?.onPreferencesChanged(preferences: self)
-        }
-    }
-    
-    var inferMagnificationAngle: Bool {
-        didSet {
-            UserDefaults.standard.set(self.inferMagnificationAngle, forKey: Preferences.key_inferMagnificationAngle)
             self.delegate?.onPreferencesChanged(preferences: self)
         }
     }
@@ -103,14 +95,6 @@ final class Preferences {
             self.swipeThreshold = swipeThreshold!
         }
         
-        let inferMagnificationAngle = defaults.object(forKey: Preferences.key_inferMagnificationAngle) as? Bool
-        if inferMagnificationAngle == nil {
-            self.inferMagnificationAngle = false
-            UserDefaults.standard.set(self.inferMagnificationAngle, forKey: Preferences.key_inferMagnificationAngle)
-        } else {
-            self.inferMagnificationAngle = inferMagnificationAngle!
-        }
-        
         let showGestureInfo = defaults.object(forKey: Preferences.key_showGestureInfo) as? Bool
         if showGestureInfo == nil {
             self.showGestureInfo = true
@@ -137,7 +121,6 @@ final class Preferences {
         self.activationModifierKey = .command
         self.activationSensitivity = 0.3
         self.swipeThreshold = 25.0
-        self.inferMagnificationAngle = false
         self.showGestureInfo = true
         self.disabledApps = []
     }

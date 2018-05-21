@@ -31,7 +31,6 @@ protocol GestureOverlayWindowDelegate: class {
 class GestureOverlayWindow: NSWindow {
     weak var delegate_: GestureOverlayWindowDelegate?
     
-    var shouldInferMagnificationAngle = false
     private var magnifying = false
     private var magnificationAngle = CGFloat.pi / 4
 
@@ -50,10 +49,9 @@ class GestureOverlayWindow: NSWindow {
             self.magnifying = false
         } else if event.phase == NSEvent.Phase.changed {
             // Resizing with factor
-            let angle = self.shouldInferMagnificationAngle ? self.magnificationAngle : nil
             let magnification = event.magnification
-            let xFactor = angle == nil ? (-1 * magnification) : (-1 * magnification * cos(angle!))
-            let yFactor = angle == nil ? (-1 * magnification) : (-1 * magnification * sin(angle!))
+            let xFactor = -1 * magnification * cos(self.magnificationAngle)
+            let yFactor = -1 * magnification * sin(self.magnificationAngle)
         
             self.delegate_?.onResizeFactorGesture(gestureOverlayWindow: self, factor: (x: xFactor, y: yFactor))
         } else if event.phase == NSEvent.Phase.ended {
@@ -64,7 +62,6 @@ class GestureOverlayWindow: NSWindow {
     override func touchesMoved(with event: NSEvent) {
         // Infer pinch angle
         guard self.magnifying == true else { return }
-        guard self.shouldInferMagnificationAngle == true else { return }
         let touches = event.allTouches()
         guard touches.count == 2 else { return }
         

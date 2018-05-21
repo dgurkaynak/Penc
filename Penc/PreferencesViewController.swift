@@ -14,7 +14,6 @@ class PreferencesViewController: NSViewController {
     @IBOutlet var doublePressSensitivityLabel: NSTextField!
     @IBOutlet var swipeSensitivitySlider: NSSlider!
     @IBOutlet var swipeSensitivityLabel: NSTextField!
-    @IBOutlet var inferPinchAngleCheckbox: NSButton!
     @IBOutlet var launchAtLoginCheckbox: NSButton!
     @IBOutlet var resetDefaultsButton: NSButton!
     @IBOutlet var modifierKeyPopUpButton: NSPopUpButton!
@@ -38,9 +37,6 @@ class PreferencesViewController: NSViewController {
         
         self.swipeSensitivitySlider.target = self
         self.swipeSensitivitySlider.action = #selector(onSwipeSensitivitySliderChange)
-        
-        self.inferPinchAngleCheckbox.target = self
-        self.inferPinchAngleCheckbox.action = #selector(onInferPinchAngleCheckboxChange)
         
         self.showGestureInfoCheckbox.target = self
         self.showGestureInfoCheckbox.action = #selector(onShowGestureInfoCheckboxChange)
@@ -81,7 +77,6 @@ class PreferencesViewController: NSViewController {
         self.showGestureInfoCheckbox.state = Preferences.shared.showGestureInfo ? .on : .off
         self.showGestureInfoCheckbox.state = Preferences.shared.showGestureInfo ? .on : .off
         
-        self.inferPinchAngleCheckbox.state = Preferences.shared.inferMagnificationAngle ? .on : .off
         self.launchAtLoginCheckbox.state = Preferences.shared.launchAtLogin ? .on : .off
     }
     
@@ -115,11 +110,6 @@ class PreferencesViewController: NSViewController {
         self.swipeSensitivityLabel.stringValue = String(format: "%.2f", self.swipeSensitivitySlider.floatValue)
         Preferences.shared.swipeThreshold = CGFloat(55 - self.swipeSensitivitySlider.floatValue)
         log.info("Set swipe threshold \(Preferences.shared.swipeThreshold)")
-    }
-    
-    @objc private func onInferPinchAngleCheckboxChange() {
-        Preferences.shared.inferMagnificationAngle = self.inferPinchAngleCheckbox.state == .on
-        log.info("Set infering magnification angle to \(Preferences.shared.inferMagnificationAngle)")
     }
     
     @objc private func onShowGestureInfoCheckboxChange() {

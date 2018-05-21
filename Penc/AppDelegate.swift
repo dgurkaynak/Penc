@@ -187,7 +187,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     func onPreferencesChanged(preferences: Preferences) {
         self.activationHandler.activationModifierKey = preferences.activationModifierKey
         self.activationHandler.activationTimeout = Double(preferences.activationSensitivity)
-        self.gestureOverlayWindow.shouldInferMagnificationAngle = preferences.inferMagnificationAngle
         self.gestureOverlayWindow.swipeThreshold = preferences.swipeThreshold
         self.placeholderWindowViewController.changeMode(preferences.showGestureInfo ? .MOVE : .NONE)
     }
