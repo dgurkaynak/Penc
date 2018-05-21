@@ -8,73 +8,14 @@
 
 import Cocoa
 
-enum PlaceholderWindowInfoMode {
-    case NONE
-    case MOVE
-}
-
 class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
     @IBOutlet var box: NSBox!
-    @IBOutlet var dragImage: NSImageView!
-    @IBOutlet var dragLabel1: NSTextField!
-    @IBOutlet var dragLabel2: NSTextField!
-    @IBOutlet var pinchImage: NSImageView!
-    @IBOutlet var pinchLabel: NSTextField!
-    var mode = PlaceholderWindowInfoMode.MOVE
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
-        
-    }
-    
-    func changeMode(_ mode: PlaceholderWindowInfoMode) {
-        if mode == .MOVE {
-            self.mode = .MOVE
-            self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.5)
-            self.dragLabel1.stringValue = "Two finger drag to move"
-            self.dragLabel2.stringValue = "Two finger swipe to snap"
-            self.dragLabel2.alphaValue = 1
-            self.showInfoIfApplicable()
-        } else {
-            self.mode = PlaceholderWindowInfoMode.NONE
-            self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.25)
-            self.hideInfo()
-        }
-    }
-    
-    func hideInfo() {
-        self.dragImage.alphaValue = 0
-        self.dragLabel1.alphaValue = 0
-        self.dragLabel2.alphaValue = 0
-        self.pinchImage.alphaValue = 0
-        self.pinchLabel.alphaValue = 0
-    }
-    
-    func showInfo() {
-        self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.5)
-        self.dragImage.alphaValue = 1
-        self.dragLabel1.alphaValue = 1
-        self.dragLabel2.alphaValue = 1
-        self.pinchImage.alphaValue = 1
-        self.pinchLabel.alphaValue = 1
-    }
-    
-    func showInfoIfApplicable() {
-        if let window = self.view.window {
-            let show = window.frame.height > 300 && window.frame.width > 500
-            if show {
-                self.showInfo()
-            } else {
-                self.hideInfo()
-            }
-        }
-    }
-    
-    func windowDidResize(_ notification: Notification) {
-        guard self.mode != .NONE else { return }
-        self.showInfoIfApplicable()
+//        self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.5)
     }
 }
 

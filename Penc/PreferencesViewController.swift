@@ -17,7 +17,6 @@ class PreferencesViewController: NSViewController {
     @IBOutlet var launchAtLoginCheckbox: NSButton!
     @IBOutlet var resetDefaultsButton: NSButton!
     @IBOutlet var modifierKeyPopUpButton: NSPopUpButton!
-    @IBOutlet var showGestureInfoCheckbox: NSButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,9 +36,6 @@ class PreferencesViewController: NSViewController {
         
         self.swipeSensitivitySlider.target = self
         self.swipeSensitivitySlider.action = #selector(onSwipeSensitivitySliderChange)
-        
-        self.showGestureInfoCheckbox.target = self
-        self.showGestureInfoCheckbox.action = #selector(onShowGestureInfoCheckboxChange)
         
         self.launchAtLoginCheckbox.target = self
         self.launchAtLoginCheckbox.action = #selector(onLaunchAtLoginCheckboxChange)
@@ -74,9 +70,6 @@ class PreferencesViewController: NSViewController {
         self.swipeSensitivitySlider.floatValue = sliderValue
         self.swipeSensitivityLabel.stringValue = String(format: "%.2f", sliderValue)
         
-        self.showGestureInfoCheckbox.state = Preferences.shared.showGestureInfo ? .on : .off
-        self.showGestureInfoCheckbox.state = Preferences.shared.showGestureInfo ? .on : .off
-        
         self.launchAtLoginCheckbox.state = Preferences.shared.launchAtLogin ? .on : .off
     }
     
@@ -110,11 +103,6 @@ class PreferencesViewController: NSViewController {
         self.swipeSensitivityLabel.stringValue = String(format: "%.2f", self.swipeSensitivitySlider.floatValue)
         Preferences.shared.swipeThreshold = CGFloat(55 - self.swipeSensitivitySlider.floatValue)
         log.info("Set swipe threshold \(Preferences.shared.swipeThreshold)")
-    }
-    
-    @objc private func onShowGestureInfoCheckboxChange() {
-        Preferences.shared.showGestureInfo = self.showGestureInfoCheckbox.state == .on
-        log.info("Set showing display gesture info to \(Preferences.shared.showGestureInfo)")
     }
     
     @objc private func onLaunchAtLoginCheckboxChange() {

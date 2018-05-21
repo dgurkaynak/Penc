@@ -20,7 +20,6 @@ final class Preferences {
     private static let key_activationModifierKey = "activationModifierKey"
     private static let key_activationSensitivity = "activationSensitivity"
     private static let key_swipeThreshold = "swipeThreshold"
-    private static let key_showGestureInfo = "showGestureInfo"
     private static let key_disabledApps = "disabledApps"
     
     weak var delegate: PreferencesDelegate?
@@ -42,13 +41,6 @@ final class Preferences {
     var swipeThreshold: CGFloat {
         didSet {
             UserDefaults.standard.set(self.swipeThreshold, forKey: Preferences.key_swipeThreshold)
-            self.delegate?.onPreferencesChanged(preferences: self)
-        }
-    }
-    
-    var showGestureInfo: Bool {
-        didSet {
-            UserDefaults.standard.set(self.showGestureInfo, forKey: Preferences.key_showGestureInfo)
             self.delegate?.onPreferencesChanged(preferences: self)
         }
     }
@@ -95,14 +87,6 @@ final class Preferences {
             self.swipeThreshold = swipeThreshold!
         }
         
-        let showGestureInfo = defaults.object(forKey: Preferences.key_showGestureInfo) as? Bool
-        if showGestureInfo == nil {
-            self.showGestureInfo = true
-            UserDefaults.standard.set(self.showGestureInfo, forKey: Preferences.key_showGestureInfo)
-        } else {
-            self.showGestureInfo = showGestureInfo!
-        }
-        
         let disabledApps = defaults.object(forKey: Preferences.key_disabledApps) as? [String]
         if disabledApps == nil {
             self.disabledApps = []
@@ -121,7 +105,6 @@ final class Preferences {
         self.activationModifierKey = .command
         self.activationSensitivity = 0.3
         self.swipeThreshold = 25.0
-        self.showGestureInfo = true
         self.disabledApps = []
     }
     
