@@ -68,4 +68,5 @@ fastlane/screenshots
 fastlane/test_output
 
 /node_modules
+/build
 /dist
