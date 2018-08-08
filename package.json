@@ -4,9 +4,9 @@
   "description": "Trackpad oriented window manager for macOS",
   "main": "",
   "scripts": {
-    "build:dmg": "appdmg appdmg/appdmg.json dist/Penc-$npm_package_version.dmg",
-    "build:landing": "rm -rf dist && parcel build landing/index.html --public-url ./ && inline-assets dist/index.html dist/index.html",
-    "start:landing": "rm -rf dist && parcel landing/index.html",
+    "build:dmg": "appdmg appdmg/appdmg.json build/Penc-$npm_package_version.dmg",
+    "build:landing": "rm -rf docs && parcel build landing/index.html --public-url ./ --out-dir docs && inline-assets docs/index.html docs/index.html",
+    "start:landing": "rm -rf docs && parcel landing/index.html --out-dir docs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
