@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>Penc</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <meta name="description" content="Trackpad-oriented window manager for macOS">
+  <meta name="author" content="Deniz Gurkaynak">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
@@ -27,6 +27,8 @@
       .showcase-item h6 { text-transform: uppercase; font-size: 1.4rem; letter-spacing: .2rem; font-weight: 600; margin-bottom: 0.25em; }
       .showcase-item p { margin-bottom: 0; }
       #github-button-container { margin-bottom: 3em; }
+      .footer { max-width: 700px; margin: 0 auto; border-top: 1px solid #ddd; }
+      .footer h6 { font-size: 1.25rem; padding-top: 10px; }
   </style>
   <!-- <link rel="icon" type="image/png" href="images/favicon.png"> -->
 </head>
@@ -77,9 +79,21 @@
       <a class="github-button" href="https://github.com/dgurkaynak/Penc/issues" data-icon="octicon-issue-opened" data-show-count="true" aria-label="Issue dgurkaynak/Penc on GitHub">Issue</a>
     </div>
 
+    <div class="row p-center footer">
+      <h6>Copyright © 2018 Deniz Gurkaynak</h6>
+    </div>
+
   </div>
 
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
   <script src="./index.js"></script>
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-55136062-3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-55136062-3');
+  </script>
 </body>
 </html>
