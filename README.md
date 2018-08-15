@@ -25,6 +25,12 @@ Penc is yet another window manager app for macOS. Instead of complicated keyboar
 
 Penc currently supports just macOS High Sierra (10.13).
 
+## Common Issues
+
+### Pinch to resize is not working
+
+In order to detect pinch gesture, `Zoom in or out` option must be turned on under the `System Preferences` > `Trackpad` > `Scroll & Zoom`
+
 ## Build & Running
 
 ```bash
