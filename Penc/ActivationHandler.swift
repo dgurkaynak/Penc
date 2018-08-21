@@ -52,10 +52,10 @@ class ActivationHandler {
     private func onModifierKeyEvent(_ event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
         
-        if flags == [] {
+        if flags == [] || flags == [NSEvent.ModifierFlags.capsLock] {
             // Modifier key released, it could be completion or gap between double press
             self.complete()
-        } else if flags == [self.activationModifierKey] {
+        } else if flags == [self.activationModifierKey] || flags == [self.activationModifierKey, NSEvent.ModifierFlags.capsLock] {
             if self.activationTimer == nil {
                 // Start timer
                 self.activationTimer = PTimer()
