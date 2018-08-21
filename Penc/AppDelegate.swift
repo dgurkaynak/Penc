@@ -31,7 +31,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
     var focusedWindow: SIWindow? = nil
     var focusedScreen: NSScreen? = nil
-    var mainScreen: NSScreen? = nil
     let activationHandler = ActivationHandler()
     var disabled = false
     let windowHelper = WindowHelper()
@@ -213,7 +212,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             log.debug("Not gonna activate, there is no screen at all")
             return
         }
-        self.mainScreen = NSScreen.screens[0]
         
         if let app = NSWorkspace.shared.frontmostApplication {
             if let appBundleId = app.bundleIdentifier {
@@ -226,7 +224,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         self.active = true
         
-        let focusedWindowRect = self.focusedWindow!.frame().topLeft2bottomLeft(self.mainScreen!)
+        let focusedWindowRect = self.focusedWindow!.frame().topLeft2bottomLeft(NSScreen.screens[0])
         self.placeholderWindow.setFrame(focusedWindowRect, display: true, animate: false)
         self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
         
@@ -239,7 +237,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     func onCompleted(activationHandler: ActivationHandler) {
         guard self.active else { return }
         
-        let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(self.mainScreen!)
+        guard NSScreen.screens.indices.contains(0) else {
+            log.debug("Not gonna complete gesture, there is no screen at all")
+            return
+        }
+        
+        let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(NSScreen.screens[0])
         self.focusedWindow!.setFrame(newRect)
         self.focusedWindow!.focus()
         self.placeholderWindow.orderOut(self.placeholderWindow)
@@ -248,7 +251,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         self.focusedWindow = nil
         self.focusedScreen = nil
-        self.mainScreen = nil
         self.active = false
     }
     
@@ -262,7 +264,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         self.focusedWindow = nil
         self.focusedScreen = nil
-        self.mainScreen = nil
         self.active = false
     }
     
