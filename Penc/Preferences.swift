@@ -21,6 +21,7 @@ final class Preferences {
     private static let key_activationSensitivity = "activationSensitivity"
     private static let key_swipeThreshold = "swipeThreshold"
     private static let key_disabledApps = "disabledApps"
+    private static let key_reverseScroll = "reverseScroll"
     
     weak var delegate: PreferencesDelegate?
     
@@ -60,6 +61,13 @@ final class Preferences {
         }
     }
     
+    var reverseScroll: Bool {
+        didSet {
+            UserDefaults.standard.set(self.reverseScroll, forKey: Preferences.key_reverseScroll)
+            self.delegate?.onPreferencesChanged(preferences: self)
+        }
+    }
+    
     private init() {
         let defaults = UserDefaults.standard
         
@@ -94,6 +102,14 @@ final class Preferences {
         } else {
             self.disabledApps = disabledApps!
         }
+        
+        let reverseScroll = defaults.object(forKey: Preferences.key_reverseScroll) as? Bool
+        if reverseScroll == nil {
+            self.reverseScroll = false
+            UserDefaults.standard.set(self.reverseScroll, forKey: Preferences.key_reverseScroll)
+        } else {
+            self.reverseScroll = reverseScroll!
+        }
     }
     
     func setDelegate(_ delegate: PreferencesDelegate?) {
@@ -106,6 +122,7 @@ final class Preferences {
         self.activationSensitivity = 0.3
         self.swipeThreshold = 25.0
         self.disabledApps = []
+        self.reverseScroll = false
     }
     
     func setLaunchAtLogin(_ value: Bool) -> Bool {

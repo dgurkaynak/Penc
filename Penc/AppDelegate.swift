@@ -188,6 +188,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.activationHandler.activationModifierKey = preferences.activationModifierKey
         self.activationHandler.activationTimeout = Double(preferences.activationSensitivity)
         self.gestureOverlayWindow.swipeThreshold = preferences.swipeThreshold
+        self.gestureOverlayWindow.reverseScroll = preferences.reverseScroll
     }
     
     func onActivated(activationHandler: ActivationHandler) {

@@ -17,6 +17,7 @@ class PreferencesViewController: NSViewController {
     @IBOutlet var launchAtLoginCheckbox: NSButton!
     @IBOutlet var resetDefaultsButton: NSButton!
     @IBOutlet var modifierKeyPopUpButton: NSPopUpButton!
+    @IBOutlet var reverseScrollCheckbox: NSButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +37,9 @@ class PreferencesViewController: NSViewController {
         
         self.swipeSensitivitySlider.target = self
         self.swipeSensitivitySlider.action = #selector(onSwipeSensitivitySliderChange)
+        
+        self.reverseScrollCheckbox.target = self
+        self.reverseScrollCheckbox.action = #selector(onReverseScrollCheckboxChange)
         
         self.launchAtLoginCheckbox.target = self
         self.launchAtLoginCheckbox.action = #selector(onLaunchAtLoginCheckboxChange)
@@ -70,6 +74,8 @@ class PreferencesViewController: NSViewController {
         self.swipeSensitivitySlider.floatValue = sliderValue
         self.swipeSensitivityLabel.stringValue = String(format: "%.2f", sliderValue)
         
+        self.reverseScrollCheckbox.state = Preferences.shared.reverseScroll ? .on : .off
+        
         self.launchAtLoginCheckbox.state = Preferences.shared.launchAtLogin ? .on : .off
     }
     
@@ -103,6 +109,11 @@ class PreferencesViewController: NSViewController {
         self.swipeSensitivityLabel.stringValue = String(format: "%.2f", self.swipeSensitivitySlider.floatValue)
         Preferences.shared.swipeThreshold = CGFloat(55 - self.swipeSensitivitySlider.floatValue)
         log.info("Set swipe threshold \(Preferences.shared.swipeThreshold)")
+    }
+    
+    @objc private func onReverseScrollCheckboxChange() {
+        Preferences.shared.reverseScroll = self.reverseScrollCheckbox.state == .on
+        log.info("Set reverse scroll to \(self.reverseScrollCheckbox.state == .on)")
     }
     
     @objc private func onLaunchAtLoginCheckboxChange() {

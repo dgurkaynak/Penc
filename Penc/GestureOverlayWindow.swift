@@ -37,6 +37,8 @@ class GestureOverlayWindow: NSWindow {
     var swipeThreshold: CGFloat = 20
     private var latestScrollingDelta: (x: CGFloat, y: CGFloat)?
     
+    var reverseScroll = false
+    
     
     func setDelegate(_ delegate: GestureOverlayWindowDelegate?) {
         self.delegate_ = delegate
@@ -99,7 +101,8 @@ class GestureOverlayWindow: NSWindow {
             self.latestScrollingDelta = nil
         } else if event.phase == NSEvent.Phase.changed {
             // Moving or resizing (delta) window
-            let factor: CGFloat = event.isDirectionInvertedFromDevice ? -1 : 1;
+            var factor: CGFloat = event.isDirectionInvertedFromDevice ? -1 : 1;
+            if self.reverseScroll { factor *= -1 }
             let delta = (x: factor * event.scrollingDeltaX, y: factor * event.scrollingDeltaY)
             self.latestScrollingDelta = delta
             self.delegate_?.onMoveGesture(gestureOverlayWindow: self, delta: delta)
