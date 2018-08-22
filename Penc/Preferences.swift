@@ -22,6 +22,7 @@ final class Preferences {
     private static let key_swipeThreshold = "swipeThreshold"
     private static let key_disabledApps = "disabledApps"
     private static let key_reverseScroll = "reverseScroll"
+    private static let key_windowSelection = "windowSelection"
     
     weak var delegate: PreferencesDelegate?
     
@@ -58,6 +59,13 @@ final class Preferences {
         get {
             guard let jobDicts = SMCopyAllJobDictionaries( kSMDomainUserLaunchd ).takeRetainedValue() as? [[String:Any]] else { return false }
             return jobDicts.first(where: { $0["Label"] as! String == "com.denizgurkaynak.PencLauncher" }) != nil
+        }
+    }
+    
+    var windowSelection: String {
+        didSet {
+            UserDefaults.standard.set(self.windowSelection, forKey: Preferences.key_windowSelection)
+            self.delegate?.onPreferencesChanged(preferences: self)
         }
     }
     
@@ -103,6 +111,14 @@ final class Preferences {
             self.disabledApps = disabledApps!
         }
         
+        let windowSelection = defaults.object(forKey: Preferences.key_windowSelection) as? String
+        if windowSelection == nil {
+            self.windowSelection = "focused"
+            UserDefaults.standard.set(self.windowSelection, forKey: Preferences.key_windowSelection)
+        } else {
+            self.windowSelection = windowSelection!
+        }
+        
         let reverseScroll = defaults.object(forKey: Preferences.key_reverseScroll) as? Bool
         if reverseScroll == nil {
             self.reverseScroll = false
@@ -122,6 +138,7 @@ final class Preferences {
         self.activationSensitivity = 0.3
         self.swipeThreshold = 25.0
         self.disabledApps = []
+        self.windowSelection = "focused"
         self.reverseScroll = false
     }
     

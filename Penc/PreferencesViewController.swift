@@ -18,6 +18,7 @@ class PreferencesViewController: NSViewController {
     @IBOutlet var resetDefaultsButton: NSButton!
     @IBOutlet var modifierKeyPopUpButton: NSPopUpButton!
     @IBOutlet var reverseScrollCheckbox: NSButton!
+    @IBOutlet var windowSelectionPopUpButton: NSPopUpButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +38,14 @@ class PreferencesViewController: NSViewController {
         
         self.swipeSensitivitySlider.target = self
         self.swipeSensitivitySlider.action = #selector(onSwipeSensitivitySliderChange)
+        
+        self.windowSelectionPopUpButton.removeAllItems()
+        self.windowSelectionPopUpButton.addItems(withTitles: [
+            "Focused window",
+            "Under mouse cursor"
+        ])
+        self.windowSelectionPopUpButton.target = self
+        self.windowSelectionPopUpButton.action = #selector(onWindowSelectionPopUpButtonChange)
         
         self.reverseScrollCheckbox.target = self
         self.reverseScrollCheckbox.action = #selector(onReverseScrollCheckboxChange)
@@ -74,6 +83,16 @@ class PreferencesViewController: NSViewController {
         self.swipeSensitivitySlider.floatValue = sliderValue
         self.swipeSensitivityLabel.stringValue = String(format: "%.2f", sliderValue)
         
+        let windowSelection = Preferences.shared.windowSelection
+        switch windowSelection {
+        case "focused":
+            self.windowSelectionPopUpButton.selectItem(at: 0)
+        case "underCursor":
+            self.windowSelectionPopUpButton.selectItem(at: 1)
+        default:
+            self.windowSelectionPopUpButton.selectItem(at: 0)
+        }
+        
         self.reverseScrollCheckbox.state = Preferences.shared.reverseScroll ? .on : .off
         
         self.launchAtLoginCheckbox.state = Preferences.shared.launchAtLogin ? .on : .off
@@ -109,6 +128,20 @@ class PreferencesViewController: NSViewController {
         self.swipeSensitivityLabel.stringValue = String(format: "%.2f", self.swipeSensitivitySlider.floatValue)
         Preferences.shared.swipeThreshold = CGFloat(55 - self.swipeSensitivitySlider.floatValue)
         log.info("Set swipe threshold \(Preferences.shared.swipeThreshold)")
+    }
+    
+    @objc private func onWindowSelectionPopUpButtonChange() {
+        switch self.windowSelectionPopUpButton.indexOfSelectedItem {
+        case 0:
+            Preferences.shared.windowSelection = "focused"
+            log.info("Set window selection as focused")
+        case 1:
+            Preferences.shared.windowSelection = "underCursor"
+            log.info("Set window selection as under cursor")
+        default:
+            Preferences.shared.windowSelection = "focused"
+            log.warning("Unknown window selection index, set window selection as focused anyway")
+        }
     }
     
     @objc private func onReverseScrollCheckboxChange() {

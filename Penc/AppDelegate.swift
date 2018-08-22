@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     let preferencesWindow = NSWindow(contentViewController: PreferencesViewController.freshController())
     let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
     var focusedWindow: SIWindow? = nil
-    var focusedScreen: NSScreen? = nil
+    var selectedWindow: SIWindow? = nil
     let activationHandler = ActivationHandler()
     var disabled = false
     let windowHelper = WindowHelper()
@@ -196,24 +196,93 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             return
         }
         
-        self.focusedWindow = SIWindow.focused()
-        guard self.focusedWindow != nil else {
-            log.debug("Not gonna activate, there is no focused window")
-            return
-        }
-        
-        self.focusedScreen = self.focusedWindow!.screen()
-        guard self.focusedScreen != nil else {
-            log.debug("Not gonna activate, there is no focused screen")
-            return
-        }
-        
         guard NSScreen.screens.indices.contains(0) else {
             log.debug("Not gonna activate, there is no screen at all")
             return
         }
         
-        if let app = NSWorkspace.shared.frontmostApplication {
+        self.focusedWindow = SIWindow.focused()
+        self.selectedWindow = nil
+        
+        // If focused window is finder's desktop window, ignore
+        if self.focusedWindow?.title() == nil {
+            if let focusedApp = self.focusedWindow?.app() {
+                if focusedApp.title() == "Finder" {
+                    self.focusedWindow = nil
+                }
+            }
+        }
+        
+        switch Preferences.shared.windowSelection {
+        case "focused":
+            guard self.focusedWindow != nil else {
+                log.debug("Not gonna activate, there is no focused window")
+                return
+            }
+            
+            self.selectedWindow = self.focusedWindow
+        case "underCursor":
+            let visibleWindowsInfo = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID)
+            guard visibleWindowsInfo != nil else {
+                log.error("Not gonna activate, visible windows returned nil")
+                return
+            }
+            
+            for windowInfo in visibleWindowsInfo as! [NSDictionary] {
+                let appPid = windowInfo["kCGWindowOwnerPID"] as? pid_t
+                let windowNumber = windowInfo["kCGWindowNumber"] as? Int
+                let windowBounds = windowInfo["kCGWindowBounds"] as? NSDictionary
+                
+                guard appPid != nil else { return }
+                guard windowNumber != nil else { return }
+                guard windowBounds != nil else { return }
+                
+                let windowWidth = windowBounds!["Width"] as? Int
+                let windowHeight = windowBounds!["Height"] as? Int
+                let windowX = windowBounds!["X"] as? Int
+                let windowY = windowBounds!["Y"] as? Int
+                
+                guard windowWidth != nil else { return }
+                guard windowHeight != nil else { return }
+                guard windowX != nil else { return }
+                guard windowY != nil else { return }
+                
+                let rect = CGRect(x: windowX!, y: windowY!, width: windowWidth!, height: windowHeight!).topLeft2bottomLeft(NSScreen.screens[0])
+                let isInRange = (
+                    x: NSEvent.mouseLocation.x >= rect.origin.x && NSEvent.mouseLocation.x <= (rect.origin.x + rect.size.width),
+                    y: NSEvent.mouseLocation.y >= rect.origin.y && NSEvent.mouseLocation.y <= (rect.origin.y + rect.size.height)
+                )
+
+                if isInRange.x && isInRange.y {
+                    if let runningApp = NSRunningApplication.init(processIdentifier: appPid!) {
+                        let app = SIApplication.init(runningApplication: runningApp)
+                        for case let win as SIWindow in app.visibleWindows() {
+                            if Int(win.windowID()) == windowNumber {
+                                self.selectedWindow = win
+                                break
+                            }
+                        }
+                    }
+                    break
+                }
+            }
+        default:
+            log.error("Not gonna activate, unknown window selection: \(Preferences.shared.windowSelection)")
+            return
+        }
+        
+        guard self.selectedWindow != nil else {
+            log.debug("Not gonna activate, there is no selected window")
+            return
+        }
+        
+        let selectedScreen = self.selectedWindow!.screen()
+        guard selectedScreen != nil else {
+            log.debug("Not gonna activate, there is no selected screen")
+            return
+        }
+        
+        if let app = NSRunningApplication.init(processIdentifier: self.selectedWindow!.processIdentifier()) {
             if let appBundleId = app.bundleIdentifier {
                 if Preferences.shared.disabledApps.contains(appBundleId) {
                     log.debug("Not gonna activate, Penc is disabled for \(appBundleId)")
@@ -224,11 +293,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         self.active = true
         
-        let focusedWindowRect = self.focusedWindow!.frame().topLeft2bottomLeft(NSScreen.screens[0])
-        self.placeholderWindow.setFrame(focusedWindowRect, display: true, animate: false)
+        let selectedWindowRect = self.selectedWindow!.frame().topLeft2bottomLeft(NSScreen.screens[0])
+        self.placeholderWindow.setFrame(selectedWindowRect, display: true, animate: false)
         self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
         
-        self.gestureOverlayWindow.setFrame(self.focusedScreen!.frame, display: true, animate: false)
+        self.gestureOverlayWindow.setFrame(selectedScreen!.frame, display: true, animate: false)
         self.gestureOverlayWindow.makeKeyAndOrderFront(self.gestureOverlayWindow)
         
         NSApplication.shared.activate(ignoringOtherApps: true)
@@ -238,38 +307,39 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.active else { return }
         
         guard NSScreen.screens.indices.contains(0) else {
-            log.debug("Not gonna complete gesture, there is no screen at all")
+            log.debug("Not gonna complete gesture, there is no screen - force cancelling")
+            self.onCancelled(activationHandler: activationHandler)
             return
         }
         
         let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(NSScreen.screens[0])
-        self.focusedWindow!.setFrame(newRect)
-        self.focusedWindow!.focus()
+        self.selectedWindow!.setFrame(newRect)
+        self.focusedWindow?.focus()
         self.placeholderWindow.orderOut(self.placeholderWindow)
         self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
         self.gestureOverlayWindow.clear()
         
         self.focusedWindow = nil
-        self.focusedScreen = nil
+        self.selectedWindow = nil
         self.active = false
     }
     
     func onCancelled(activationHandler: ActivationHandler) {
         guard self.active else { return }
         
-        self.focusedWindow!.focus()
+        self.focusedWindow?.focus()
         self.placeholderWindow.orderOut(self.placeholderWindow)
         self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
         self.gestureOverlayWindow.clear()
         
         self.focusedWindow = nil
-        self.focusedScreen = nil
+        self.selectedWindow = nil
         self.active = false
     }
     
     func onMoveGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
         guard self.active else { return }
-        guard self.focusedWindow!.isMovable() else { return }
+        guard self.selectedWindow!.isMovable() else { return }
         
         let rect = self.windowHelper.moveWithSnappingScreenBoundaries(self.placeholderWindow, delta: delta)
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
@@ -277,12 +347,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: GestureType) {
         guard self.active else { return }
-        guard self.focusedWindow!.isMovable() else { return }
+        guard self.selectedWindow!.isMovable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
         
         var rect: CGRect? = nil
         
-        if self.focusedWindow!.isResizable() {
+        if self.selectedWindow!.isResizable() {
             if [GestureType.SWIPE_TOP, GestureType.SWIPE_BOTTOM].contains(type) {
                 rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: 1.0)
                 rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: 0.5)
@@ -319,7 +389,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     func onResizeFactorGesture(gestureOverlayWindow: GestureOverlayWindow, factor: (x: CGFloat, y: CGFloat)) {
         guard self.active else { return }
-        guard self.focusedWindow!.isResizable() else { return }
+        guard self.selectedWindow!.isResizable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
         
         let rect = self.windowHelper.resize(self.placeholderWindow, factor: factor)
