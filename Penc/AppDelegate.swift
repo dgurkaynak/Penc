@@ -49,12 +49,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
         let file = FileDestination()
         file.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c: $M"
-        if Env.isProduction() {
-            file.logFileURL = URL(fileURLWithPath: "penc.log")
-        } else {
-            file.logFileURL = URL(fileURLWithPath: "/tmp/penc.log")
-            file.asynchronously = false
-        }
+        file.logFileURL = URL(fileURLWithPath: "/tmp/penc.log")
+//        file.asynchronously = false
         log.addDestination(file)
         
         log.info("Booting...")
