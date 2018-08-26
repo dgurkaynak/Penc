@@ -233,19 +233,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                 let windowNumber = windowInfo["kCGWindowNumber"] as? Int
                 let windowBounds = windowInfo["kCGWindowBounds"] as? NSDictionary
                 
-                guard appPid != nil else { return }
-                guard windowNumber != nil else { return }
-                guard windowBounds != nil else { return }
+                guard appPid != nil else { continue }
+                guard windowNumber != nil else { continue }
+                guard windowBounds != nil else { continue }
                 
                 let windowWidth = windowBounds!["Width"] as? Int
                 let windowHeight = windowBounds!["Height"] as? Int
                 let windowX = windowBounds!["X"] as? Int
                 let windowY = windowBounds!["Y"] as? Int
                 
-                guard windowWidth != nil else { return }
-                guard windowHeight != nil else { return }
-                guard windowX != nil else { return }
-                guard windowY != nil else { return }
+                guard windowWidth != nil else { continue }
+                guard windowHeight != nil else { continue }
+                guard windowX != nil else { continue }
+                guard windowY != nil else { continue }
                 
                 let rect = CGRect(x: windowX!, y: windowY!, width: windowWidth!, height: windowHeight!).topLeft2bottomLeft(NSScreen.screens[0])
                 let isInRange = (
