@@ -225,6 +225,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             log.debug("Looking for the window under mouse cursor -- X=\(mouseX), Y=\(mouseY)")
             
             for windowInfo in visibleWindowsInfo as! [NSDictionary] {
+                // Ignore dock, desktop, menubar stuff: https://stackoverflow.com/a/5286921
+                let windowLayer = windowInfo["kCGWindowLayer"] as? Int
+                guard windowLayer == 0 else { continue }
+                
                 let appPid = windowInfo["kCGWindowOwnerPID"] as? pid_t
                 let windowNumber = windowInfo["kCGWindowNumber"] as? Int
                 let windowBounds = windowInfo["kCGWindowBounds"] as? NSDictionary
