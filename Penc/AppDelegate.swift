@@ -318,7 +318,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(NSScreen.screens[0])
         self.selectedWindow!.setFrame(newRect)
-        self.focusedWindow?.focus()
+        self.focusedWindow?.focusThisWindowOnly()
         self.placeholderWindow.orderOut(self.placeholderWindow)
         self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
         self.gestureOverlayWindow.clear()
