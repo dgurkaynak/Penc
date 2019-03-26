@@ -11,7 +11,15 @@ Penc is yet another window manager app for macOS. Instead of complicated keyboar
   - Fast swipe with two fingers to snap the window into halves/quarters
 - Release Command Key (⌘) to take effect
 
-## Download & Installation
+## Installation
+
+There are two recommended options for installation.
+
+**Homebrew**
+
+`$ brew cask install penc`.
+
+**Download Release from Github**
 
 - Download latest dmg file from [Releases page](https://github.com/dgurkaynak/Penc/releases)
 - Mount and open that dmg file
@@ -23,7 +31,7 @@ Penc is yet another window manager app for macOS. Instead of complicated keyboar
 
 ## System Requirements
 
-Penc currently supports just macOS High Sierra (10.13).
+Penc currently supports macOS High Sierra (10.13) and Mojave (10.14).
 
 ## Common Issues
 
