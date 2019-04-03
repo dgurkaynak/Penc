@@ -8,6 +8,7 @@ Penc is yet another window manager app for macOS. Instead of complicated keyboar
 - Double press and hold Command Key (⌘) to activate Penc
   - Drag with two fingers to move the window
   - Pinch with two fingers to resize the window
+    - Pinch vertically to make the window taller/shorter, or horizontally to make it wider/thinner
   - Fast swipe with two fingers to snap the window into halves/quarters
 - Release Command Key (⌘) to take effect
 
