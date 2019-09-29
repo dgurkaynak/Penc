@@ -99,7 +99,7 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <script type='text/javascript'>
     //some default pre init
-    var Countly = Countly || {};
+    var Countly = window['Countly'] = window['Countly'] || {};
     Countly.q = Countly.q || [];
 
     //provide countly initialization parameters
