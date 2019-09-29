@@ -5,8 +5,8 @@
   "main": "",
   "scripts": {
     "build:dmg": "appdmg appdmg/appdmg.json build/Penc-$npm_package_version.dmg",
-    "build:landing": "rm -rf docs && parcel build landing/index.html --public-url ./ --out-dir docs && inline-assets docs/index.html docs/index.html",
-    "start:landing": "rm -rf docs && parcel landing/index.html --out-dir docs",
+    "build:landing": "rm -rf dist-landing && parcel build landing/index.html --public-url ./ --out-dir dist-landing && inline-assets dist-landing/index.html dist-landing/index.html",
+    "start:landing": "rm -rf dist-landing && parcel landing/index.html --out-dir dist-landing",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
