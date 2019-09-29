@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/dgurkaynak/Penc#readme",
   "dependencies": {
-    "appdmg": "^0.5.2",
+    "appdmg": "^0.6.0",
     "inline-assets": "^1.4.1",
-    "parcel-bundler": "^1.9.7"
+    "parcel-bundler": "^1.12.3"
   }
 }
