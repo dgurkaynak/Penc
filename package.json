@@ -21,6 +21,7 @@
   "homepage": "https://github.com/dgurkaynak/Penc#readme",
   "dependencies": {
     "appdmg": "^0.6.0",
+    "browserslist": "^4.7.0",
     "inline-assets": "^1.4.1",
     "parcel-bundler": "^1.12.3"
   }
