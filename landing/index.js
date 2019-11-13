@@ -61,7 +61,12 @@ function onShowcaseItemHover(item) {
 
 function onVideoEnded() {
     if (isShowcaseDirty) {
-        videoEl.play();
+        const playPromise = videoEl.play();
+        if (playPromise && playPromise.catch) {
+            playPromise.catch((err) => {
+                console.warn('Could not play video element', err);
+            });
+        }
         return;
     }
     const nextItem = getNextShowcaseItem(activeShowcaseItem);
