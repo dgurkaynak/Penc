@@ -1,6 +1,6 @@
 PODS:
   - Silica (0.1.5)
-  - Sparkle (1.18.1)
+  - Sparkle (1.23.0)
 
 DEPENDENCIES:
   - Silica (from `https://github.com/ianyh/Silica.git`, tag `0.1.5`)
@@ -22,7 +22,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Silica: 3b5a774469476ef84fe9d96a63bfe09908654e50
-  Sparkle: 06ea33170007c5937ee54da481b4481af98fac79
+  Sparkle: 55b1a87ba69d56913375a281546b7c82dec95bb0
 
 PODFILE CHECKSUM: 2da49d708707808abe4a49bbdc4d8a3a7872db78
 
