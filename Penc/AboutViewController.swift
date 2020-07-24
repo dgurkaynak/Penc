@@ -34,8 +34,8 @@ class AboutViewController: NSViewController {
 extension AboutViewController {
     // MARK: Storyboard instantiation
     static func freshController() -> AboutViewController {
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
-        let identifier = NSStoryboard.SceneIdentifier(rawValue: "AboutViewController")
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let identifier = "AboutViewController"
         guard let viewController = storyboard.instantiateController(withIdentifier: identifier) as? AboutViewController else {
             fatalError("Not found AboutViewController in Main.storyboard")
         }

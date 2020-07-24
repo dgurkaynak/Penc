@@ -182,8 +182,8 @@ class PreferencesViewController: NSViewController {
 extension PreferencesViewController {
     // MARK: Storyboard instantiation
     static func freshController() -> PreferencesViewController {
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
-        let identifier = NSStoryboard.SceneIdentifier(rawValue: "PreferencesViewController")
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let identifier = "PreferencesViewController"
         guard let viewController = storyboard.instantiateController(withIdentifier: identifier) as? PreferencesViewController else {
             fatalError("Not found PreferencesViewController in Main.storyboard")
         }

@@ -61,7 +61,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
         
         if let button = self.statusItem.button {
-            button.image = NSImage(named:NSImage.Name("penc-menu-icon"))
+            button.image = NSImage(named:"penc-menu-icon")
         }
         
 //        log.info("Checking accessibility permissions...")
@@ -430,7 +430,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         if let app = NSWorkspace.shared.frontmostApplication {
             if let appBundleId = app.bundleIdentifier {
                 if Preferences.shared.disabledApps.contains(appBundleId) {
-                    let i = Preferences.shared.disabledApps.index(of: appBundleId)
+                    let i = Preferences.shared.disabledApps.firstIndex(of: appBundleId)
                     Preferences.shared.disabledApps.remove(at: i!)
 //                    log.info("Enabled back for \(appBundleId)")
                 } else {

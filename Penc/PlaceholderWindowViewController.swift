@@ -22,8 +22,8 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
 extension PlaceholderWindowViewController {
     // MARK: Storyboard instantiation
     static func freshController() -> PlaceholderWindowViewController {
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
-        let identifier = NSStoryboard.SceneIdentifier(rawValue: "PlaceholderWindowViewController")
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let identifier = "PlaceholderWindowViewController"
         guard let viewController = storyboard.instantiateController(withIdentifier: identifier) as? PlaceholderWindowViewController else {
             fatalError("Not found PlaceholderWindowViewController in Main.storyboard")
         }

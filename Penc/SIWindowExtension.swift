@@ -11,6 +11,6 @@ import Silica
 extension SIWindow {
     func focusThisWindowOnly() {
         NSRunningApplication(processIdentifier: processIdentifier())?.activate(options: .activateIgnoringOtherApps)
-        AXUIElementSetAttributeValue(axElementRef, NSAccessibilityAttributeName.main.rawValue as CFString, kCFBooleanTrue)
+        AXUIElementSetAttributeValue(axElementRef, NSAccessibility.Attribute.main.rawValue as CFString, kCFBooleanTrue)
     }
 }
