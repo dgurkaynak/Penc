@@ -187,7 +187,6 @@
 				9417B7BF1FADAEED00749BC8 /* Run Script */,
 				9451959E1FA88B8B00FA53B4 /* Resources */,
 				3E396F0A92C23C8B987D6383 /* [CP] Embed Pods Frameworks */,
-				5EA852D97CDD8F2E7E0F872D /* [CP] Copy Pods Resources */,
 				94756FFD20ACB6C3003023FD /* CopyFiles */,
 			);
 			buildRules = (
@@ -312,37 +311,20 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Penc/Pods-Penc-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Penc/Pods-Penc-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Silica/Silica.framework",
 				"${PODS_ROOT}/Sparkle/Sparkle.framework",
 				"${PODS_ROOT}/Sparkle/Sparkle.framework.dSYM",
-				"${BUILT_PRODUCTS_DIR}/SwiftyBeaver/SwiftyBeaver.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Silica.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Sparkle.framework",
 				"${DWARF_DSYM_FOLDER_PATH}/Sparkle.framework.dSYM",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyBeaver.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Penc/Pods-Penc-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5EA852D97CDD8F2E7E0F872D /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Penc/Pods-Penc-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Penc/Pods-Penc-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9417B7BF1FADAEED00749BC8 /* Run Script */ = {
