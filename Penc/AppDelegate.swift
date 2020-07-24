@@ -37,26 +37,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         
-//        if !Env.isProduction() {
-//            let console = ConsoleDestination()
-//            console.format = "$DHH:mm:ss.SSS$d $C$L$c: $M"
-//            console.asynchronously = false
-//            log.addDestination(console)
-//        }
-//
-//        let file = FileDestination()
-//        file.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c: $M"
-//        file.logFileURL = URL(fileURLWithPath: "/tmp/penc.log")
-////        file.asynchronously = false
-//        log.addDestination(file)
-//
-//        log.info("Booting...")
+        Logger.shared.info("Booting...")
         
         let launcherAppId = "com.denizgurkaynak.PencLauncher"
         let runningApps = NSWorkspace.shared.runningApplications
         let isLauncherRunning = !runningApps.filter { $0.bundleIdentifier == launcherAppId }.isEmpty
         if isLauncherRunning {
-//            log.debug("Launcher is running, killing it...")
+            Logger.shared.debug("Launcher is running, killing it...")
             DistributedNotificationCenter.default().post(name: .killLauncher, object: Bundle.main.bundleIdentifier!)
         }
         
@@ -64,7 +51,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             button.image = NSImage(named:"penc-menu-icon")
         }
         
-//        log.info("Checking accessibility permissions...")
+        Logger.shared.info("Checking accessibility permissions...")
         
         if checkPermissions() {
             constructMenu()
@@ -77,6 +64,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             self.setupPreferencesWindow()
             self.setupAboutWindow()
             self.onPreferencesChanged(preferences: Preferences.shared)
+            
+            Logger.shared.info("Boot successful")
         } else {
             let warnAlert = NSAlert();
             warnAlert.messageText = "Accessibility permissions needed";
@@ -93,12 +82,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     func checkPermissions() -> Bool {
         if AXIsProcessTrusted() {
-//            log.info("We're trusted accessibility client")
+            Logger.shared.info("We're trusted accessibility client")
             return true
         } else {
             let options = NSDictionary(object: kCFBooleanTrue, forKey: kAXTrustedCheckOptionPrompt.takeUnretainedValue() as NSString) as CFDictionary
             let accessibilityEnabled = AXIsProcessTrustedWithOptions(options)
-//            log.warning("We're NOT trusted accessibility client, manual check result: \(accessibilityEnabled)")
+            Logger.shared.warn("We're NOT trusted accessibility client, manual check result: \(accessibilityEnabled)")
             return accessibilityEnabled
         }
     }
@@ -185,12 +174,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     func onActivated(activationHandler: ActivationHandler) {
         guard !self.disabled else {
-//            log.info("Not gonna activate, Penc is disabled globally")
+            Logger.shared.info("Not gonna activate, Penc is disabled globally")
             return
         }
         
         guard NSScreen.screens.indices.contains(0) else {
-//            log.info("Not gonna activate, there is no screen at all")
+            Logger.shared.info("Not gonna activate, there is no screen at all")
             return
         }
         
@@ -201,7 +190,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         if self.focusedWindow?.title() == nil {
             if let focusedApp = self.focusedWindow?.app() {
                 if focusedApp.title() == "Finder" {
-//                    log.debug("Desktop is focused, ignoring")
+                    Logger.shared.debug("Desktop is focused, ignoring")
                     self.focusedWindow = nil
                 }
             }
@@ -213,13 +202,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         case "underCursor":
             let visibleWindowsInfo = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID)
             guard visibleWindowsInfo != nil else {
-//                log.error("Not gonna activate, visible windows returned nil")
+                Logger.shared.error("Not gonna activate, visible windows returned nil")
                 return
             }
             
             let mouseX = NSEvent.mouseLocation.x
             let mouseY = NSEvent.mouseLocation.y
-//            log.debug("Looking for the window under mouse cursor -- X=\(mouseX), Y=\(mouseY)")
+            Logger.shared.debug("Looking for the window under mouse cursor -- X=\(mouseX), Y=\(mouseY)")
             
             for windowInfo in visibleWindowsInfo as! [NSDictionary] {
                 // Ignore dock, desktop, menubar stuff: https://stackoverflow.com/a/5286921
@@ -251,7 +240,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                 )
 
                 if isInRange.x && isInRange.y {
-//                    log.debug("Found a window: \(windowInfo)")
+                    Logger.shared.debug("Found a window: \(windowInfo)")
                     if let runningApp = NSRunningApplication.init(processIdentifier: appPid!) {
                         let app = SIApplication.init(runningApplication: runningApp)
                         let visibleWindows = app.visibleWindows()
@@ -267,11 +256,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                 }
             }
         default:
-//            log.error("Not gonna activate, unknown window selection: \(Preferences.shared.windowSelection)")
+            Logger.shared.error("Not gonna activate, unknown window selection: \(Preferences.shared.windowSelection)")
             return
         }
         
-//        log.info("Activating... (Window selection: \(Preferences.shared.windowSelection) -- Focused window: \(self.focusedWindow.debugDescription) -- Selected window: \(self.selectedWindow.debugDescription))")
+        Logger.shared.info("Activating... (Window selection: \(Preferences.shared.windowSelection) -- Focused window: \(self.focusedWindow.debugDescription) -- Selected window: \(self.selectedWindow.debugDescription))")
         
         guard self.selectedWindow != nil else {
             return
@@ -279,14 +268,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         let selectedScreen = self.selectedWindow!.screen()
         guard selectedScreen != nil else {
-//            log.info("Not gonna activate, there is no selected screen")
+            Logger.shared.info("Not gonna activate, there is no selected screen")
             return
         }
         
         if let app = NSRunningApplication.init(processIdentifier: self.selectedWindow!.processIdentifier()) {
             if let appBundleId = app.bundleIdentifier {
                 if Preferences.shared.disabledApps.contains(appBundleId) {
-//                    log.info("Not gonna activate, Penc is disabled for \(appBundleId)")
+                    Logger.shared.info("Not gonna activate, Penc is disabled for \(appBundleId)")
                     return
                 }
             }
@@ -308,7 +297,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.active else { return }
         
         guard NSScreen.screens.indices.contains(0) else {
-//            log.info("Not gonna complete activation, there is no screen -- force cancelling")
+            Logger.shared.info("Not gonna complete activation, there is no screen -- force cancelling")
             self.onCancelled(activationHandler: activationHandler)
             return
         }
@@ -328,7 +317,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     func onCancelled(activationHandler: ActivationHandler) {
         guard self.active else { return }
         
-//        log.info("Cancelled activation")
+        Logger.shared.info("Cancelled activation")
         
         self.focusedWindow?.focus()
         self.placeholderWindow.orderOut(self.placeholderWindow)
@@ -383,7 +372,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             rect = self.windowHelper.snapToRightOfScreen(self.placeholderWindow, frame: rect)
         default:
             print("Unsupported swipe type: \(type)")
-//            log.error("Unsupported swipe type: \(type)")
+            Logger.shared.error("Unsupported swipe type: \(type)")
         }
         
         if rect != nil {
@@ -423,7 +412,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     @objc func toggleDisable(_ sender: Any?) {
         self.disabled = !self.disabled
-//        log.info(self.disabled ? "Disabled globally" : "Enabled globally")
+        Logger.shared.info(self.disabled ? "Disabled globally" : "Enabled globally")
     }
     
     @objc func toggleDisableApp(_ sender: Any?) {
@@ -432,10 +421,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                 if Preferences.shared.disabledApps.contains(appBundleId) {
                     let i = Preferences.shared.disabledApps.firstIndex(of: appBundleId)
                     Preferences.shared.disabledApps.remove(at: i!)
-//                    log.info("Enabled back for \(appBundleId)")
+                    Logger.shared.info("Enabled back for \(appBundleId)")
                 } else {
                     Preferences.shared.disabledApps.append(appBundleId)
-//                    log.info("Disabled for \(appBundleId)")
+                    Logger.shared.info("Disabled for \(appBundleId)")
                 }
                 
                 Preferences.shared.disabledApps = Preferences.shared.disabledApps
@@ -444,7 +433,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     }
     
     @objc func checkForUpdates(_ sender: Any?) {
-//        log.info("Checking for updates")
+        Logger.shared.info("Checking for updates")
         self.updater.checkForUpdates(nil)
     }
     
