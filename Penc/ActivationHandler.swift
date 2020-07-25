@@ -11,9 +11,9 @@ import Cocoa
 
 
 protocol ActivationHandlerDelegate: class {
-    func onActivated(activationHandler: ActivationHandler)
-    func onCompleted(activationHandler: ActivationHandler)
-    func onCancelled(activationHandler: ActivationHandler)
+    func onActivationStarted(activationHandler: ActivationHandler)
+    func onActivationCompleted(activationHandler: ActivationHandler)
+    func onActivationCancelled(activationHandler: ActivationHandler)
 }
 
 class ActivationHandler {
@@ -83,21 +83,21 @@ class ActivationHandler {
         guard !self.active else { return }
         self.active = true
         self.activationTimer = nil
-        self.delegate?.onActivated(activationHandler: self)
+        self.delegate?.onActivationStarted(activationHandler: self)
     }
     
     private func complete() {
         guard self.active else { return }
         self.active = false
         self.activationTimer = nil
-        self.delegate?.onCompleted(activationHandler: self)
+        self.delegate?.onActivationCompleted(activationHandler: self)
     }
     
     private func cancel() {
         self.activationTimer = nil
         guard self.active else { return }
         self.active = false
-        self.delegate?.onCancelled(activationHandler: self)
+        self.delegate?.onActivationCancelled(activationHandler: self)
     }
     
     deinit {

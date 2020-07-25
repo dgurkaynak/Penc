@@ -172,7 +172,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.gestureOverlayWindow.reverseScroll = preferences.reverseScroll
     }
     
-    func onActivated(activationHandler: ActivationHandler) {
+    func onActivationStarted(activationHandler: ActivationHandler) {
         guard !self.disabled else {
             Logger.shared.info("Not gonna activate, Penc is disabled globally")
             return
@@ -293,12 +293,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         NSApplication.shared.activate(ignoringOtherApps: true)
     }
     
-    func onCompleted(activationHandler: ActivationHandler) {
+    func onActivationCompleted(activationHandler: ActivationHandler) {
         guard self.active else { return }
         
         guard NSScreen.screens.indices.contains(0) else {
             Logger.shared.info("Not gonna complete activation, there is no screen -- force cancelling")
-            self.onCancelled(activationHandler: activationHandler)
+            self.onActivationCancelled(activationHandler: activationHandler)
             return
         }
         
@@ -314,7 +314,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.active = false
     }
     
-    func onCancelled(activationHandler: ActivationHandler) {
+    func onActivationCancelled(activationHandler: ActivationHandler) {
         guard self.active else { return }
         
         Logger.shared.info("Cancelled activation")
