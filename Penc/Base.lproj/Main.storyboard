@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -622,7 +622,7 @@
                                         <menuItem title="Show Sidebar" keyEquivalent="s" id="kIP-vf-haE">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>
-                                                <action selector="toggleSourceList:" target="Ady-hI-5gd" id="iwa-gc-5KM"/>
+                                                <action selector="toggleSidebar:" target="Ady-hI-5gd" id="iwa-gc-5KM"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Enter Full Screen" keyEquivalent="f" id="4J7-dP-txa">
@@ -751,7 +751,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="4FL-Yz-kg9" id="ABp-7V-qY8">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="menu"/>
+                                    <font key="font" metaFont="system"/>
                                     <menu key="menu" id="L87-Gl-4Xq">
                                         <items>
                                             <menuItem title="Item 1" state="on" id="4FL-Yz-kg9"/>
@@ -801,7 +801,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Swd-QP-kG3" id="0Rw-gC-eIA">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="menu"/>
+                                    <font key="font" metaFont="system"/>
                                     <menu key="menu" id="eom-uP-B1N">
                                         <items>
                                             <menuItem title="Item 1" state="on" id="Swd-QP-kG3"/>
@@ -872,7 +872,7 @@
                                 <rect key="frame" x="18" y="110" width="180" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Version 1.0.0 (612)" id="Mmb-Cb-WOa">
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="message" size="11"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -882,14 +882,14 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Source code on Github" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nnq-gA-WFv">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="message" size="11"/>
                                 </buttonCell>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oBn-Bg-2L0">
                                 <rect key="frame" x="18" y="37" width="180" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Copyright © 2017" id="gdA-Yk-3bk">
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="message" size="11"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -898,7 +898,7 @@
                                 <rect key="frame" x="18" y="20" width="180" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Deniz Gurkaynak" id="4n8-EB-s1z">
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="message" size="11"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
