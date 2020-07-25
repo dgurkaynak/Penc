@@ -183,6 +183,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             return
         }
         
+//        NSScreen.screens.forEach { (screen) in
+//            let screenNumber = screen.deviceDescription[NSDeviceDescriptionKey(rawValue: "NSScreenNumber")] as! NSNumber
+//            print("\(screenNumber) - \(screen.getDeviceName())")
+//        }
+        
         self.focusedWindow = SIWindow.focused()
         self.selectedWindow = nil
         
