@@ -26,6 +26,7 @@ protocol GestureOverlayWindowDelegate: class {
     func onMoveGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat))
     func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: GestureType)
     func onResizeFactorGesture(gestureOverlayWindow: GestureOverlayWindow, factor: (x: CGFloat, y: CGFloat))
+    func onDoubleClickGesture(gestureOverlayWindow: GestureOverlayWindow)
 }
 
 class GestureOverlayWindow: NSWindow {
@@ -39,6 +40,8 @@ class GestureOverlayWindow: NSWindow {
     
     var reverseScroll = false
     
+    private var doubleClickTimer: PTimer? = nil
+    var doubleClickTimeout = 0.3
     
     func setDelegate(_ delegate: GestureOverlayWindowDelegate?) {
         self.delegate_ = delegate
@@ -92,6 +95,24 @@ class GestureOverlayWindow: NSWindow {
         // Moving the window
         let delta = (x: -1 * event.deltaX, y: -1 * event.deltaY)
         self.delegate_?.onMoveGesture(gestureOverlayWindow: self, delta: delta)
+    }
+    
+    override func mouseDown(with event: NSEvent) {
+        if self.doubleClickTimer == nil {
+            // Start timer
+            self.doubleClickTimer = PTimer()
+        } else {
+            let elapsed = self.doubleClickTimer!.end()
+            let timeoutInNs = self.doubleClickTimeout * 1000000000
+            
+            if elapsed <= UInt64(timeoutInNs) {
+                self.doubleClickTimer = nil
+                self.delegate_?.onDoubleClickGesture(gestureOverlayWindow: self)
+            } else {
+                // Too late, start over
+                self.doubleClickTimer = PTimer()
+            }
+        }
     }
     
     override func scrollWheel(with event: NSEvent) {

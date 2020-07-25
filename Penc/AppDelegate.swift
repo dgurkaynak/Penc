@@ -389,6 +389,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }
     
+    func onDoubleClickGesture(gestureOverlayWindow: GestureOverlayWindow) {
+        print("double click")
+    }
+    
     func menuWillOpen(_ menu: NSMenu) {
         let disableToggleMenuItem = menu.item(withTag: 1)
         disableToggleMenuItem!.title = self.disabled ? "Enable" : "Disable"
