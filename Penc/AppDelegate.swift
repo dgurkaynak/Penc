@@ -390,7 +390,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     }
     
     func onDoubleClickGesture(gestureOverlayWindow: GestureOverlayWindow) {
-        print("double click")
+        guard self.active else { return }
+        guard self.selectedWindow!.isResizable() else { return }
+        guard self.placeholderWindow.screen != nil else { return }
+        
+        self.placeholderWindow.setFrame(self.placeholderWindow.screen!.visibleFrame, display: true, animate: false)
     }
     
     func menuWillOpen(_ menu: NSMenu) {
