@@ -8,10 +8,7 @@
 
 import Cocoa
 
-enum GestureType {
-    case MOVE
-    case RESIZE_DELTA
-    case RESIZE_FACTOR
+enum SwipeGestureType {
     case SWIPE_TOP
     case SWIPE_TOP_RIGHT
     case SWIPE_RIGHT
@@ -23,9 +20,9 @@ enum GestureType {
 }
 
 protocol GestureOverlayWindowDelegate: class {
-    func onMoveGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat))
-    func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: GestureType)
-    func onResizeFactorGesture(gestureOverlayWindow: GestureOverlayWindow, factor: (x: CGFloat, y: CGFloat))
+    func onScrollGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat))
+    func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: SwipeGestureType)
+    func onPinchGesture(gestureOverlayWindow: GestureOverlayWindow, zoomFactor: (x: CGFloat, y: CGFloat))
     func onDoubleClickGesture(gestureOverlayWindow: GestureOverlayWindow)
 }
 
@@ -58,7 +55,7 @@ class GestureOverlayWindow: NSWindow {
             let xFactor = -1 * magnification * cos(self.magnificationAngle)
             let yFactor = -1 * magnification * sin(self.magnificationAngle)
         
-            self.delegate_?.onResizeFactorGesture(gestureOverlayWindow: self, factor: (x: xFactor, y: yFactor))
+            self.delegate_?.onPinchGesture(gestureOverlayWindow: self, zoomFactor: (x: xFactor, y: yFactor))
         } else if event.phase == NSEvent.Phase.ended {
             self.magnifying = false
         }
@@ -125,7 +122,7 @@ class GestureOverlayWindow: NSWindow {
             if self.reverseScroll { factor *= -1 }
             let delta = (x: factor * event.scrollingDeltaX, y: factor * event.scrollingDeltaY)
             self.latestScrollingDelta = delta
-            self.delegate_?.onMoveGesture(gestureOverlayWindow: self, delta: delta)
+            self.delegate_?.onScrollGesture(gestureOverlayWindow: self, delta: delta)
         } else if event.phase == NSEvent.Phase.ended {
             // Maybe swiping?
             if self.latestScrollingDelta == nil { return }
@@ -140,35 +137,35 @@ class GestureOverlayWindow: NSWindow {
                 swipe.y = delta.y > 0 ? 1 : -1
             }
             
-            var swipeType: GestureType? = nil
+            var swipeType: SwipeGestureType? = nil
             
             switch swipe {
             case (x: -1, y: -1):
-                swipeType = GestureType.SWIPE_BOTTOM_RIGHT
+                swipeType = SwipeGestureType.SWIPE_BOTTOM_RIGHT
                 break
             case (x: -1, y: 0):
-                swipeType = GestureType.SWIPE_RIGHT
+                swipeType = SwipeGestureType.SWIPE_RIGHT
                 break
             case (x: -1, y: 1):
-                swipeType = GestureType.SWIPE_TOP_RIGHT
+                swipeType = SwipeGestureType.SWIPE_TOP_RIGHT
                 break
             case (x: 0, y: -1):
-                swipeType = GestureType.SWIPE_BOTTOM
+                swipeType = SwipeGestureType.SWIPE_BOTTOM
                 break
             case (x: 0, y: 0):
                 swipeType = nil
                 break
             case (x: 0, y: 1):
-                swipeType = GestureType.SWIPE_TOP
+                swipeType = SwipeGestureType.SWIPE_TOP
                 break
             case (x: 1, y: -1):
-                swipeType = GestureType.SWIPE_BOTTOM_LEFT
+                swipeType = SwipeGestureType.SWIPE_BOTTOM_LEFT
                 break
             case (x: 1, y: 0):
-                swipeType = GestureType.SWIPE_LEFT
+                swipeType = SwipeGestureType.SWIPE_LEFT
                 break
             case (x: 1, y: 1):
-                swipeType = GestureType.SWIPE_TOP_LEFT
+                swipeType = SwipeGestureType.SWIPE_TOP_LEFT
                 break
             default:
                 swipeType = nil

@@ -329,7 +329,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.active = false
     }
     
-    func onMoveGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
+    func onScrollGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
         guard self.active else { return }
         guard self.selectedWindow!.isMovable() else { return }
         
@@ -337,7 +337,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }
     
-    func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: GestureType) {
+    func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: SwipeGestureType) {
         guard self.active else { return }
         guard self.selectedWindow!.isMovable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
@@ -345,13 +345,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         var rect: CGRect? = nil
         
         if self.selectedWindow!.isResizable() {
-            if [GestureType.SWIPE_TOP, GestureType.SWIPE_BOTTOM].contains(type) {
+            if [SwipeGestureType.SWIPE_TOP, SwipeGestureType.SWIPE_BOTTOM].contains(type) {
                 rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: 1.0)
                 rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: 0.5)
-            } else if [GestureType.SWIPE_LEFT, GestureType.SWIPE_RIGHT].contains(type) {
+            } else if [SwipeGestureType.SWIPE_LEFT, SwipeGestureType.SWIPE_RIGHT].contains(type) {
                 rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: 0.5)
                 rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: 1.0)
-            } else if [GestureType.SWIPE_TOP_LEFT, GestureType.SWIPE_TOP_RIGHT, GestureType.SWIPE_BOTTOM_LEFT, GestureType.SWIPE_BOTTOM_RIGHT].contains(type) {
+            } else if [SwipeGestureType.SWIPE_TOP_LEFT, SwipeGestureType.SWIPE_TOP_RIGHT, SwipeGestureType.SWIPE_BOTTOM_LEFT, SwipeGestureType.SWIPE_BOTTOM_RIGHT].contains(type) {
                 rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: 0.5)
                 rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: 0.5)
             }
@@ -380,12 +380,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
     }
     
-    func onResizeFactorGesture(gestureOverlayWindow: GestureOverlayWindow, factor: (x: CGFloat, y: CGFloat)) {
+    func onPinchGesture(gestureOverlayWindow: GestureOverlayWindow, zoomFactor: (x: CGFloat, y: CGFloat)) {
         guard self.active else { return }
         guard self.selectedWindow!.isResizable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
         
-        let rect = self.windowHelper.resize(self.placeholderWindow, factor: factor)
+        let rect = self.windowHelper.resize(self.placeholderWindow, factor: zoomFactor)
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }
     
