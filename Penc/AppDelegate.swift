@@ -18,7 +18,7 @@ extension Notification.Name {
 }
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate, ActivationHandlerDelegate, PreferencesDelegate, NSMenuDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate, KeyboardListenerDelegate, PreferencesDelegate, NSMenuDelegate {
     
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
     let gestureOverlayWindow = GestureOverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
@@ -28,7 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
     var focusedWindow: SIWindow? = nil
     var selectedWindow: SIWindow? = nil
-    let activationHandler = ActivationHandler()
+    let activationHandler = KeyboardListener()
     var disabled = false
     let windowHelper = WindowHelper()
     var active = false
@@ -172,7 +172,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.gestureOverlayWindow.reverseScroll = preferences.reverseScroll
     }
     
-    func onActivationStarted(activationHandler: ActivationHandler) {
+    func onActivationStarted(activationHandler: KeyboardListener) {
         guard !self.disabled else {
             Logger.shared.info("Not gonna activate, Penc is disabled globally")
             return
@@ -298,7 +298,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         NSApplication.shared.activate(ignoringOtherApps: true)
     }
     
-    func onActivationCompleted(activationHandler: ActivationHandler) {
+    func onActivationCompleted(activationHandler: KeyboardListener) {
         guard self.active else { return }
         
         guard NSScreen.screens.indices.contains(0) else {
@@ -319,7 +319,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.active = false
     }
     
-    func onActivationCancelled(activationHandler: ActivationHandler) {
+    func onActivationCancelled(activationHandler: KeyboardListener) {
         guard self.active else { return }
         
         Logger.shared.info("Cancelled activation")

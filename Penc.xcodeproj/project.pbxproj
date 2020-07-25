@@ -24,7 +24,7 @@
 		949553E21FB0BDC60025E22C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949553E11FB0BDC60025E22C /* AboutViewController.swift */; };
 		94C1640624CB12C6005A564F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640524CB12C6005A564F /* Logger.swift */; };
 		94C1640C24CC710B005A564F /* NSScreen+DeviceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640B24CC710B005A564F /* NSScreen+DeviceName.swift */; };
-		94C5FCCB1FB2201200916D97 /* ActivationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCA1FB2201200916D97 /* ActivationHandler.swift */; };
+		94C5FCCB1FB2201200916D97 /* KeyboardListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCA1FB2201200916D97 /* KeyboardListener.swift */; };
 		94C5FCCD1FB222CA00916D97 /* PTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCC1FB222CA00916D97 /* PTimer.swift */; };
 		94C5FCCF1FB3025200916D97 /* PApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCE1FB3025200916D97 /* PApplication.swift */; };
 		94C5FCD11FB347DA00916D97 /* PlaceholderWindowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */; };
@@ -70,7 +70,7 @@
 		949553E11FB0BDC60025E22C /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		94C1640524CB12C6005A564F /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		94C1640B24CC710B005A564F /* NSScreen+DeviceName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSScreen+DeviceName.swift"; sourceTree = "<group>"; };
-		94C5FCCA1FB2201200916D97 /* ActivationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationHandler.swift; sourceTree = "<group>"; };
+		94C5FCCA1FB2201200916D97 /* KeyboardListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardListener.swift; sourceTree = "<group>"; };
 		94C5FCCC1FB222CA00916D97 /* PTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTimer.swift; sourceTree = "<group>"; };
 		94C5FCCE1FB3025200916D97 /* PApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PApplication.swift; sourceTree = "<group>"; };
 		94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderWindowViewController.swift; sourceTree = "<group>"; };
@@ -144,7 +144,7 @@
 				9417B7C01FADB16300749BC8 /* GestureOverlayWindow.swift */,
 				9417B7CA1FB04A0100749BC8 /* Preferences.swift */,
 				949553E11FB0BDC60025E22C /* AboutViewController.swift */,
-				94C5FCCA1FB2201200916D97 /* ActivationHandler.swift */,
+				94C5FCCA1FB2201200916D97 /* KeyboardListener.swift */,
 				94C5FCCC1FB222CA00916D97 /* PTimer.swift */,
 				94C5FCCE1FB3025200916D97 /* PApplication.swift */,
 				94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */,
@@ -358,7 +358,7 @@
 				94C88E9220AB6E5600F4B83E /* PlaceholderWindow.swift in Sources */,
 				9417B7CB1FB04A0100749BC8 /* Preferences.swift in Sources */,
 				94C5FCCD1FB222CA00916D97 /* PTimer.swift in Sources */,
-				94C5FCCB1FB2201200916D97 /* ActivationHandler.swift in Sources */,
+				94C5FCCB1FB2201200916D97 /* KeyboardListener.swift in Sources */,
 				80E0F4932230A6FD0084F0AC /* SIWindowExtension.swift in Sources */,
 				945195A41FA88B8B00FA53B4 /* AppDelegate.swift in Sources */,
 				9417B7C11FADB16300749BC8 /* GestureOverlayWindow.swift in Sources */,

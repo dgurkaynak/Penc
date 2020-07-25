@@ -10,15 +10,15 @@ import Foundation
 import Cocoa
 
 
-protocol ActivationHandlerDelegate: class {
-    func onActivationStarted(activationHandler: ActivationHandler)
-    func onActivationCompleted(activationHandler: ActivationHandler)
-    func onActivationCancelled(activationHandler: ActivationHandler)
+protocol KeyboardListenerDelegate: class {
+    func onActivationStarted(activationHandler: KeyboardListener)
+    func onActivationCompleted(activationHandler: KeyboardListener)
+    func onActivationCancelled(activationHandler: KeyboardListener)
 }
 
-class ActivationHandler {
+class KeyboardListener {
     
-    weak var delegate: ActivationHandlerDelegate?
+    weak var delegate: KeyboardListenerDelegate?
     private var globalModifierKeyMonitor: Any?
     private var localModifierKeyMonitor: Any?
     private var globalKeyDownMonitor: Any?
@@ -45,7 +45,7 @@ class ActivationHandler {
         }
     }
     
-    func setDelegate(_ delegate: ActivationHandlerDelegate) {
+    func setDelegate(_ delegate: KeyboardListenerDelegate) {
         self.delegate = delegate
     }
     
