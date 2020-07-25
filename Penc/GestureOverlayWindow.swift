@@ -92,9 +92,8 @@ class GestureOverlayWindow: NSWindow {
     }
     
     override func mouseDragged(with event: NSEvent) {
-        // Moving the window
-        let delta = (x: -1 * event.deltaX, y: -1 * event.deltaY)
-        self.delegate_?.onMoveGesture(gestureOverlayWindow: self, delta: delta)
+//        let delta = (x: -1 * event.deltaX, y: -1 * event.deltaY)
+//        self.delegate_?.onMoveGesture(gestureOverlayWindow: self, delta: delta)
     }
     
     override func mouseDown(with event: NSEvent) {
