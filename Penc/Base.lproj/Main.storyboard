@@ -846,6 +846,30 @@
             </objects>
             <point key="canvasLocation" x="632" y="651"/>
         </scene>
+        <!--Preferences Customize Actions View Controller-->
+        <scene sceneID="guu-Sa-stz">
+            <objects>
+                <viewController storyboardIdentifier="PreferencesCustomizeActionsViewController" id="TCp-xL-AYa" customClass="PreferencesCustomizeActionsViewController" customModule="Penc" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="J1W-cJ-UAI">
+                        <rect key="frame" x="0.0" y="0.0" width="385" height="339"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wjn-Ad-Kqd">
+                                <rect key="frame" x="174" y="162" width="37" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="H0Q-DJ-5Ta">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                </viewController>
+                <customObject id="cxr-mH-jc9" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1149.5" y="669.5"/>
+        </scene>
         <!--Window Controller-->
         <scene sceneID="GsQ-HE-c66">
             <objects>

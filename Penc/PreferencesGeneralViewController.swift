@@ -23,6 +23,8 @@ class PreferencesGeneralViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.preferredContentSize = NSSize(width: self.view.frame.width, height: self.view.frame.height)
+        
         self.modifierKeyPopUpButton.removeAllItems()
         self.modifierKeyPopUpButton.addItems(withTitles: [
             "⌘ Command",

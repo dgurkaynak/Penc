@@ -25,6 +25,7 @@
 		94C1640624CB12C6005A564F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640524CB12C6005A564F /* Logger.swift */; };
 		94C1640C24CC710B005A564F /* NSScreen+DeviceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640B24CC710B005A564F /* NSScreen+DeviceName.swift */; };
 		94C1640E24CD81D1005A564F /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640D24CD81D1005A564F /* PreferencesWindowController.swift */; };
+		94C1641024CD98C8005A564F /* PreferencesCustomizeActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640F24CD98C8005A564F /* PreferencesCustomizeActionsViewController.swift */; };
 		94C5FCCB1FB2201200916D97 /* KeyboardListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCA1FB2201200916D97 /* KeyboardListener.swift */; };
 		94C5FCCD1FB222CA00916D97 /* PTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCC1FB222CA00916D97 /* PTimer.swift */; };
 		94C5FCCF1FB3025200916D97 /* PApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCE1FB3025200916D97 /* PApplication.swift */; };
@@ -72,6 +73,7 @@
 		94C1640524CB12C6005A564F /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		94C1640B24CC710B005A564F /* NSScreen+DeviceName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSScreen+DeviceName.swift"; sourceTree = "<group>"; };
 		94C1640D24CD81D1005A564F /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
+		94C1640F24CD98C8005A564F /* PreferencesCustomizeActionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesCustomizeActionsViewController.swift; sourceTree = "<group>"; };
 		94C5FCCA1FB2201200916D97 /* KeyboardListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardListener.swift; sourceTree = "<group>"; };
 		94C5FCCC1FB222CA00916D97 /* PTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTimer.swift; sourceTree = "<group>"; };
 		94C5FCCE1FB3025200916D97 /* PApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PApplication.swift; sourceTree = "<group>"; };
@@ -142,9 +144,11 @@
 				945195AD1FA88B8B00FA53B4 /* Penc.entitlements */,
 				94763F721FA8DE5800D60C27 /* CGRectExtension.swift */,
 				80E0F4922230A6FD0084F0AC /* SIWindowExtension.swift */,
-				94763F7E1FA9095E00D60C27 /* PreferencesGeneralViewController.swift */,
 				9417B7C01FADB16300749BC8 /* GestureOverlayWindow.swift */,
 				9417B7CA1FB04A0100749BC8 /* Preferences.swift */,
+				94C1640D24CD81D1005A564F /* PreferencesWindowController.swift */,
+				94763F7E1FA9095E00D60C27 /* PreferencesGeneralViewController.swift */,
+				94C1640F24CD98C8005A564F /* PreferencesCustomizeActionsViewController.swift */,
 				949553E11FB0BDC60025E22C /* AboutViewController.swift */,
 				94C5FCCA1FB2201200916D97 /* KeyboardListener.swift */,
 				94C5FCCC1FB222CA00916D97 /* PTimer.swift */,
@@ -154,7 +158,6 @@
 				94C88E9520AC189A00F4B83E /* WindowHelper.swift */,
 				94C1640524CB12C6005A564F /* Logger.swift */,
 				94C1640B24CC710B005A564F /* NSScreen+DeviceName.swift */,
-				94C1640D24CD81D1005A564F /* PreferencesWindowController.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -366,6 +369,7 @@
 				945195A41FA88B8B00FA53B4 /* AppDelegate.swift in Sources */,
 				9417B7C11FADB16300749BC8 /* GestureOverlayWindow.swift in Sources */,
 				94C1640624CB12C6005A564F /* Logger.swift in Sources */,
+				94C1641024CD98C8005A564F /* PreferencesCustomizeActionsViewController.swift in Sources */,
 				94C5FCD11FB347DA00916D97 /* PlaceholderWindowViewController.swift in Sources */,
 				949553E21FB0BDC60025E22C /* AboutViewController.swift in Sources */,
 				94C5FCCF1FB3025200916D97 /* PApplication.swift in Sources */,

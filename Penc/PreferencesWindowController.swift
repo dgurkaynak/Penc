@@ -14,6 +14,9 @@ class PreferencesWindowController: NSWindowController {
     @IBOutlet var generalToolbarItem: NSToolbarItem!
     @IBOutlet var customizeActionsToolbarItem: NSToolbarItem!
     
+    private var generalViewController = PreferencesGeneralViewController.freshController()
+    private var customizeActionsViewController = PreferencesCustomizeActionsViewController.freshController()
+    
     override func windowDidLoad() {
         super.windowDidLoad()
     
@@ -25,12 +28,17 @@ class PreferencesWindowController: NSWindowController {
         self.customizeActionsToolbarItem.target = self
         self.customizeActionsToolbarItem.action = #selector(onToolbarItemClick)
         
+        // Initially show general tab
         self.toolbar.selectedItemIdentifier = self.generalToolbarItem.itemIdentifier
-        self.contentViewController = PreferencesGeneralViewController.freshController()
+        self.contentViewController = self.generalViewController
     }
     
     @objc private func onToolbarItemClick(_ sender: NSToolbarItem) {
-        print("onToolbarItemClick \(sender.tag)")
+        if sender.tag == 0 {
+            self.contentViewController = self.generalViewController
+        } else if sender.tag == 1 {
+            self.contentViewController = self.customizeActionsViewController
+        }
     }
 
 }
