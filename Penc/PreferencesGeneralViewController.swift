@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class PreferencesViewController: NSViewController {
+class PreferencesGeneralViewController: NSViewController {
     
     @IBOutlet var doublePressSensitivitySider: NSSlider!
     @IBOutlet var doublePressSensitivityLabel: NSTextField!
@@ -179,13 +179,13 @@ class PreferencesViewController: NSViewController {
     }
 }
 
-extension PreferencesViewController {
+extension PreferencesGeneralViewController {
     // MARK: Storyboard instantiation
-    static func freshController() -> PreferencesViewController {
+    static func freshController() -> PreferencesGeneralViewController {
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
-        let identifier = "PreferencesViewController"
-        guard let viewController = storyboard.instantiateController(withIdentifier: identifier) as? PreferencesViewController else {
-            fatalError("Not found PreferencesViewController in Main.storyboard")
+        let identifier = "PreferencesGeneralViewController"
+        guard let viewController = storyboard.instantiateController(withIdentifier: identifier) as? PreferencesGeneralViewController else {
+            fatalError("Not found PreferencesGeneralViewController in Main.storyboard")
         }
         return viewController
     }

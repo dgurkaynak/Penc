@@ -683,10 +683,10 @@
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
         </scene>
-        <!--Preferences View Controller-->
+        <!--Preferences General View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController storyboardIdentifier="PreferencesViewController" id="XfG-lQ-9wD" customClass="PreferencesViewController" customModule="Penc" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PreferencesGeneralViewController" id="XfG-lQ-9wD" customClass="PreferencesGeneralViewController" customModule="Penc" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="445" height="223"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -844,7 +844,51 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="68.5" y="536.5"/>
+            <point key="canvasLocation" x="632" y="651"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="GsQ-HE-c66">
+            <objects>
+                <windowController storyboardIdentifier="PreferencesWindowController" id="j1s-EH-gmX" customClass="PreferencesWindowController" customModule="Penc" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Penc Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="16i-rG-bEp">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="163" y="199" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
+                        <toolbar key="toolbar" implicitIdentifier="B7D3C097-5C3F-4AAC-AF00-0193E3084852" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconAndLabel" sizeMode="regular" id="UvH-T2-Fwj">
+                            <allowedToolbarItems>
+                                <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="T2E-RD-UeE"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="uHj-XL-Rr2"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="dX4-dI-q4Y"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="Q2c-WY-rq6"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="5Fj-Si-aog"/>
+                                <toolbarItem implicitItemIdentifier="FC4B556A-DE51-4C81-A725-9285A404D0B0" label="General" paletteLabel="General" image="NSPreferencesGeneral" selectable="YES" id="vR3-EL-35O">
+                                    <size key="minSize" width="32" height="32"/>
+                                    <size key="maxSize" width="32" height="32"/>
+                                </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="67CAFF38-A80A-495D-ABC0-007099AF978F" label="Customize Actions" paletteLabel="Customize Actions" tag="1" image="NSAdvanced" selectable="YES" id="q5b-zY-Qxw">
+                                    <size key="minSize" width="32" height="32"/>
+                                    <size key="maxSize" width="32" height="32"/>
+                                </toolbarItem>
+                            </allowedToolbarItems>
+                            <defaultToolbarItems>
+                                <toolbarItem reference="vR3-EL-35O"/>
+                                <toolbarItem reference="q5b-zY-Qxw"/>
+                            </defaultToolbarItems>
+                        </toolbar>
+                        <connections>
+                            <outlet property="delegate" destination="j1s-EH-gmX" id="sFP-rM-RNF"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <outlet property="customizeActionsToolbarItem" destination="q5b-zY-Qxw" id="5xx-Qp-KBy"/>
+                        <outlet property="generalToolbarItem" destination="vR3-EL-35O" id="4pB-Gn-QAq"/>
+                        <outlet property="toolbar" destination="UvH-T2-Fwj" id="UbJ-qG-oMf"/>
+                    </connections>
+                </windowController>
+                <customObject id="g3e-MP-Gyx" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="68" y="674"/>
         </scene>
         <!--About View Controller-->
         <scene sceneID="4jQ-lK-m5Y">
@@ -945,10 +989,12 @@
                 </viewController>
                 <customObject id="wYq-Lv-GOz" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="51" y="1003"/>
+            <point key="canvasLocation" x="68" y="1052"/>
         </scene>
     </scenes>
     <resources>
+        <image name="NSAdvanced" width="32" height="32"/>
+        <image name="NSPreferencesGeneral" width="32" height="32"/>
         <image name="penc-logo-64" width="64" height="64"/>
     </resources>
 </document>

@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     let gestureOverlayWindow = GestureOverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
     let placeholderWindow = PlaceholderWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
     let placeholderWindowViewController = PlaceholderWindowViewController.freshController()
-    let preferencesWindow = NSWindow(contentViewController: PreferencesViewController.freshController())
+    let preferencesWindowController = PreferencesWindowController.freshController()
     let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
     var focusedWindow: SIWindow? = nil
     var selectedWindow: SIWindow? = nil
@@ -61,7 +61,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             
             self.setupPlaceholderWindow()
             self.setupOverlayWindow()
-            self.setupPreferencesWindow()
             self.setupAboutWindow()
             self.onPreferencesChanged(preferences: Preferences.shared)
             
@@ -143,14 +142,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.gestureOverlayWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
     }
     
-    func setupPreferencesWindow() {
-        self.preferencesWindow.title = "Penc Preferences"
-        self.preferencesWindow.styleMask.remove(.resizable)
-        self.preferencesWindow.styleMask.remove(.miniaturizable)
-    }
-    
     @objc func openPreferencesWindow(_ sender: Any?) {
-        self.preferencesWindow.makeKeyAndOrderFront(self.preferencesWindow)
+        self.preferencesWindowController.showWindow(self)
         NSApplication.shared.activate(ignoringOtherApps: true)
     }
     
