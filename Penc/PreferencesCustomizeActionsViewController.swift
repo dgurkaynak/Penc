@@ -9,7 +9,8 @@
 import Cocoa
 
 enum PreferencesCustomizeActionsError: Error {
-    case unexpectedSliderValue
+    case unexpectedSliderIntValue
+    case unexpectedSliderRatioValue
 }
 
 enum ActionType: String {
@@ -83,11 +84,12 @@ class PreferencesCustomizeActionsViewController: NSViewController {
     func update() {
         self.updateScreens()
         self.updateActionButtonStates()
-        // TODO: Update sliders
+        self.updateSliders()
     }
     
     @objc private func onScreenPopUpButtonChange() {
-        print("selected screen index \(self.screenPopUpButton.indexOfSelectedItem)")
+        self.selectedScreen = NSScreen.screens[self.screenPopUpButton.indexOfSelectedItem]
+        self.updateSliders()
     }
     
     private func updateScreens() {
@@ -95,13 +97,13 @@ class PreferencesCustomizeActionsViewController: NSViewController {
         
         var selectedScreenStillExists = false
         var selectedScreenNumber: NSNumber?
-            
+        
         if self.selectedScreen != nil {
-            selectedScreenNumber = (self.selectedScreen!.deviceDescription[NSDeviceDescriptionKey(rawValue: "NSScreenNumber")] as! NSNumber)
+            selectedScreenNumber = self.selectedScreen!.getScreenNumber()
         }
         
         for (index, screen) in NSScreen.screens.enumerated() {
-            let screenNumber = screen.deviceDescription[NSDeviceDescriptionKey(rawValue: "NSScreenNumber")] as! NSNumber
+            let screenNumber = screen.getScreenNumber()
             
             let screenName = screen.getDeviceName() ?? "Unnamed Screen"
             let resolution = "\(Int(screen.frame.width))x\(Int(screen.frame.height))"
@@ -117,81 +119,62 @@ class PreferencesCustomizeActionsViewController: NSViewController {
         if !selectedScreenStillExists && !NSScreen.screens.isEmpty {
             self.selectedScreen = NSScreen.screens[0]
             self.screenPopUpButton.selectItem(at: 0)
-            // TODO: Update slider values
+            self.updateSliders()
         }
-    }
-    
-    @objc private func onWidthSliderChange() {
-        do {
-            let ratio = try getRatioFromSlider(self.widthSlider)
-            print("width ratio is \(ratio)")
-        } catch {
-            Logger.shared.error("Unexpected width-slider value recieved \(error)")
-        }
-    }
-    
-    @objc private func onHeightSliderChange() {
-        do {
-            let ratio = try getRatioFromSlider(self.heightSlider)
-            print("height ratio is \(ratio)")
-        } catch {
-            Logger.shared.error("Unexpected height-slider value recieved \(error)")
-        }
-    }
-    
-    func getRatioFromSlider(_ slider: NSSlider) throws -> Double {
-        if slider.integerValue == 1 { return 0.25 }
-        if slider.integerValue == 2 { return 0.3333 }
-        if slider.integerValue == 3 { return 0.5 }
-        if slider.integerValue == 4 { return 0.6666 }
-        if slider.integerValue == 5 { return 0.75 }
-        if slider.integerValue == 6 { return 1 }
-        throw PreferencesCustomizeActionsError.unexpectedSliderValue
     }
     
     @objc private func onActionTopClicked() {
         self.selectedAction = .top
         self.updateActionButtonStates()
+        self.updateSliders()
     }
     
     @objc private func onActionTopRightClicked() {
         self.selectedAction = .topRight
         self.updateActionButtonStates()
+        self.updateSliders()
     }
     
     @objc private func onActionRightClicked() {
         self.selectedAction = .right
         self.updateActionButtonStates()
+        self.updateSliders()
     }
     
     @objc private func onActionBottomRightClicked() {
         self.selectedAction = .bottomRight
         self.updateActionButtonStates()
+        self.updateSliders()
     }
     
     @objc private func onActionBottomClicked() {
         self.selectedAction = .bottom
         self.updateActionButtonStates()
+        self.updateSliders()
     }
     
     @objc private func onActionBottomLeftClicked() {
         self.selectedAction = .bottomLeft
         self.updateActionButtonStates()
+        self.updateSliders()
     }
     
     @objc private func onActionLeftClicked() {
         self.selectedAction = .left
         self.updateActionButtonStates()
+        self.updateSliders()
     }
     
     @objc private func onActionTopLeftClicked() {
         self.selectedAction = .topLeft
         self.updateActionButtonStates()
+        self.updateSliders()
     }
     
     @objc private func onActionDblClickClicked() {
         self.selectedAction = .dblClick
         self.updateActionButtonStates()
+        self.updateSliders()
     }
     
     private func updateActionButtonStates() {
@@ -204,6 +187,114 @@ class PreferencesCustomizeActionsViewController: NSViewController {
         self.actionLeftButton.state = self.selectedAction == .left ? .on : .off
         self.actionTopLeftButton.state = self.selectedAction == .topLeft ? .on : .off
         self.actionDblClickButton.state = self.selectedAction == .dblClick ? .on : .off
+    }
+    
+    private func updateSliders() {
+        guard self.selectedScreen != nil else {
+            Logger.shared.warn("Selected screen is null")
+            return
+        }
+        
+        let screenNumber = self.selectedScreen!.getScreenNumber()
+        guard screenNumber != nil else {
+            Logger.shared.warn("Selected screen's number is null")
+            return
+        }
+        
+        let customActions = Preferences.shared.getCustomActions(forScreenNumber: screenNumber!)
+        let customActionEntry = customActions[self.selectedAction.rawValue]
+        
+        guard customActionEntry != nil else {
+            Logger.shared.error("Unexpected selected action while updating sliders: \(self.selectedAction)")
+            return
+        }
+        
+        do {
+            try self.setSliderValue(self.widthSlider, ratio: customActionEntry![0])
+            try self.setSliderValue(self.heightSlider, ratio: customActionEntry![1])
+        } catch {
+            Logger.shared.error("Could not set slider value \(customActionEntry!) \(error)")
+        }
+    }
+    
+    @objc private func onWidthSliderChange() {
+        guard self.selectedScreen != nil else {
+            Logger.shared.warn("Selected screen is null")
+            return
+        }
+        
+        let screenNumber = self.selectedScreen!.getScreenNumber()
+        guard screenNumber != nil else {
+            Logger.shared.warn("Selected screen's number is null")
+            return
+        }
+        
+        var customActions = Preferences.shared.getCustomActions(forScreenNumber: screenNumber!)
+        
+        guard customActions[self.selectedAction.rawValue] != nil else {
+            Logger.shared.error("Unexpected selected action while setting custom action width: \(self.selectedAction)")
+            return
+        }
+        
+        do {
+            let ratio = try getRatioFromSlider(self.widthSlider)
+            customActions[self.selectedAction.rawValue]![0] = ratio
+            Preferences.shared.setCustomActions(customActions, forScreenNumber: screenNumber!)
+        } catch {
+            Logger.shared.error("Unexpected width-slider value recieved \(error)")
+        }
+    }
+    
+    @objc private func onHeightSliderChange() {
+        guard self.selectedScreen != nil else {
+            Logger.shared.warn("Selected screen is null")
+            return
+        }
+        
+        let screenNumber = self.selectedScreen!.getScreenNumber()
+        guard screenNumber != nil else {
+            Logger.shared.warn("Selected screen's number is null")
+            return
+        }
+        
+        var customActions = Preferences.shared.getCustomActions(forScreenNumber: screenNumber!)
+        
+        guard customActions[self.selectedAction.rawValue] != nil else {
+            Logger.shared.error("Unexpected selected action while setting custom action height: \(self.selectedAction)")
+            return
+        }
+        
+        do {
+            let ratio = try getRatioFromSlider(self.heightSlider)
+            customActions[self.selectedAction.rawValue]![1] = ratio
+            Preferences.shared.setCustomActions(customActions, forScreenNumber: screenNumber!)
+        } catch {
+            Logger.shared.error("Unexpected height-slider value recieved \(error)")
+        }
+    }
+    
+    func getRatioFromSlider(_ slider: NSSlider) throws -> Double {
+        if slider.integerValue == 1 { return 0.25 }
+        if slider.integerValue == 2 { return 0.3333 }
+        if slider.integerValue == 3 { return 0.5 }
+        if slider.integerValue == 4 { return 0.6666 }
+        if slider.integerValue == 5 { return 0.75 }
+        if slider.integerValue == 6 { return 1 }
+        throw PreferencesCustomizeActionsError.unexpectedSliderIntValue
+    }
+    
+    func setSliderValue(_ slider: NSSlider, ratio: Double) throws {
+        let ratioRounded = Double(floor(100 * ratio) / 100)
+        
+        if ratio == 0.25 { slider.integerValue = 1 }
+        else if ratioRounded == 0.33 { slider.integerValue = 2 }
+        else if ratio == 0.5 { slider.integerValue = 3 }
+        else if ratioRounded == 0.66 { slider.integerValue = 4 }
+        else if ratio == 0.75 { slider.integerValue = 5 }
+        else if ratio == 1.0 { slider.integerValue = 6 }
+        else {
+            throw PreferencesCustomizeActionsError.unexpectedSliderRatioValue
+        }
     }
     
 }

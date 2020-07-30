@@ -23,7 +23,8 @@ final class Preferences {
     private static let key_disabledApps = "disabledApps"
     private static let key_reverseScroll = "reverseScroll"
     private static let key_windowSelection = "windowSelection"
-    
+    private static let key_customActionsForScreenPrefix = "customActionsForScreen"
+
     weak var delegate: PreferencesDelegate?
     
     var activationModifierKey: NSEvent.ModifierFlags {
@@ -132,6 +133,29 @@ final class Preferences {
         self.delegate = delegate
     }
     
+
+    // [width, height]
+    func getCustomActions(forScreenNumber: NSNumber) -> [String: [Double]] {
+        let preferenceKey = "\(Preferences.key_customActionsForScreenPrefix)_\(forScreenNumber.intValue)"
+        let customActions = UserDefaults.standard.object(forKey: preferenceKey) as? [String: [Double]] ?? [
+            "top": [1, 0.5],
+            "topRight": [0.5, 0.5],
+            "right": [0.5, 1],
+            "bottomRight": [0.5, 0.5],
+            "bottom": [1, 0.5],
+            "bottomLeft": [0.5, 0.5],
+            "left": [0.5, 1],
+            "topLeft": [0.5, 0.5],
+            "dblClick": [1, 1]
+        ]
+        return customActions
+    }
+
+    func setCustomActions(_ customActions: [String: [Double]], forScreenNumber: NSNumber) {
+        let preferenceKey = "\(Preferences.key_customActionsForScreenPrefix)_\(forScreenNumber.intValue)"
+        UserDefaults.standard.set(customActions, forKey: preferenceKey)
+    }
+
     func reset() {
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
         self.activationModifierKey = .command
