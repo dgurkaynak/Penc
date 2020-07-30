@@ -38,6 +38,7 @@ class PreferencesCustomizeActionsViewController: NSViewController {
     @IBOutlet var actionBottomLeftButton: NSButton!
     @IBOutlet var actionLeftButton: NSButton!
     @IBOutlet var actionDblClickButton: NSButton!
+    @IBOutlet var actionDescription: NSTextField!
     @IBOutlet var widthSlider: NSSlider!
     @IBOutlet var heightSlider: NSSlider!
     
@@ -77,6 +78,7 @@ class PreferencesCustomizeActionsViewController: NSViewController {
         self.actionDblClickButton.target = self
         self.actionDblClickButton.action = #selector(onActionDblClickClicked)
         self.updateActionButtonStates()
+        self.updateActionDescription()
         
         self.widthSlider.target = self
         self.widthSlider.action = #selector(onWidthSliderChange)
@@ -88,6 +90,7 @@ class PreferencesCustomizeActionsViewController: NSViewController {
     func update() {
         self.updateScreens()
         self.updateActionButtonStates()
+        self.updateActionDescription()
         self.updateSliders()
     }
     
@@ -135,54 +138,63 @@ class PreferencesCustomizeActionsViewController: NSViewController {
         self.selectedAction = .top
         self.updateActionButtonStates()
         self.updateSliders()
+        self.updateActionDescription()
     }
     
     @objc private func onActionTopRightClicked() {
         self.selectedAction = .topRight
         self.updateActionButtonStates()
         self.updateSliders()
+        self.updateActionDescription()
     }
     
     @objc private func onActionRightClicked() {
         self.selectedAction = .right
         self.updateActionButtonStates()
         self.updateSliders()
+        self.updateActionDescription()
     }
     
     @objc private func onActionBottomRightClicked() {
         self.selectedAction = .bottomRight
         self.updateActionButtonStates()
         self.updateSliders()
+        self.updateActionDescription()
     }
     
     @objc private func onActionBottomClicked() {
         self.selectedAction = .bottom
         self.updateActionButtonStates()
         self.updateSliders()
+        self.updateActionDescription()
     }
     
     @objc private func onActionBottomLeftClicked() {
         self.selectedAction = .bottomLeft
         self.updateActionButtonStates()
         self.updateSliders()
+        self.updateActionDescription()
     }
     
     @objc private func onActionLeftClicked() {
         self.selectedAction = .left
         self.updateActionButtonStates()
         self.updateSliders()
+        self.updateActionDescription()
     }
     
     @objc private func onActionTopLeftClicked() {
         self.selectedAction = .topLeft
         self.updateActionButtonStates()
         self.updateSliders()
+        self.updateActionDescription()
     }
     
     @objc private func onActionDblClickClicked() {
         self.selectedAction = .dblClick
         self.updateActionButtonStates()
         self.updateSliders()
+        self.updateActionDescription()
     }
     
     private func updateActionButtonStates() {
@@ -195,6 +207,29 @@ class PreferencesCustomizeActionsViewController: NSViewController {
         self.actionLeftButton.state = self.selectedAction == .left ? .on : .off
         self.actionTopLeftButton.state = self.selectedAction == .topLeft ? .on : .off
         self.actionDblClickButton.state = self.selectedAction == .dblClick ? .on : .off
+    }
+    
+    private func updateActionDescription() {
+        switch self.selectedAction {
+        case .top:
+            self.actionDescription.stringValue = "- Swipe up, or\n- Press up key"
+        case .topRight:
+            self.actionDescription.stringValue = "- Swipe to top-right direction, or\n- Press up + right keys"
+        case .right:
+            self.actionDescription.stringValue = "- Swipe right, or\n- Press right key"
+        case .bottomRight:
+            self.actionDescription.stringValue = "- Swipe to bottom-right direction, or\n- Press down + right keys"
+        case .bottom:
+            self.actionDescription.stringValue = "- Swipe down, or\n- Press down key"
+        case .bottomLeft:
+            self.actionDescription.stringValue = "- Swipe to bottom-left direction, or\n- Press down + left keys"
+        case .left:
+            self.actionDescription.stringValue = "- Swipe left, or\n- Press left key"
+        case .topLeft:
+            self.actionDescription.stringValue = "- Swipe to top-left direction, or\n- Press left + up keys"
+        case .dblClick:
+            self.actionDescription.stringValue = "- Double click anywhere on screen, or\n- Press enter key"
+        }
     }
     
     private func updateSliders() {

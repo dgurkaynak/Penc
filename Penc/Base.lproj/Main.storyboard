@@ -936,6 +936,30 @@
                                     </subviews>
                                 </view>
                             </box>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lvt-0o-1K6">
+                                <rect key="frame" x="298" y="291" width="146" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="nhE-a6-q9u" id="IDm-N3-k5N">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="lEy-KX-yhX">
+                                        <items>
+                                            <menuItem title="Item 1" state="on" id="nhE-a6-q9u"/>
+                                            <menuItem title="Item 2" id="JtZ-hA-3em"/>
+                                            <menuItem title="Item 3" id="sk6-es-tdq"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wjn-Ad-Kqd">
+                                <rect key="frame" x="107" y="297" width="185" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Customize actions for screen:" id="H0Q-DJ-5Ta">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="t5R-H6-fjS">
                                 <rect key="frame" x="0.0" y="271" width="599" height="5"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -1017,19 +1041,10 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2ZU-nY-cvc">
-                                <rect key="frame" x="424" y="235" width="157" height="11"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" selectable="YES" title="Triggered on:" id="K84-aU-bdJ">
-                                    <font key="font" metaFont="label" size="9"/>
-                                    <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s6E-QA-czc">
-                                <rect key="frame" x="424" y="134" width="157" height="97"/>
+                                <rect key="frame" x="424" y="137" width="157" height="79"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" selectable="YES" title="- Swipe to top-left direction - Press left + up keys" id="ViL-Ue-0AL">
+                                <textFieldCell key="cell" selectable="YES" title="- Swipe to top-left direction, or - Press left + up keys" id="ViL-Ue-0AL">
                                     <font key="font" metaFont="label" size="9"/>
                                     <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1112,30 +1127,6 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lvt-0o-1K6">
-                                <rect key="frame" x="298" y="291" width="146" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="nhE-a6-q9u" id="IDm-N3-k5N">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <menu key="menu" id="lEy-KX-yhX">
-                                        <items>
-                                            <menuItem title="Item 1" state="on" id="nhE-a6-q9u"/>
-                                            <menuItem title="Item 2" id="JtZ-hA-3em"/>
-                                            <menuItem title="Item 3" id="sk6-es-tdq"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                            </popUpButton>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wjn-Ad-Kqd">
-                                <rect key="frame" x="107" y="297" width="185" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Customize actions for screen:" id="H0Q-DJ-5Ta">
-                                    <font key="font" usesAppearanceFont="YES"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aky-91-9HW">
                                 <rect key="frame" x="443" y="287" width="53" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1144,6 +1135,15 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2ZU-nY-cvc">
+                                <rect key="frame" x="424" y="221" width="157" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" selectable="YES" title="When Penc is activated, you can trigger this action by:" id="K84-aU-bdJ">
+                                    <font key="font" metaFont="label" size="9"/>
+                                    <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                     </view>
                     <connections>
@@ -1151,6 +1151,7 @@
                         <outlet property="actionBottomLeftButton" destination="n17-Gu-lbt" id="wEQ-4n-euf"/>
                         <outlet property="actionBottomRightButton" destination="PK8-Xu-q7D" id="Jnc-Y1-wBC"/>
                         <outlet property="actionDblClickButton" destination="dAh-H5-X2j" id="EY2-2s-0FL"/>
+                        <outlet property="actionDescription" destination="s6E-QA-czc" id="ft6-3G-2yh"/>
                         <outlet property="actionLeftButton" destination="0df-MA-J9N" id="yZa-aG-lhm"/>
                         <outlet property="actionRightButton" destination="B1F-x0-4Cf" id="XM3-ML-nbU"/>
                         <outlet property="actionTopButton" destination="Zlg-GP-zYW" id="MQt-GW-b49"/>
