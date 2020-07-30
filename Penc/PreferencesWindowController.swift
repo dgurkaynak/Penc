@@ -36,8 +36,10 @@ class PreferencesWindowController: NSWindowController {
     @objc private func onToolbarItemClick(_ sender: NSToolbarItem) {
         if sender.tag == 0 {
             self.contentViewController = self.generalViewController
+            self.generalViewController.update()
         } else if sender.tag == 1 {
             self.contentViewController = self.customizeActionsViewController
+            self.customizeActionsViewController.update()
         }
     }
 
