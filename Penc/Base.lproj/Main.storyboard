@@ -936,30 +936,6 @@
                                     </subviews>
                                 </view>
                             </box>
-                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lvt-0o-1K6">
-                                <rect key="frame" x="321" y="291" width="146" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="nhE-a6-q9u" id="IDm-N3-k5N">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <menu key="menu" id="lEy-KX-yhX">
-                                        <items>
-                                            <menuItem title="Item 1" state="on" id="nhE-a6-q9u"/>
-                                            <menuItem title="Item 2" id="JtZ-hA-3em"/>
-                                            <menuItem title="Item 3" id="sk6-es-tdq"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                            </popUpButton>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wjn-Ad-Kqd">
-                                <rect key="frame" x="130" y="297" width="185" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Customize actions for screen:" id="H0Q-DJ-5Ta">
-                                    <font key="font" usesAppearanceFont="YES"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="t5R-H6-fjS">
                                 <rect key="frame" x="0.0" y="271" width="599" height="5"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -1136,6 +1112,38 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lvt-0o-1K6">
+                                <rect key="frame" x="298" y="291" width="146" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="nhE-a6-q9u" id="IDm-N3-k5N">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <menu key="menu" id="lEy-KX-yhX">
+                                        <items>
+                                            <menuItem title="Item 1" state="on" id="nhE-a6-q9u"/>
+                                            <menuItem title="Item 2" id="JtZ-hA-3em"/>
+                                            <menuItem title="Item 3" id="sk6-es-tdq"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wjn-Ad-Kqd">
+                                <rect key="frame" x="107" y="297" width="185" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Customize actions for screen:" id="H0Q-DJ-5Ta">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aky-91-9HW">
+                                <rect key="frame" x="443" y="287" width="53" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="⟳" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xVF-ks-MJK">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
@@ -1150,6 +1158,7 @@
                         <outlet property="actionTopRightButton" destination="8hN-1a-RMZ" id="0DD-dE-DVZ"/>
                         <outlet property="heightSlider" destination="gvc-Ol-9NP" id="Shy-LM-9tj"/>
                         <outlet property="screenPopUpButton" destination="lvt-0o-1K6" id="BzM-gf-ORb"/>
+                        <outlet property="screenRefreshButton" destination="Aky-91-9HW" id="HeR-JA-4dY"/>
                         <outlet property="widthSlider" destination="iJX-q9-sM1" id="z63-LT-thq"/>
                     </connections>
                 </viewController>

@@ -28,6 +28,7 @@ enum ActionType: String {
 class PreferencesCustomizeActionsViewController: NSViewController {
 
     @IBOutlet var screenPopUpButton: NSPopUpButton!
+    @IBOutlet var screenRefreshButton: NSButton!
     @IBOutlet var actionTopLeftButton: NSButton!
     @IBOutlet var actionTopButton: NSButton!
     @IBOutlet var actionTopRightButton: NSButton!
@@ -53,6 +54,9 @@ class PreferencesCustomizeActionsViewController: NSViewController {
         self.screenPopUpButton.target = self
         self.screenPopUpButton.action = #selector(onScreenPopUpButtonChange)
         self.updateScreens()
+        
+        self.screenRefreshButton.target = self
+        self.screenRefreshButton.action = #selector(onScreenRefreshButtonClicked)
         
         self.actionTopButton.target = self
         self.actionTopButton.action = #selector(onActionTopClicked)
@@ -90,6 +94,10 @@ class PreferencesCustomizeActionsViewController: NSViewController {
     @objc private func onScreenPopUpButtonChange() {
         self.selectedScreen = NSScreen.screens[self.screenPopUpButton.indexOfSelectedItem]
         self.updateSliders()
+    }
+    
+    @objc private func onScreenRefreshButtonClicked() {
+        self.updateScreens()
     }
     
     private func updateScreens() {
