@@ -1,8 +1,8 @@
 //
-//  NSScreen+DeviceName.swift
+//  NSScreenExtension.swift
 //  Penc
 //
-//  Created by Deniz Gurkaynak on 25.07.2020.
+//  Created by Deniz Gurkaynak on 30.07.2020.
 //  Copyright © 2020 Deniz Gurkaynak. All rights reserved.
 //
 
@@ -71,5 +71,9 @@ extension NSScreen {
         }
 
         return nil
+    }
+    
+    func getScreenNumber() -> NSNumber? {
+        return self.deviceDescription[NSDeviceDescriptionKey(rawValue: "NSScreenNumber")] as? NSNumber
     }
 }

@@ -11,6 +11,7 @@
 		80E0F4932230A6FD0084F0AC /* SIWindowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E0F4922230A6FD0084F0AC /* SIWindowExtension.swift */; };
 		9417B7C11FADB16300749BC8 /* GestureOverlayWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9417B7C01FADB16300749BC8 /* GestureOverlayWindow.swift */; };
 		9417B7CB1FB04A0100749BC8 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9417B7CA1FB04A0100749BC8 /* Preferences.swift */; };
+		94490CA124D2FD220010C713 /* NSScreenExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94490CA024D2FD220010C713 /* NSScreenExtension.swift */; };
 		945195A41FA88B8B00FA53B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945195A31FA88B8B00FA53B4 /* AppDelegate.swift */; };
 		945195A81FA88B8B00FA53B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 945195A71FA88B8B00FA53B4 /* Assets.xcassets */; };
 		945195AB1FA88B8B00FA53B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 945195A91FA88B8B00FA53B4 /* Main.storyboard */; };
@@ -23,7 +24,6 @@
 		94763F7F1FA9095E00D60C27 /* PreferencesGeneralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94763F7E1FA9095E00D60C27 /* PreferencesGeneralViewController.swift */; };
 		949553E21FB0BDC60025E22C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949553E11FB0BDC60025E22C /* AboutViewController.swift */; };
 		94C1640624CB12C6005A564F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640524CB12C6005A564F /* Logger.swift */; };
-		94C1640C24CC710B005A564F /* NSScreen+DeviceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640B24CC710B005A564F /* NSScreen+DeviceName.swift */; };
 		94C1640E24CD81D1005A564F /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640D24CD81D1005A564F /* PreferencesWindowController.swift */; };
 		94C1641024CD98C8005A564F /* PreferencesCustomizeActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640F24CD98C8005A564F /* PreferencesCustomizeActionsViewController.swift */; };
 		94C5FCCB1FB2201200916D97 /* KeyboardListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCA1FB2201200916D97 /* KeyboardListener.swift */; };
@@ -54,6 +54,7 @@
 		86BC15AF2221EE6872E73AA3 /* Pods_Penc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Penc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9417B7C01FADB16300749BC8 /* GestureOverlayWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GestureOverlayWindow.swift; sourceTree = "<group>"; };
 		9417B7CA1FB04A0100749BC8 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		94490CA024D2FD220010C713 /* NSScreenExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSScreenExtension.swift; sourceTree = "<group>"; };
 		945195A01FA88B8B00FA53B4 /* Penc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Penc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		945195A31FA88B8B00FA53B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		945195A71FA88B8B00FA53B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -71,7 +72,6 @@
 		94763F7E1FA9095E00D60C27 /* PreferencesGeneralViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesGeneralViewController.swift; sourceTree = "<group>"; };
 		949553E11FB0BDC60025E22C /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		94C1640524CB12C6005A564F /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		94C1640B24CC710B005A564F /* NSScreen+DeviceName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSScreen+DeviceName.swift"; sourceTree = "<group>"; };
 		94C1640D24CD81D1005A564F /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
 		94C1640F24CD98C8005A564F /* PreferencesCustomizeActionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesCustomizeActionsViewController.swift; sourceTree = "<group>"; };
 		94C5FCCA1FB2201200916D97 /* KeyboardListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardListener.swift; sourceTree = "<group>"; };
@@ -157,7 +157,7 @@
 				94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */,
 				94C88E9520AC189A00F4B83E /* WindowHelper.swift */,
 				94C1640524CB12C6005A564F /* Logger.swift */,
-				94C1640B24CC710B005A564F /* NSScreen+DeviceName.swift */,
+				94490CA024D2FD220010C713 /* NSScreenExtension.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -359,6 +359,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94490CA124D2FD220010C713 /* NSScreenExtension.swift in Sources */,
 				94C88E9620AC189A00F4B83E /* WindowHelper.swift in Sources */,
 				94763F731FA8DE5800D60C27 /* CGRectExtension.swift in Sources */,
 				94C88E9220AB6E5600F4B83E /* PlaceholderWindow.swift in Sources */,
@@ -373,7 +374,6 @@
 				94C5FCD11FB347DA00916D97 /* PlaceholderWindowViewController.swift in Sources */,
 				949553E21FB0BDC60025E22C /* AboutViewController.swift in Sources */,
 				94C5FCCF1FB3025200916D97 /* PApplication.swift in Sources */,
-				94C1640C24CC710B005A564F /* NSScreen+DeviceName.swift in Sources */,
 				94C1640E24CD81D1005A564F /* PreferencesWindowController.swift in Sources */,
 				94763F7F1FA9095E00D60C27 /* PreferencesGeneralViewController.swift in Sources */,
 			);
