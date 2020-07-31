@@ -12,6 +12,9 @@ import Cocoa
 // Borrowed from:
 // https://gist.github.com/suzp1984/f14cfab6871e51bee70979a40c1c9760
 
+// See also:
+// https://stackoverflow.com/questions/61456922/how-can-i-get-the-localized-name-of-an-nsscreen-on-macos-older-than-10-15
+
 extension CGDirectDisplayID {
     func getIOService() -> io_service_t {
         var serialPortIterator = io_iterator_t()
@@ -32,7 +35,6 @@ extension CGDirectDisplayID {
                 if CGDisplayVendorNumber(self) == venderID &&
                     CGDisplayModelNumber(self) == productID &&
                     CGDisplaySerialNumber(self) == serialNumber {
-                    //print("found the target io_service_t")
                     break
                 }
 
@@ -48,20 +50,20 @@ extension CGDirectDisplayID {
 
 extension NSScreen {
     func getDeviceName() -> String? {
-        guard let displayID =
-            deviceDescription[NSDeviceDescriptionKey(rawValue: "NSScreenNumber")] as? CGDirectDisplayID else {
-            //print( "can not get CGDirectDisplayID from NSScreen.")
+        if #available(OSX 10.15, *) {
+            return self.localizedName
+        }
+        
+        guard let displayID = deviceDescription[NSDeviceDescriptionKey(rawValue: "NSScreenNumber")] as? CGDirectDisplayID else {
             return nil
         }
 
         let ioServicePort = displayID.getIOService()
         if ioServicePort == 0 {
-            //print("can not get valide io_service_t.")
             return nil
         }
 
         guard let info = IODisplayCreateInfoDictionary(ioServicePort, UInt32(kIODisplayOnlyPreferredName)).takeRetainedValue() as? [String: AnyObject] else {
-            //print("IODisplayCreateInfoDictionary can not convert to [String: AnyObject]")
             return nil
         }
 
