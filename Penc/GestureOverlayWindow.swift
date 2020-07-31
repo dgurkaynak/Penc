@@ -180,6 +180,12 @@ class GestureOverlayWindow: NSWindow {
         }
     }
     
+    override func keyDown(with event: NSEvent) {
+        // NOOP
+        // This prevents macOS to play dang or error sound (its proper name is `funk`)
+        // When (penc is activated and-) pressed arrow keys
+    }
+    
     func clear() {
         self.magnifying = false
         self.latestScrollingDelta = nil

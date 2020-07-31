@@ -28,7 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
     var focusedWindow: SIWindow? = nil
     var selectedWindow: SIWindow? = nil
-    let activationHandler = KeyboardListener()
+    let keyboardListener = KeyboardListener()
     var disabled = false
     let windowHelper = WindowHelper()
     var active = false
@@ -57,7 +57,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             constructMenu()
             Preferences.shared.setDelegate(self)
             self.gestureOverlayWindow.setDelegate(self)
-            self.activationHandler.setDelegate(self)
+            self.keyboardListener.setDelegate(self)
             
             self.setupPlaceholderWindow()
             self.setupOverlayWindow()
@@ -166,7 +166,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.gestureOverlayWindow.reverseScroll = preferences.reverseScroll
     }
     
-    func onActivationStarted(activationHandler: KeyboardListener) {
+    func onActivationStarted() {
         guard !self.disabled else {
             Logger.shared.info("Not gonna activate, Penc is disabled globally")
             return
@@ -287,12 +287,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         NSApplication.shared.activate(ignoringOtherApps: true)
     }
     
-    func onActivationCompleted(activationHandler: KeyboardListener) {
+    func onActivationCompleted() {
         guard self.active else { return }
         
         guard NSScreen.screens.indices.contains(0) else {
             Logger.shared.info("Not gonna complete activation, there is no screen -- force cancelling")
-            self.onActivationCancelled(activationHandler: activationHandler)
+            self.onActivationCancelled()
             return
         }
         
@@ -308,7 +308,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.active = false
     }
     
-    func onActivationCancelled(activationHandler: KeyboardListener) {
+    func onActivationCancelled() {
         guard self.active else { return }
         
         Logger.shared.info("Cancelled activation")
@@ -321,6 +321,26 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.focusedWindow = nil
         self.selectedWindow = nil
         self.active = false
+    }
+    
+    func onKeyDown(pressedKeys: Set<UInt16>) {
+        guard self.active else { return }
+        
+        let isLeftKeyPressed = pressedKeys.contains(123)
+        let isRightKeyPressed = pressedKeys.contains(124)
+        let isDownKeyPressed = pressedKeys.contains(125)
+        let isUpKeyPressed = pressedKeys.contains(126)
+        let isEnterKeyPressed = pressedKeys.contains(36)
+        
+        if isLeftKeyPressed && isUpKeyPressed { self.onSwipeGesture(type: .SWIPE_TOP_LEFT) }
+        else if isLeftKeyPressed && isDownKeyPressed { self.onSwipeGesture(type: .SWIPE_BOTTOM_LEFT) }
+        else if isRightKeyPressed && isUpKeyPressed { self.onSwipeGesture(type: .SWIPE_TOP_RIGHT) }
+        else if isRightKeyPressed && isDownKeyPressed { self.onSwipeGesture(type: .SWIPE_BOTTOM_RIGHT) }
+        else if isLeftKeyPressed { self.onSwipeGesture(type: .SWIPE_LEFT) }
+        else if isRightKeyPressed { self.onSwipeGesture(type: .SWIPE_RIGHT) }
+        else if isUpKeyPressed { self.onSwipeGesture(type: .SWIPE_TOP) }
+        else if isDownKeyPressed { self.onSwipeGesture(type: .SWIPE_BOTTOM) }
+        else if isEnterKeyPressed { self.onDoubleClickGesture() }
     }
     
     func onScrollGesture(delta: (x: CGFloat, y: CGFloat)) {
