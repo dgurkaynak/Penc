@@ -11,12 +11,19 @@ import Cocoa
 
 
 extension CGRect {
-    // Works both ways
+    // NSRect or CGRect's signiture is => { x, y, width, height }
+    // Silica uses top-left corner of the main screen as origin and
+    // (x, y) refers to top-left corner of a window.
+    // However Cocoa uses bottom-left corner of the main screen
+    // as origin (increasing bottom to top) and bottom-left corner
+    // of a window as (x, y).
+    //
+    // This method converts between top-left <=> bottom-left (in both ways)
     func topLeft2bottomLeft(_ mainScreen: NSScreen) -> CGRect {
         return CGRect(x: self.origin.x, y: mainScreen.frame.height - self.height - self.origin.y, width: self.width, height: self.height)
     }
     
-    // Works for bottom-left
+    // Works only for bottom-left rects
     func fitInVisibleFrame(_ screen: NSScreen) -> CGRect {
         let visibleFrame = screen.visibleFrame
         var rectData = (x: self.origin.x, y: self.origin.y, width: self.width, height: self.height)

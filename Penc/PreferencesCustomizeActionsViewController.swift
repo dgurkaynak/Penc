@@ -49,6 +49,7 @@ class PreferencesCustomizeActionsViewController: NSViewController {
         super.viewDidLoad()
         // Do view setup here.
         
+        // This forces toolbar controller to adjust its size
         self.preferredContentSize = NSSize(width: self.view.frame.width, height: self.view.frame.height)
         
         self.screenPopUpButton.removeAllItems()

@@ -23,6 +23,7 @@ class PreferencesGeneralViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // This forces toolbar controller to adjust its size
         self.preferredContentSize = NSSize(width: self.view.frame.width, height: self.view.frame.height)
         
         self.modifierKeyPopUpButton.removeAllItems()
