@@ -201,7 +201,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             }
             
             let mouseX = NSEvent.mouseLocation.x
-            let mouseY = NSEvent.mouseLocation.y
+            let mouseY = NSEvent.mouseLocation.y // bottom-left origined
             Logger.shared.debug("Looking for the window under mouse cursor -- X=\(mouseX), Y=\(mouseY)")
             
             for windowInfo in visibleWindowsInfo as! [NSDictionary] {
@@ -220,7 +220,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                 let windowWidth = windowBounds!["Width"] as? Int
                 let windowHeight = windowBounds!["Height"] as? Int
                 let windowX = windowBounds!["X"] as? Int
-                let windowY = windowBounds!["Y"] as? Int
+                let windowY = windowBounds!["Y"] as? Int // top-left origined
                 
                 guard windowWidth != nil else { continue }
                 guard windowHeight != nil else { continue }
@@ -277,7 +277,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         self.active = true
         
-        let selectedWindowRect = self.selectedWindow!.frame().topLeft2bottomLeft(NSScreen.screens[0])
+        let selectedWindowRect = self.selectedWindow!.getFrameBottomLeft()
         self.placeholderWindow.setFrame(selectedWindowRect, display: true, animate: false)
         self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
         
@@ -296,8 +296,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             return
         }
         
-        let newRect = self.placeholderWindow.frame.topLeft2bottomLeft(NSScreen.screens[0])
-        self.selectedWindow!.setFrame(newRect)
+        self.selectedWindow!.setFrameBottomLeft(self.placeholderWindow.frame)
         self.focusedWindow?.focusThisWindowOnly()
         self.placeholderWindow.orderOut(self.placeholderWindow)
         self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
@@ -390,6 +389,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                 rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: CGFloat(actions["topLeft"]![1]))
             }
         }
+        
+        self.placeholderWindow.setFrame(rect!, display: true, animate: false)
         
         switch type {
         case .SWIPE_TOP, .SWIPE_LEFT, .SWIPE_TOP_LEFT:
