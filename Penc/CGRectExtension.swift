@@ -19,8 +19,11 @@ extension CGRect {
     // of a window as (x, y).
     //
     // This method converts between top-left <=> bottom-left (in both ways)
-    func topLeft2bottomLeft(_ mainScreen: NSScreen) -> CGRect {
-        return CGRect(x: self.origin.x, y: mainScreen.frame.height - self.height - self.origin.y, width: self.width, height: self.height)
+    //
+    // Primary screen is the screen at index 0, that contains
+    // the menu bar and whose origin is at the point (0, 0).
+    func topLeft2bottomLeft(_ primaryScreen: NSScreen) -> CGRect {
+        return CGRect(x: self.origin.x, y: primaryScreen.frame.height - self.height - self.origin.y, width: self.width, height: self.height)
     }
     
     // Works only for bottom-left rects
