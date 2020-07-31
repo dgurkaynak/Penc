@@ -11,7 +11,7 @@ import Cocoa
 import ServiceManagement
 
 protocol PreferencesDelegate: class {
-    func onPreferencesChanged(preferences: Preferences)
+    func onPreferencesChanged()
 }
 
 final class Preferences {
@@ -30,28 +30,28 @@ final class Preferences {
     var activationModifierKey: NSEvent.ModifierFlags {
         didSet {
             UserDefaults.standard.set(self.activationModifierKey.rawValue, forKey: Preferences.key_activationModifierKey)
-            self.delegate?.onPreferencesChanged(preferences: self)
+            self.delegate?.onPreferencesChanged()
         }
     }
     
     var activationSensitivity: Float {
         didSet {
             UserDefaults.standard.set(self.activationSensitivity, forKey: Preferences.key_activationSensitivity)
-            self.delegate?.onPreferencesChanged(preferences: self)
+            self.delegate?.onPreferencesChanged()
         }
     }
     
     var swipeThreshold: CGFloat {
         didSet {
             UserDefaults.standard.set(self.swipeThreshold, forKey: Preferences.key_swipeThreshold)
-            self.delegate?.onPreferencesChanged(preferences: self)
+            self.delegate?.onPreferencesChanged()
         }
     }
     
     var disabledApps: [String] {
         didSet {
             UserDefaults.standard.set(self.disabledApps, forKey: Preferences.key_disabledApps)
-            self.delegate?.onPreferencesChanged(preferences: self)
+            self.delegate?.onPreferencesChanged()
         }
     }
     
@@ -66,14 +66,14 @@ final class Preferences {
     var windowSelection: String {
         didSet {
             UserDefaults.standard.set(self.windowSelection, forKey: Preferences.key_windowSelection)
-            self.delegate?.onPreferencesChanged(preferences: self)
+            self.delegate?.onPreferencesChanged()
         }
     }
     
     var reverseScroll: Bool {
         didSet {
             UserDefaults.standard.set(self.reverseScroll, forKey: Preferences.key_reverseScroll)
-            self.delegate?.onPreferencesChanged(preferences: self)
+            self.delegate?.onPreferencesChanged()
         }
     }
     

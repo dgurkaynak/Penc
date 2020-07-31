@@ -62,7 +62,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             self.setupPlaceholderWindow()
             self.setupOverlayWindow()
             self.setupAboutWindow()
-            self.onPreferencesChanged(preferences: Preferences.shared)
+            self.onPreferencesChanged()
             
             Logger.shared.info("Boot successful")
         } else {
@@ -158,9 +158,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         NSApplication.shared.activate(ignoringOtherApps: true)
     }
     
-    func onPreferencesChanged(preferences: Preferences) {
-        self.activationHandler.activationModifierKey = preferences.activationModifierKey
-        self.activationHandler.activationTimeout = Double(preferences.activationSensitivity)
+    func onPreferencesChanged() {
+        let preferences = Preferences.shared
+        self.keyboardListener.activationModifierKey = preferences.activationModifierKey
+        self.keyboardListener.activationTimeout = Double(preferences.activationSensitivity)
         self.gestureOverlayWindow.swipeThreshold = preferences.swipeThreshold
         self.gestureOverlayWindow.reverseScroll = preferences.reverseScroll
     }
@@ -322,7 +323,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.active = false
     }
     
-    func onScrollGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat)) {
+    func onScrollGesture(delta: (x: CGFloat, y: CGFloat)) {
         guard self.active else { return }
         guard self.selectedWindow!.isMovable() else { return }
         
@@ -330,7 +331,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }
     
-    func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: SwipeGestureType) {
+    func onSwipeGesture(type: SwipeGestureType) {
         guard self.active else { return }
         guard self.selectedWindow!.isMovable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
@@ -393,7 +394,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
     }
     
-    func onPinchGesture(gestureOverlayWindow: GestureOverlayWindow, zoomFactor: (x: CGFloat, y: CGFloat)) {
+    func onPinchGesture(zoomFactor: (x: CGFloat, y: CGFloat)) {
         guard self.active else { return }
         guard self.selectedWindow!.isResizable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
@@ -402,7 +403,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
     }
     
-    func onDoubleClickGesture(gestureOverlayWindow: GestureOverlayWindow) {
+    func onDoubleClickGesture() {
         guard self.active else { return }
         guard self.selectedWindow!.isResizable() else { return }
         guard self.placeholderWindow.screen != nil else { return }

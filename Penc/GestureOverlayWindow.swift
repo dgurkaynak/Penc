@@ -20,10 +20,10 @@ enum SwipeGestureType {
 }
 
 protocol GestureOverlayWindowDelegate: class {
-    func onScrollGesture(gestureOverlayWindow: GestureOverlayWindow, delta: (x: CGFloat, y: CGFloat))
-    func onSwipeGesture(gestureOverlayWindow: GestureOverlayWindow, type: SwipeGestureType)
-    func onPinchGesture(gestureOverlayWindow: GestureOverlayWindow, zoomFactor: (x: CGFloat, y: CGFloat))
-    func onDoubleClickGesture(gestureOverlayWindow: GestureOverlayWindow)
+    func onScrollGesture(delta: (x: CGFloat, y: CGFloat))
+    func onSwipeGesture(type: SwipeGestureType)
+    func onPinchGesture(zoomFactor: (x: CGFloat, y: CGFloat))
+    func onDoubleClickGesture()
 }
 
 class GestureOverlayWindow: NSWindow {
@@ -55,7 +55,7 @@ class GestureOverlayWindow: NSWindow {
             let xFactor = -1 * magnification * cos(self.magnificationAngle)
             let yFactor = -1 * magnification * sin(self.magnificationAngle)
         
-            self.delegate_?.onPinchGesture(gestureOverlayWindow: self, zoomFactor: (x: xFactor, y: yFactor))
+            self.delegate_?.onPinchGesture(zoomFactor: (x: xFactor, y: yFactor))
         } else if event.phase == NSEvent.Phase.ended {
             self.magnifying = false
         }
@@ -103,7 +103,7 @@ class GestureOverlayWindow: NSWindow {
             
             if elapsed <= UInt64(timeoutInNs) {
                 self.doubleClickTimer = nil
-                self.delegate_?.onDoubleClickGesture(gestureOverlayWindow: self)
+                self.delegate_?.onDoubleClickGesture()
             } else {
                 // Too late, start over
                 self.doubleClickTimer = PTimer()
@@ -122,7 +122,7 @@ class GestureOverlayWindow: NSWindow {
             if self.reverseScroll { factor *= -1 }
             let delta = (x: factor * event.scrollingDeltaX, y: factor * event.scrollingDeltaY)
             self.latestScrollingDelta = delta
-            self.delegate_?.onScrollGesture(gestureOverlayWindow: self, delta: delta)
+            self.delegate_?.onScrollGesture(delta: delta)
         } else if event.phase == NSEvent.Phase.ended {
             // Maybe swiping?
             if self.latestScrollingDelta == nil { return }
@@ -173,7 +173,7 @@ class GestureOverlayWindow: NSWindow {
             }
             
             if swipeType != nil {
-                self.delegate_?.onSwipeGesture(gestureOverlayWindow: self, type: swipeType!)
+                self.delegate_?.onSwipeGesture(type: swipeType!)
             }
             
             self.latestScrollingDelta = nil
