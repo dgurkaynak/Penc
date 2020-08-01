@@ -22,7 +22,7 @@ enum SwipeGestureType {
 protocol GestureOverlayWindowDelegate: class {
     func onScrollGesture(delta: (x: CGFloat, y: CGFloat))
     func onSwipeGesture(type: SwipeGestureType)
-    func onPinchGesture(zoomFactor: (x: CGFloat, y: CGFloat))
+    func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat))
     func onDoubleClickGesture()
 }
 
@@ -52,10 +52,10 @@ class GestureOverlayWindow: NSWindow {
         } else if event.phase == NSEvent.Phase.changed {
             // Resizing with factor
             let magnification = event.magnification
-            let xFactor = -1 * magnification * cos(self.magnificationAngle)
-            let yFactor = -1 * magnification * sin(self.magnificationAngle)
+            let wFactor = 1 + (magnification * cos(self.magnificationAngle))
+            let hFactor = 1 + (magnification * sin(self.magnificationAngle))
         
-            self.delegate_?.onPinchGesture(zoomFactor: (x: xFactor, y: yFactor))
+            self.delegate_?.onMagnifyGesture(factor: (width: wFactor, height: hFactor))
         } else if event.phase == NSEvent.Phase.ended {
             self.magnifying = false
         }

@@ -20,78 +20,6 @@ class WindowHelper {
     private static let maxSnapDeltaY: CGFloat = 10
     
     
-    func snapToLeftOfScreen(_ window: NSWindow, frame: NSRect?) -> CGRect {
-        var frame_ = window.frame
-        if frame != nil { frame_ = frame! }
-        
-        return CGRect(
-            x: window.screen!.visibleFrame.origin.x,
-            y: frame_.origin.y,
-            width: frame_.size.width,
-            height: frame_.size.height
-        )
-    }
-    
-    func snapToRightOfScreen(_ window: NSWindow, frame: NSRect?) -> CGRect {
-        var frame_ = window.frame
-        if frame != nil { frame_ = frame! }
-        
-        return CGRect(
-            x: window.screen!.visibleFrame.origin.x + window.screen!.visibleFrame.size.width - frame_.size.width,
-            y: frame_.origin.y,
-            width: frame_.size.width,
-            height: frame_.size.height
-        )
-    }
-    
-    func snapToBottomOfScreen(_ window: NSWindow, frame: NSRect?) -> CGRect {
-        var frame_ = window.frame
-        if frame != nil { frame_ = frame! }
-        
-        return CGRect(
-            x: frame_.origin.x,
-            y: window.screen!.visibleFrame.origin.y,
-            width: frame_.size.width,
-            height: frame_.size.height
-        )
-    }
-    
-    func snapToTopOfScreen(_ window: NSWindow, frame: NSRect?) -> CGRect {
-        var frame_ = window.frame
-        if frame != nil { frame_ = frame! }
-        
-        return CGRect(
-            x: frame_.origin.x,
-            y: window.screen!.visibleFrame.origin.y + window.screen!.visibleFrame.size.height - frame_.size.height,
-            width: frame_.size.width,
-            height: frame_.size.height
-        )
-    }
-    
-    func resizeToScreenWidth(_ window: NSWindow, frame: NSRect?, factor: CGFloat = 1) -> CGRect {
-        var frame_ = window.frame
-        if frame != nil { frame_ = frame! }
-        
-        return CGRect(
-            x: frame_.origin.x,
-            y: frame_.origin.y,
-            width: window.screen!.visibleFrame.size.width * factor,
-            height: frame_.size.height
-        )
-    }
-    
-    func resizeToScreenHeight(_ window: NSWindow, frame: NSRect?, factor: CGFloat = 1) -> CGRect {
-        var frame_ = window.frame
-        if frame != nil { frame_ = frame! }
-        
-        return CGRect(
-            x: frame_.origin.x,
-            y: frame_.origin.y,
-            width: frame_.size.width,
-            height: window.screen!.visibleFrame.size.height * factor
-        )
-    }
-    
     func moveWithSnappingScreenBoundaries(_ window: NSWindow, delta: (x: CGFloat, y: CGFloat)) -> CGRect {
         var deltaX: CGFloat = delta.x
         var deltaY: CGFloat = delta.y
@@ -170,34 +98,5 @@ class WindowHelper {
             width: window.frame.size.width,
             height: window.frame.size.height
         )
-    }
-    
-    func resize(_ window: NSWindow, factor: (x: CGFloat, y: CGFloat)) -> CGRect {
-        let delta = (
-            x: window.frame.size.width * factor.x,
-            y: window.frame.size.height * factor.y
-        )
-        
-        let wCandidate = window.frame.size.width - (delta.x * 2)
-        let hCandidate = window.frame.size.height - (delta.y * 2)
-        
-        return CGRect(
-            x: window.frame.origin.x + delta.x,
-            y: window.frame.origin.y + delta.y,
-            width: min(max(wCandidate, window.minSize.width), window.maxSize.width),
-            height: min(max(hCandidate, window.minSize.height), window.maxSize.height)
-        ).fitInVisibleFrame(window.screen!)
-    }
-    
-    func resize(_ window: NSWindow, delta: (x: CGFloat, y: CGFloat)) -> CGRect {
-        let wCandidate = window.frame.size.width - (delta.x * 2)
-        let hCandidate = window.frame.size.height - (delta.y * 2)
-        
-        return CGRect(
-            x: window.frame.origin.x + delta.x,
-            y: window.frame.origin.y + delta.y,
-            width: min(max(wCandidate, window.minSize.width), window.maxSize.width),
-            height: min(max(hCandidate, window.minSize.height), window.maxSize.height)
-        ).fitInVisibleFrame(window.screen!)
     }
 }

@@ -352,76 +352,134 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     func onSwipeGesture(type: SwipeGestureType) {
         guard self.active else { return }
-        guard self.selectedWindow!.isMovable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
         
         let screenNumber = self.placeholderWindow.screen?.getScreenNumber()
         guard screenNumber != nil else { return }
         let actions = Preferences.shared.getCustomActions(forScreenNumber: screenNumber!)
         
-        var rect: CGRect? = nil
-        
-        if self.selectedWindow!.isResizable() {
-            switch (type) {
-            case .SWIPE_TOP:
-                rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: CGFloat(actions["top"]![0]))
-                rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: CGFloat(actions["top"]![1]))
-            case .SWIPE_TOP_RIGHT:
-                rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: CGFloat(actions["topRight"]![0]))
-                rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: CGFloat(actions["topRight"]![1]))
-            case .SWIPE_RIGHT:
-                rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: CGFloat(actions["right"]![0]))
-                rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: CGFloat(actions["right"]![1]))
-            case .SWIPE_BOTTOM_RIGHT:
-                rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: CGFloat(actions["bottomRight"]![0]))
-                rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: CGFloat(actions["bottomRight"]![1]))
-            case .SWIPE_BOTTOM:
-                rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: CGFloat(actions["bottom"]![0]))
-                rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: CGFloat(actions["bottom"]![1]))
-            case .SWIPE_BOTTOM_LEFT:
-                rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: CGFloat(actions["bottomLeft"]![0]))
-                rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: CGFloat(actions["bottomLeft"]![1]))
-            case .SWIPE_LEFT:
-                rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: CGFloat(actions["left"]![0]))
-                rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: CGFloat(actions["left"]![1]))
-            case .SWIPE_TOP_LEFT:
-                rect = self.windowHelper.resizeToScreenWidth(self.placeholderWindow, frame: rect, factor: CGFloat(actions["topLeft"]![0]))
-                rect = self.windowHelper.resizeToScreenHeight(self.placeholderWindow, frame: rect, factor: CGFloat(actions["topLeft"]![1]))
+        switch (type) {
+        case .SWIPE_TOP:
+            if self.selectedWindow!.isResizable() {
+                self.placeholderWindow.resizeBy(screenRatio: (
+                    width: CGFloat(actions["top"]![0]),
+                    height: CGFloat(actions["top"]![1])
+                ))
             }
-        }
-        
-        self.placeholderWindow.setFrame(rect!, display: true, animate: false)
-        
-        switch type {
-        case .SWIPE_TOP, .SWIPE_LEFT, .SWIPE_TOP_LEFT:
-            rect = self.windowHelper.snapToTopOfScreen(self.placeholderWindow, frame: rect)
-            rect = self.windowHelper.snapToLeftOfScreen(self.placeholderWindow, frame: rect)
-        case .SWIPE_BOTTOM, .SWIPE_BOTTOM_LEFT:
-            rect = self.windowHelper.snapToBottomOfScreen(self.placeholderWindow, frame: rect)
-            rect = self.windowHelper.snapToLeftOfScreen(self.placeholderWindow, frame: rect)
-        case .SWIPE_RIGHT, .SWIPE_TOP_RIGHT:
-            rect = self.windowHelper.snapToTopOfScreen(self.placeholderWindow, frame: rect)
-            rect = self.windowHelper.snapToRightOfScreen(self.placeholderWindow, frame: rect)
+            
+            if self.selectedWindow!.isMovable() {
+                self.placeholderWindow.setPosition(
+                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .TOP_CENTER),
+                    byAnchorPoint: .TOP_CENTER
+                )
+            }
+        case .SWIPE_TOP_RIGHT:
+            if self.selectedWindow!.isResizable() {
+                self.placeholderWindow.resizeBy(screenRatio: (
+                    width: CGFloat(actions["topRight"]![0]),
+                    height: CGFloat(actions["topRight"]![1])
+                ))
+            }
+            
+            if self.selectedWindow!.isMovable() {
+                self.placeholderWindow.setPosition(
+                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .TOP_RIGHT),
+                    byAnchorPoint: .TOP_RIGHT
+                )
+            }
+        case .SWIPE_RIGHT:
+            if self.selectedWindow!.isResizable() {
+                self.placeholderWindow.resizeBy(screenRatio: (
+                    width: CGFloat(actions["right"]![0]),
+                    height: CGFloat(actions["right"]![1])
+                ))
+            }
+            
+            if self.selectedWindow!.isMovable() {
+                self.placeholderWindow.setPosition(
+                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .RIGHT_CENTER),
+                    byAnchorPoint: .RIGHT_CENTER
+                )
+            }
         case .SWIPE_BOTTOM_RIGHT:
-            rect = self.windowHelper.snapToBottomOfScreen(self.placeholderWindow, frame: rect)
-            rect = self.windowHelper.snapToRightOfScreen(self.placeholderWindow, frame: rect)
-        default:
-            print("Unsupported swipe type: \(type)")
-            Logger.shared.error("Unsupported swipe type: \(type)")
-        }
-        
-        if rect != nil {
-            self.placeholderWindow.setFrame(rect!, display: true, animate: false)
+            if self.selectedWindow!.isResizable() {
+                self.placeholderWindow.resizeBy(screenRatio: (
+                    width: CGFloat(actions["bottomRight"]![0]),
+                    height: CGFloat(actions["bottomRight"]![1])
+                ))
+            }
+            
+            if self.selectedWindow!.isMovable() {
+                self.placeholderWindow.setPosition(
+                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_RIGHT),
+                    byAnchorPoint: .BOTTOM_RIGHT
+                )
+            }
+        case .SWIPE_BOTTOM:
+            if self.selectedWindow!.isResizable() {
+                self.placeholderWindow.resizeBy(screenRatio: (
+                    width: CGFloat(actions["bottom"]![0]),
+                    height: CGFloat(actions["bottom"]![1])
+                ))
+            }
+            
+            if self.selectedWindow!.isMovable() {
+                self.placeholderWindow.setPosition(
+                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_CENTER),
+                    byAnchorPoint: .BOTTOM_CENTER
+                )
+            }
+        case .SWIPE_BOTTOM_LEFT:
+            if self.selectedWindow!.isResizable() {
+                self.placeholderWindow.resizeBy(screenRatio: (
+                    width: CGFloat(actions["bottomLeft"]![0]),
+                    height: CGFloat(actions["bottomLeft"]![1])
+                ))
+            }
+            
+            if self.selectedWindow!.isMovable() {
+                self.placeholderWindow.setPosition(
+                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_LEFT),
+                    byAnchorPoint: .BOTTOM_LEFT
+                )
+            }
+        case .SWIPE_LEFT:
+            if self.selectedWindow!.isResizable() {
+                self.placeholderWindow.resizeBy(screenRatio: (
+                    width: CGFloat(actions["left"]![0]),
+                    height: CGFloat(actions["left"]![1])
+                ))
+            }
+            
+            if self.selectedWindow!.isMovable() {
+                self.placeholderWindow.setPosition(
+                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .LEFT_CENTER),
+                    byAnchorPoint: .LEFT_CENTER
+                )
+            }
+        case .SWIPE_TOP_LEFT:
+            if self.selectedWindow!.isResizable() {
+                self.placeholderWindow.resizeBy(screenRatio: (
+                    width: CGFloat(actions["topLeft"]![0]),
+                    height: CGFloat(actions["topLeft"]![1])
+                ))
+            }
+            
+            if self.selectedWindow!.isMovable() {
+                self.placeholderWindow.setPosition(
+                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .TOP_LEFT),
+                    byAnchorPoint: .TOP_LEFT
+                )
+            }
         }
     }
     
-    func onPinchGesture(zoomFactor: (x: CGFloat, y: CGFloat)) {
+    func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat)) {
         guard self.active else { return }
         guard self.selectedWindow!.isResizable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
         
-        let rect = self.windowHelper.resize(self.placeholderWindow, factor: zoomFactor)
-        self.placeholderWindow.setFrame(rect, display: true, animate: false)
+        self.placeholderWindow.resizeBy(factor: factor)
     }
     
     func onDoubleClickGesture() {
