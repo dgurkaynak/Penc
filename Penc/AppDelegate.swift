@@ -484,10 +484,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     func onDoubleClickGesture() {
         guard self.active else { return }
-        guard self.selectedWindow!.isResizable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
         
-        self.placeholderWindow.setFrame(self.placeholderWindow.screen!.visibleFrame, display: true, animate: false)
+        let screenNumber = self.placeholderWindow.screen?.getScreenNumber()
+        guard screenNumber != nil else { return }
+        let actions = Preferences.shared.getCustomActions(forScreenNumber: screenNumber!)
+        
+        if self.selectedWindow!.isResizable() {
+            self.placeholderWindow.resizeBy(screenRatio: (
+                width: CGFloat(actions["dblClick"]![0]),
+                height: CGFloat(actions["dblClick"]![1])
+            ))
+        }
+        
+        if self.selectedWindow!.isMovable() {
+            self.placeholderWindow.setPosition(
+                self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .CENTER),
+                byAnchorPoint: .CENTER
+            )
+        }
     }
     
     func menuWillOpen(_ menu: NSMenu) {
