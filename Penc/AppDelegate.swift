@@ -161,7 +161,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     func onPreferencesChanged() {
         let preferences = Preferences.shared
         self.keyboardListener.activationModifierKey = preferences.activationModifierKey
-        self.keyboardListener.activationTimeout = Double(preferences.activationSensitivity)
+        self.keyboardListener.secondActivationModifierKeyPress = Double(preferences.activationSensitivity)
         self.gestureOverlayWindow.swipeThreshold = preferences.swipeThreshold
         self.gestureOverlayWindow.reverseScroll = preferences.reverseScroll
     }
@@ -292,7 +292,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         guard NSScreen.screens.indices.contains(0) else {
             Logger.shared.info("Not gonna complete activation, there is no screen -- force cancelling")
-            self.onActivationCancelled()
+            self.onActivationAborted()
             return
         }
         
@@ -307,10 +307,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.active = false
     }
     
-    func onActivationCancelled() {
+    func onActivationAborted() {
         guard self.active else { return }
         
-        Logger.shared.info("Cancelled activation")
+        Logger.shared.info("Aborted activation")
         
         self.focusedWindow?.focus()
         self.placeholderWindow.orderOut(self.placeholderWindow)
@@ -322,7 +322,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.active = false
     }
     
-    func onKeyDown(pressedKeys: Set<UInt16>) {
+    func onKeyDownWhileActivated(pressedKeys: Set<UInt16>) {
         guard self.active else { return }
         
         let isLeftKeyPressed = pressedKeys.contains(123)

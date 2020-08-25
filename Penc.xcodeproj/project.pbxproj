@@ -19,7 +19,7 @@
 		94756FF020ACB665003023FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94756FEF20ACB665003023FD /* AppDelegate.swift */; };
 		94756FF420ACB666003023FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94756FF320ACB666003023FD /* Assets.xcassets */; };
 		94756FF720ACB666003023FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94756FF520ACB666003023FD /* Main.storyboard */; };
-		94756FFE20ACB6DA003023FD /* PencLauncher.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94756FED20ACB665003023FD /* PencLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		94756FFE20ACB6DA003023FD /* PencLauncher.app in Copy Files */ = {isa = PBXBuildFile; fileRef = 94756FED20ACB665003023FD /* PencLauncher.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		9475700020ACB705003023FD /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94756FFF20ACB705003023FD /* ServiceManagement.framework */; };
 		94763F731FA8DE5800D60C27 /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94763F721FA8DE5800D60C27 /* CGRectExtension.swift */; };
 		94763F7F1FA9095E00D60C27 /* PreferencesGeneralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94763F7E1FA9095E00D60C27 /* PreferencesGeneralViewController.swift */; };
@@ -37,14 +37,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		94756FFD20ACB6C3003023FD /* CopyFiles */ = {
+		94756FFD20ACB6C3003023FD /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = Contents/Library/LoginItems;
 			dstSubfolderSpec = 1;
 			files = (
-				94756FFE20ACB6DA003023FD /* PencLauncher.app in CopyFiles */,
+				94756FFE20ACB6DA003023FD /* PencLauncher.app in Copy Files */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -199,7 +200,7 @@
 				9417B7BF1FADAEED00749BC8 /* Run Script */,
 				9451959E1FA88B8B00FA53B4 /* Resources */,
 				3E396F0A92C23C8B987D6383 /* [CP] Embed Pods Frameworks */,
-				94756FFD20ACB6C3003023FD /* CopyFiles */,
+				94756FFD20ACB6C3003023FD /* Copy Files */,
 			);
 			buildRules = (
 			);
