@@ -692,10 +692,10 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YKv-hh-Gxc">
-                                <rect key="frame" x="18" y="186" width="233" height="17"/>
+                                <rect key="frame" x="18" y="186" width="289" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Double press modifier key to activate:" id="eA0-GJ-rqC">
-                                    <font key="font" metaFont="system"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Double press and hold modifier key to activate:" id="eA0-GJ-rqC">
+                                    <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -709,7 +709,7 @@
                                 <rect key="frame" x="18" y="158" width="153" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Double press sensitivity:" id="It5-pY-Jir">
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -723,7 +723,7 @@
                                 <rect key="frame" x="18" y="133" width="109" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Swipe sensitivity:" id="rO1-fZ-wGH">
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -732,7 +732,7 @@
                                 <rect key="frame" x="369" y="158" width="58" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="300 ms" id="Boa-41-5eC">
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -741,26 +741,11 @@
                                 <rect key="frame" x="369" y="133" width="58" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="30" id="rj2-NC-ILc">
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S5h-MR-UgN">
-                                <rect key="frame" x="259" y="180" width="117" height="26"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="4FL-Yz-kg9" id="ABp-7V-qY8">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <menu key="menu" id="L87-Gl-4Xq">
-                                        <items>
-                                            <menuItem title="Item 1" state="on" id="4FL-Yz-kg9"/>
-                                            <menuItem title="Item 2" id="Ak1-Af-LRr"/>
-                                            <menuItem title="Item 3" id="NBp-ge-4LO"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                            </popUpButton>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="GTi-YS-OlM">
                                 <rect key="frame" x="0.0" y="59" width="445" height="5"/>
                             </box>
@@ -768,21 +753,21 @@
                                 <rect key="frame" x="18" y="22" width="149" height="18"/>
                                 <buttonCell key="cell" type="check" title="Launch Penc at login" bezelStyle="regularSquare" imagePosition="left" inset="2" id="diT-tc-QfE">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lbR-8e-hcN">
                                 <rect key="frame" x="288" y="13" width="143" height="32"/>
                                 <buttonCell key="cell" type="push" title="Reset to defaults" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="w0O-n5-E5V">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                 </buttonCell>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UJ4-ah-crj">
                                 <rect key="frame" x="18" y="108" width="115" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Window selection:" id="WG0-Sd-wUd">
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -791,7 +776,7 @@
                                 <rect key="frame" x="18" y="83" width="93" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Reverse scroll:" id="yyv-pA-L9g">
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -801,7 +786,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Swd-QP-kG3" id="0Rw-gC-eIA">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                     <menu key="menu" id="eom-uP-B1N">
                                         <items>
                                             <menuItem title="Item 1" state="on" id="Swd-QP-kG3"/>
@@ -816,9 +801,24 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="zkl-Ck-t7E">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                 </buttonCell>
                             </button>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S5h-MR-UgN">
+                                <rect key="frame" x="311" y="180" width="117" height="26"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="4FL-Yz-kg9" id="ABp-7V-qY8">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="message"/>
+                                    <menu key="menu" id="L87-Gl-4Xq">
+                                        <items>
+                                            <menuItem title="Item 1" state="on" id="4FL-Yz-kg9"/>
+                                            <menuItem title="Item 2" id="Ak1-Af-LRr"/>
+                                            <menuItem title="Item 3" id="NBp-ge-4LO"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                            </popUpButton>
                         </subviews>
                         <constraints>
                             <constraint firstItem="GTi-YS-OlM" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="Hty-bV-Gux"/>
@@ -844,7 +844,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="632" y="651"/>
+            <point key="canvasLocation" x="631.5" y="650.5"/>
         </scene>
         <!--Preferences Customize Actions View Controller-->
         <scene sceneID="guu-Sa-stz">
@@ -866,7 +866,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="↖︎" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r69-5G-oc7">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="message"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8hN-1a-RMZ">
@@ -874,7 +874,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="↗︎" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UmU-Fy-wKh">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="message"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n17-Gu-lbt">
@@ -882,7 +882,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="↙︎" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dJl-hf-JX6">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="message"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PK8-Xu-q7D">
@@ -890,7 +890,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="↘︎" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uCi-jZ-rOS">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="message"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zlg-GP-zYW">
@@ -898,7 +898,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="↑" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sFd-8L-zzA">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="message"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cba-Je-4ne">
@@ -906,7 +906,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="↓" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vfn-iG-pTm">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="message"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0df-MA-J9N">
@@ -914,7 +914,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="←" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vT7-yQ-SP7">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="message"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B1F-x0-4Cf">
@@ -922,7 +922,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="→" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="31E-w5-EHx">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="message"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dAh-H5-X2j">
@@ -930,7 +930,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="Dbl-click" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="L19-EN-MAa">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="system"/>
+                                                <font key="font" metaFont="message"/>
                                             </buttonCell>
                                         </button>
                                     </subviews>
@@ -941,7 +941,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="nhE-a6-q9u" id="IDm-N3-k5N">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                     <menu key="menu" id="lEy-KX-yhX">
                                         <items>
                                             <menuItem title="Item 1" state="on" id="nhE-a6-q9u"/>
@@ -1027,7 +1027,7 @@
                                 <rect key="frame" x="18" y="90" width="136" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Resize the window to:" id="Q5y-xe-4hJ">
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -1036,7 +1036,7 @@
                                 <rect key="frame" x="107" y="181" width="47" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Action:" id="MBm-Lf-xtV">
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -1132,7 +1132,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="⟳" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xVF-ks-MJK">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="message"/>
                                 </buttonCell>
                             </button>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2ZU-nY-cvc">
