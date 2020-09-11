@@ -44,7 +44,7 @@ class KeyboardListener {
     var secondActivationModifierKeyPress = 0.3
     
     private var holdActivationModifierKeyTimeoutTask: DispatchWorkItem?
-    var holdActivationModifierKeyTimeout = 0.15
+    var holdActivationModifierKeyTimeout = 0.10
     
     init() {
         self.globalModifierKeyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .flagsChanged) { (event) in

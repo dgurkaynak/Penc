@@ -162,6 +162,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         let preferences = Preferences.shared
         self.keyboardListener.activationModifierKey = preferences.activationModifierKey
         self.keyboardListener.secondActivationModifierKeyPress = Double(preferences.activationSensitivity)
+        self.keyboardListener.holdActivationModifierKeyTimeout = Double(preferences.holdDuration)
         self.gestureOverlayWindow.swipeThreshold = preferences.swipeThreshold
         self.gestureOverlayWindow.reverseScroll = preferences.reverseScroll
     }

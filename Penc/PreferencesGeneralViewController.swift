@@ -12,6 +12,8 @@ class PreferencesGeneralViewController: NSViewController {
     
     @IBOutlet var doublePressSensitivitySider: NSSlider!
     @IBOutlet var doublePressSensitivityLabel: NSTextField!
+    @IBOutlet var holdDurationSlider: NSSlider!
+    @IBOutlet var holdDurationLabel: NSTextField!
     @IBOutlet var swipeSensitivitySlider: NSSlider!
     @IBOutlet var swipeSensitivityLabel: NSTextField!
     @IBOutlet var launchAtLoginCheckbox: NSButton!
@@ -38,6 +40,9 @@ class PreferencesGeneralViewController: NSViewController {
         
         self.doublePressSensitivitySider.target = self
         self.doublePressSensitivitySider.action = #selector(onDoublePressSensitivitySliderChange)
+        
+        self.holdDurationSlider.target = self
+        self.holdDurationSlider.action = #selector(onHoldDurationSliderChange)
         
         self.swipeSensitivitySlider.target = self
         self.swipeSensitivitySlider.action = #selector(onSwipeSensitivitySliderChange)
@@ -80,6 +85,10 @@ class PreferencesGeneralViewController: NSViewController {
         let activationSensitivity = Int(Preferences.shared.activationSensitivity * 1000)
         self.doublePressSensitivitySider.integerValue = activationSensitivity
         self.doublePressSensitivityLabel.stringValue = "\(activationSensitivity) ms"
+        
+        let holdDuration = Int(Preferences.shared.holdDuration * 1000)
+        self.holdDurationSlider.integerValue = holdDuration
+        self.holdDurationLabel.stringValue = "\(holdDuration) ms"
         
         let swipeThreshold = Float(Preferences.shared.swipeThreshold)
         let sliderValue = 55 - swipeThreshold
@@ -125,6 +134,12 @@ class PreferencesGeneralViewController: NSViewController {
         self.doublePressSensitivityLabel.stringValue = "\(self.doublePressSensitivitySider.integerValue) ms"
         Preferences.shared.activationSensitivity = self.doublePressSensitivitySider.floatValue / 1000
         Logger.shared.info("Set activation double press sensitivity \(Preferences.shared.activationSensitivity)")
+    }
+    
+    @objc private func onHoldDurationSliderChange() {
+        self.holdDurationLabel.stringValue = "\(self.holdDurationSlider.integerValue) ms"
+        Preferences.shared.holdDuration = self.holdDurationSlider.floatValue / 1000
+        Logger.shared.info("Set hold duration \(Preferences.shared.holdDuration)")
     }
     
     @objc private func onSwipeSensitivitySliderChange() {

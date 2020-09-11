@@ -19,6 +19,7 @@ final class Preferences {
     
     private static let key_activationModifierKey = "activationModifierKey"
     private static let key_activationSensitivity = "activationSensitivity"
+    private static let key_holdDuration = "holdDuration"
     private static let key_swipeThreshold = "swipeThreshold"
     private static let key_disabledApps = "disabledApps"
     private static let key_reverseScroll = "reverseScroll"
@@ -37,6 +38,13 @@ final class Preferences {
     var activationSensitivity: Float {
         didSet {
             UserDefaults.standard.set(self.activationSensitivity, forKey: Preferences.key_activationSensitivity)
+            self.delegate?.onPreferencesChanged()
+        }
+    }
+    
+    var holdDuration: Float {
+        didSet {
+            UserDefaults.standard.set(self.holdDuration, forKey: Preferences.key_holdDuration)
             self.delegate?.onPreferencesChanged()
         }
     }
@@ -94,6 +102,14 @@ final class Preferences {
             UserDefaults.standard.set(self.activationSensitivity, forKey: Preferences.key_activationSensitivity)
         } else {
             self.activationSensitivity = activationSensitivity!
+        }
+        
+        let holdDuration = defaults.object(forKey: Preferences.key_holdDuration) as? Float
+        if holdDuration == nil {
+            self.holdDuration = 0.1
+            UserDefaults.standard.set(self.holdDuration, forKey: Preferences.key_holdDuration)
+        } else {
+            self.holdDuration = holdDuration!
         }
         
         let swipeThreshold = defaults.object(forKey: Preferences.key_swipeThreshold) as? CGFloat
@@ -160,6 +176,7 @@ final class Preferences {
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
         self.activationModifierKey = .command
         self.activationSensitivity = 0.3
+        self.holdDuration = 0.1
         self.swipeThreshold = 25.0
         self.disabledApps = []
         self.windowSelection = "focused"
