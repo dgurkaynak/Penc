@@ -33,6 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     let windowHelper = WindowHelper()
     var active = false
     var updater = SUUpdater()
+    let abortSound = NSSound(named: "Funk")
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -170,11 +171,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     func onActivationStarted() {
         guard !self.disabled else {
             Logger.shared.info("Not gonna activate, Penc is disabled globally")
+            self.abortSound?.play()
             return
         }
         
         guard NSScreen.screens.indices.contains(0) else {
             Logger.shared.info("Not gonna activate, there is no screen at all")
+            self.abortSound?.play()
             return
         }
         
@@ -198,6 +201,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             let visibleWindowsInfo = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID)
             guard visibleWindowsInfo != nil else {
                 Logger.shared.error("Not gonna activate, visible windows returned nil")
+                self.abortSound?.play()
                 return
             }
             
@@ -252,18 +256,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             }
         default:
             Logger.shared.error("Not gonna activate, unknown window selection: \(Preferences.shared.windowSelection)")
+            self.abortSound?.play()
             return
         }
         
         Logger.shared.info("Activating... (Window selection: \(Preferences.shared.windowSelection) -- Focused window: \(self.focusedWindow.debugDescription) -- Selected window: \(self.selectedWindow.debugDescription))")
         
         guard self.selectedWindow != nil else {
+            self.abortSound?.play()
             return
         }
         
         let selectedScreen = self.selectedWindow!.screen()
         guard selectedScreen != nil else {
             Logger.shared.info("Not gonna activate, there is no selected screen")
+            self.abortSound?.play()
             return
         }
         
@@ -271,6 +278,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             if let appBundleId = app.bundleIdentifier {
                 if Preferences.shared.disabledApps.contains(appBundleId) {
                     Logger.shared.info("Not gonna activate, Penc is disabled for \(appBundleId)")
+                    self.abortSound?.play()
                     return
                 }
             }
