@@ -133,6 +133,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.placeholderWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
         self.placeholderWindow.contentViewController = self.placeholderWindowViewController
         self.placeholderWindow.delegate = self.placeholderWindowViewController
+        
+        self.placeholderWindowViewController.toggleWindowSizeTextField(Preferences.shared.showWindowSize)
     }
     
     func setupOverlayWindow() {
@@ -166,6 +168,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.keyboardListener.holdActivationModifierKeyTimeout = Double(preferences.holdDuration)
         self.gestureOverlayWindow.swipeThreshold = preferences.swipeThreshold
         self.gestureOverlayWindow.reverseScroll = preferences.reverseScroll
+        self.placeholderWindowViewController.toggleWindowSizeTextField(preferences.showWindowSize)
     }
     
     func onActivationStarted() {

@@ -21,6 +21,7 @@ class PreferencesGeneralViewController: NSViewController {
     @IBOutlet var modifierKeyPopUpButton: NSPopUpButton!
     @IBOutlet var reverseScrollCheckbox: NSButton!
     @IBOutlet var windowSelectionPopUpButton: NSPopUpButton!
+    @IBOutlet var showWindowSizeCheckbox: NSButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +58,9 @@ class PreferencesGeneralViewController: NSViewController {
         
         self.reverseScrollCheckbox.target = self
         self.reverseScrollCheckbox.action = #selector(onReverseScrollCheckboxChange)
+        
+        self.showWindowSizeCheckbox.target = self
+        self.showWindowSizeCheckbox.action = #selector(onShowWindowSizeCheckboxChange)
         
         self.launchAtLoginCheckbox.target = self
         self.launchAtLoginCheckbox.action = #selector(onLaunchAtLoginCheckboxChange)
@@ -106,6 +110,8 @@ class PreferencesGeneralViewController: NSViewController {
         }
         
         self.reverseScrollCheckbox.state = Preferences.shared.reverseScroll ? .on : .off
+        
+        self.showWindowSizeCheckbox.state = Preferences.shared.showWindowSize ? .on : .off
         
         self.launchAtLoginCheckbox.state = Preferences.shared.launchAtLogin ? .on : .off
     }
@@ -165,6 +171,11 @@ class PreferencesGeneralViewController: NSViewController {
     @objc private func onReverseScrollCheckboxChange() {
         Preferences.shared.reverseScroll = self.reverseScrollCheckbox.state == .on
         Logger.shared.info("Set reverse scroll to \(self.reverseScrollCheckbox.state == .on)")
+    }
+    
+    @objc private func onShowWindowSizeCheckboxChange() {
+        Preferences.shared.showWindowSize = self.showWindowSizeCheckbox.state == .on
+        Logger.shared.info("Set showing window size to \(self.showWindowSizeCheckbox.state == .on)")
     }
     
     @objc private func onLaunchAtLoginCheckboxChange() {
