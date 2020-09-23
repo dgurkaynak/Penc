@@ -290,6 +290,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.placeholderWindow.setFrame(selectedWindowRect, display: true, animate: false)
         self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
         
+        self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
+        
         self.gestureOverlayWindow.setFrame(selectedScreen!.frame, display: true, animate: false)
         self.gestureOverlayWindow.makeKeyAndOrderFront(self.gestureOverlayWindow)
         
@@ -357,6 +359,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         let rect = self.windowHelper.moveWithSnappingScreenBoundaries(self.placeholderWindow, delta: delta)
         self.placeholderWindow.setFrame(rect, display: true, animate: false)
+        
+        self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
     }
     
     func onSwipeGesture(type: SwipeGestureType) {
@@ -481,6 +485,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                 )
             }
         }
+        
+        self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
     }
     
     func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat)) {
@@ -489,6 +495,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.placeholderWindow.screen != nil else { return }
         
         self.placeholderWindow.resizeBy(factor: factor)
+        
+        self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
     }
     
     func onDoubleClickGesture() {
@@ -512,6 +520,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                 byAnchorPoint: .CENTER
             )
         }
+        
+        self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
     }
     
     func menuWillOpen(_ menu: NSMenu) {

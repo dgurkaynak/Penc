@@ -10,12 +10,19 @@ import Cocoa
 
 class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
     @IBOutlet var box: NSBox!
-    
+    @IBOutlet var windowSizeTextField: NSTextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
-//        self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.5)
+    }
+    
+    func updateWindowSizeTextField(_ windowFrame: CGRect) {
+        self.windowSizeTextField.stringValue = "\(Int(windowFrame.width)) x \(Int(windowFrame.height))"
+    }
+    
+    func toggleWindowSizeTextField(_ show: Bool) {
+        self.windowSizeTextField.alphaValue = show ? 1 : 0
     }
 }
 
