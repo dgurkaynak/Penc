@@ -1,16 +1,23 @@
 PODS:
+  - Silica (0.1.5)
   - Sparkle (1.23.0)
 
 DEPENDENCIES:
+  - Silica (from `./Silica`)
   - Sparkle
 
 SPEC REPOS:
   trunk:
     - Sparkle
 
+EXTERNAL SOURCES:
+  Silica:
+    :path: "./Silica"
+
 SPEC CHECKSUMS:
+  Silica: 3b5a774469476ef84fe9d96a63bfe09908654e50
   Sparkle: 55b1a87ba69d56913375a281546b7c82dec95bb0
 
-PODFILE CHECKSUM: 3d0bdac305c9aa6e93ffd4f8c69037a22a0a6b32
+PODFILE CHECKSUM: 6dac210a5bf210471a9060ce784450d01a8600aa
 
 COCOAPODS: 1.9.3

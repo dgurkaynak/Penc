@@ -6,5 +6,6 @@ target 'Penc' do
   use_frameworks!
 
   # Pods for Penc
+  pod 'Silica', :path => './Silica'
   pod 'Sparkle'
 end

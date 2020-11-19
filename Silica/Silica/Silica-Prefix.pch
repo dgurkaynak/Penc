@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'Silica' target in the 'Silica' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+    #import "CGSSpaces.h"
+#endif
