@@ -30,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     var selectedWindow: SIWindow? = nil
     let keyboardListener = KeyboardListener()
     var disabled = false
-    let windowHelper = WindowHelper()
+    var windowAlignmentManager: WindowAlignmentManager? = nil
     var active = false
     var updater = SUUpdater()
     let abortSound = NSSound(named: "Funk")
@@ -197,20 +197,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             }
         }
         
+        // Get visible windows on the screen
+        var visibleWindows: [WindowInfo] = []
+        do {
+            visibleWindows = try WindowInfo.getVisibleWindows()
+        } catch {
+            Logger.shared.error("Not gonna activate, could not get visible windows: \(error.localizedDescription)")
+            self.abortSound?.play()
+            return
+        }
+        
         switch Preferences.shared.windowSelection {
         case "focused":
             self.selectedWindow = self.focusedWindow
         case "underCursor":
-            var visibleWindows: [WindowInfo] = []
-            
-            do {
-                visibleWindows = try WindowInfo.getVisibleWindows()
-            } catch {
-                Logger.shared.error("Not gonna activate, could not get visible windows")
-                self.abortSound?.play()
-                return
-            }
-            
             let mouseX = NSEvent.mouseLocation.x
             let mouseY = NSEvent.mouseLocation.y // bottom-left origined
             Logger.shared.debug("Looking for the window under mouse cursor -- X=\(mouseX), Y=\(mouseY)")
@@ -269,6 +269,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         self.active = true
         
+        // Setup window alignment manager
+        let otherWindows = visibleWindows.filter { (windowInfo) -> Bool in
+            return windowInfo.windowNumber != self.selectedWindow!.windowID()
+        }
+        self.windowAlignmentManager = WindowAlignmentManager(getWindowFrame: { () -> CGRect in
+            return self.placeholderWindow.frame
+        }, otherWindows: otherWindows)
+        
         let selectedWindowRect = self.selectedWindow!.getFrameBottomLeft()
         self.placeholderWindow.setFrame(selectedWindowRect, display: true, animate: false)
         self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
@@ -296,6 +304,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
         self.gestureOverlayWindow.clear()
         
+        self.windowAlignmentManager = nil
         self.focusedWindow = nil
         self.selectedWindow = nil
         self.active = false
@@ -311,6 +320,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
         self.gestureOverlayWindow.clear()
         
+        self.windowAlignmentManager = nil
         self.focusedWindow = nil
         self.selectedWindow = nil
         self.active = false
@@ -339,9 +349,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     func onScrollGesture(delta: (x: CGFloat, y: CGFloat)) {
         guard self.active else { return }
         guard self.selectedWindow!.isMovable() else { return }
+        guard self.windowAlignmentManager != nil else { return }
         
-        let rect = self.windowHelper.moveWithSnappingScreenBoundaries(self.placeholderWindow, delta: delta)
-        self.placeholderWindow.setFrame(rect, display: true, animate: false)
+        let rect = self.placeholderWindow.frame
+        let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y))
+        let newRect = CGRect(
+            x: rect.origin.x + newMovement.x,
+            y: rect.origin.y + newMovement.y,
+            width: rect.width,
+            height: rect.height
+        )
+        self.placeholderWindow.setFrame(newRect, display: true, animate: false)
         
         self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
     }

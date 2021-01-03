@@ -18,6 +18,7 @@
 		945195AB1FA88B8B00FA53B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 945195A91FA88B8B00FA53B4 /* Main.storyboard */; };
 		946C90B025A19FB6007BDA76 /* LineSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946C90AF25A19FB6007BDA76 /* LineSegment.swift */; };
 		946C90B425A1C09E007BDA76 /* WindowInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946C90B325A1C09E007BDA76 /* WindowInfo.swift */; };
+		946C90C025A1CB9C007BDA76 /* WindowAlignmentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946C90BF25A1CB9C007BDA76 /* WindowAlignmentManager.swift */; };
 		94756FF020ACB665003023FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94756FEF20ACB665003023FD /* AppDelegate.swift */; };
 		94756FF420ACB666003023FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94756FF320ACB666003023FD /* Assets.xcassets */; };
 		94756FF720ACB666003023FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94756FF520ACB666003023FD /* Main.storyboard */; };
@@ -68,6 +69,7 @@
 		945195AD1FA88B8B00FA53B4 /* Penc.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Penc.entitlements; sourceTree = "<group>"; };
 		946C90AF25A19FB6007BDA76 /* LineSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineSegment.swift; sourceTree = "<group>"; };
 		946C90B325A1C09E007BDA76 /* WindowInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowInfo.swift; sourceTree = "<group>"; };
+		946C90BF25A1CB9C007BDA76 /* WindowAlignmentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowAlignmentManager.swift; sourceTree = "<group>"; };
 		94756FED20ACB665003023FD /* PencLauncher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PencLauncher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94756FEF20ACB665003023FD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94756FF320ACB666003023FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				94490CA224D4B1BD0010C713 /* NSWindowExtension.swift */,
 				946C90AF25A19FB6007BDA76 /* LineSegment.swift */,
 				946C90B325A1C09E007BDA76 /* WindowInfo.swift */,
+				946C90BF25A1CB9C007BDA76 /* WindowAlignmentManager.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				94C5FCD11FB347DA00916D97 /* PlaceholderWindowViewController.swift in Sources */,
 				949553E21FB0BDC60025E22C /* AboutViewController.swift in Sources */,
 				94C5FCCF1FB3025200916D97 /* PApplication.swift in Sources */,
+				946C90C025A1CB9C007BDA76 /* WindowAlignmentManager.swift in Sources */,
 				946C90B025A19FB6007BDA76 /* LineSegment.swift in Sources */,
 				94C1640E24CD81D1005A564F /* PreferencesWindowController.swift in Sources */,
 				94763F7F1FA9095E00D60C27 /* PreferencesGeneralViewController.swift in Sources */,
