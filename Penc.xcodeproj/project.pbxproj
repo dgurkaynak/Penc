@@ -16,6 +16,7 @@
 		945195A41FA88B8B00FA53B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945195A31FA88B8B00FA53B4 /* AppDelegate.swift */; };
 		945195A81FA88B8B00FA53B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 945195A71FA88B8B00FA53B4 /* Assets.xcassets */; };
 		945195AB1FA88B8B00FA53B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 945195A91FA88B8B00FA53B4 /* Main.storyboard */; };
+		946C90B425A1C09E007BDA76 /* WindowInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946C90B325A1C09E007BDA76 /* WindowInfo.swift */; };
 		94756FF020ACB665003023FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94756FEF20ACB665003023FD /* AppDelegate.swift */; };
 		94756FF420ACB666003023FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94756FF320ACB666003023FD /* Assets.xcassets */; };
 		94756FF720ACB666003023FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94756FF520ACB666003023FD /* Main.storyboard */; };
@@ -64,6 +65,7 @@
 		945195AA1FA88B8B00FA53B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		945195AC1FA88B8B00FA53B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		945195AD1FA88B8B00FA53B4 /* Penc.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Penc.entitlements; sourceTree = "<group>"; };
+		946C90B325A1C09E007BDA76 /* WindowInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowInfo.swift; sourceTree = "<group>"; };
 		94756FED20ACB665003023FD /* PencLauncher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PencLauncher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94756FEF20ACB665003023FD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94756FF320ACB666003023FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				94C1640524CB12C6005A564F /* Logger.swift */,
 				94490CA024D2FD220010C713 /* NSScreenExtension.swift */,
 				94490CA224D4B1BD0010C713 /* NSWindowExtension.swift */,
+				946C90B325A1C09E007BDA76 /* WindowInfo.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -368,6 +371,7 @@
 				94C88E9220AB6E5600F4B83E /* PlaceholderWindow.swift in Sources */,
 				9417B7CB1FB04A0100749BC8 /* Preferences.swift in Sources */,
 				94C5FCCD1FB222CA00916D97 /* PTimer.swift in Sources */,
+				946C90B425A1C09E007BDA76 /* WindowInfo.swift in Sources */,
 				94C5FCCB1FB2201200916D97 /* KeyboardListener.swift in Sources */,
 				80E0F4932230A6FD0084F0AC /* SIWindowExtension.swift in Sources */,
 				945195A41FA88B8B00FA53B4 /* AppDelegate.swift in Sources */,

@@ -201,9 +201,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         case "focused":
             self.selectedWindow = self.focusedWindow
         case "underCursor":
-            let visibleWindowsInfo = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID)
-            guard visibleWindowsInfo != nil else {
-                Logger.shared.error("Not gonna activate, visible windows returned nil")
+            var visibleWindows: [WindowInfo] = []
+            
+            do {
+                visibleWindows = try WindowInfo.getVisibleWindows()
+            } catch {
+                Logger.shared.error("Not gonna activate, could not get visible windows")
                 self.abortSound?.play()
                 return
             }
@@ -212,43 +215,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             let mouseY = NSEvent.mouseLocation.y // bottom-left origined
             Logger.shared.debug("Looking for the window under mouse cursor -- X=\(mouseX), Y=\(mouseY)")
             
-            for windowInfo in visibleWindowsInfo as! [NSDictionary] {
-                // Ignore dock, desktop, menubar stuff: https://stackoverflow.com/a/5286921
-                let windowLayer = windowInfo["kCGWindowLayer"] as? Int
-                guard windowLayer == 0 else { continue }
-                
-                let appPid = windowInfo["kCGWindowOwnerPID"] as? pid_t
-                let windowNumber = windowInfo["kCGWindowNumber"] as? Int
-                let windowBounds = windowInfo["kCGWindowBounds"] as? NSDictionary
-                
-                guard appPid != nil else { continue }
-                guard windowNumber != nil else { continue }
-                guard windowBounds != nil else { continue }
-                
-                let windowWidth = windowBounds!["Width"] as? Int
-                let windowHeight = windowBounds!["Height"] as? Int
-                let windowX = windowBounds!["X"] as? Int
-                let windowY = windowBounds!["Y"] as? Int // top-left origined
-                
-                guard windowWidth != nil else { continue }
-                guard windowHeight != nil else { continue }
-                guard windowX != nil else { continue }
-                guard windowY != nil else { continue }
-                
-                let rect = CGRect(x: windowX!, y: windowY!, width: windowWidth!, height: windowHeight!).topLeft2bottomLeft(NSScreen.screens[0])
+            for windowInfo in visibleWindows {
                 let isInRange = (
-                    x: mouseX >= rect.origin.x && mouseX <= (rect.origin.x + rect.size.width),
-                    y: mouseY >= rect.origin.y && mouseY <= (rect.origin.y + rect.size.height)
+                    x: mouseX >= windowInfo.rect.origin.x && mouseX <= (windowInfo.rect.origin.x + windowInfo.rect.size.width),
+                    y: mouseY >= windowInfo.rect.origin.y && mouseY <= (windowInfo.rect.origin.y + windowInfo.rect.size.height)
                 )
 
                 if isInRange.x && isInRange.y {
                     Logger.shared.debug("Found a window: \(windowInfo)")
-                    if let runningApp = NSRunningApplication.init(processIdentifier: appPid!) {
+                    if let runningApp = NSRunningApplication.init(processIdentifier: windowInfo.appPid) {
                         let app = SIApplication.init(runningApplication: runningApp)
                         let visibleWindows = app.visibleWindows()
 
                         for case let win as SIWindow in visibleWindows {
-                            if Int(win.windowID()) == windowNumber {
+                            if Int(win.windowID()) == windowInfo.windowNumber {
                                 self.selectedWindow = win
                                 break
                             }
