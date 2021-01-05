@@ -72,7 +72,7 @@ class WindowAlignmentManager {
             // Increase window size by WINDOW_ALIGNMENT_OFFSET without changing it's center,
             // so our window can perfectly align to it by sepecified offset
             let enlargedRect = CGRect(
-                x: otherWindow.rect.origin.x + WINDOW_ALIGNMENT_OFFSET,
+                x: otherWindow.rect.origin.x - WINDOW_ALIGNMENT_OFFSET,
                 y: otherWindow.rect.origin.y - WINDOW_ALIGNMENT_OFFSET,
                 width: otherWindow.rect.width + (2 * WINDOW_ALIGNMENT_OFFSET),
                 height: otherWindow.rect.height + (2 * WINDOW_ALIGNMENT_OFFSET)
