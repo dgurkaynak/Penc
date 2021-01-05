@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Cocoa
 
 let WINDOW_ALIGNMENT_OFFSET: CGFloat = 1.0
 
@@ -223,7 +224,7 @@ class WindowAlignmentManager {
                     ),
                     edgeModifier: bottomPointOf(_:),
                     skipContinuousCollisionCheck: true
-                ),
+                )
             ])
             
             // topEdge(A) >|< bottomEdge(B)
@@ -249,11 +250,54 @@ class WindowAlignmentManager {
                     ),
                     edgeModifier: topPointOf(_:),
                     skipContinuousCollisionCheck: true
-                ),
+                )
             ])
         }
         
-        // TODO: Add screen edges
+        // Add screen edges
+        for screen in NSScreen.screens {
+            self.verticalAlignments.append(contentsOf: [
+                // Left edge
+                VerticalEdgeAlignment(
+                    edge: .LEFT,
+                    alignTo: VerticalLineSegment(
+                        x: screen.visibleFrame.origin.x,
+                        y1: screen.visibleFrame.origin.y,
+                        y2: screen.visibleFrame.origin.y + screen.visibleFrame.size.height
+                    )
+                ),
+                // Right edge
+                VerticalEdgeAlignment(
+                    edge: .RIGHT,
+                    alignTo: VerticalLineSegment(
+                        x: screen.visibleFrame.origin.x + screen.visibleFrame.size.width,
+                        y1: screen.visibleFrame.origin.y,
+                        y2: screen.visibleFrame.origin.y + screen.visibleFrame.size.height
+                    )
+                )
+            ])
+            
+            self.horizontalAlignments.append(contentsOf: [
+                // Top edge
+                HorizontalEdgeAlignment(
+                    edge: .TOP,
+                    alignTo: HorizontalLineSegment(
+                        y: screen.visibleFrame.origin.y + screen.visibleFrame.size.height,
+                        x1: screen.visibleFrame.origin.x,
+                        x2: screen.visibleFrame.origin.x + screen.visibleFrame.size.width
+                    )
+                ),
+                // Bottom edge
+                HorizontalEdgeAlignment(
+                    edge: .BOTTOM,
+                    alignTo: HorizontalLineSegment(
+                        y: screen.visibleFrame.origin.y,
+                        x1: screen.visibleFrame.origin.x,
+                        x2: screen.visibleFrame.origin.x + screen.visibleFrame.size.width
+                    )
+                )
+            ])
+        }
     }
     
     // This function maps a cursor movement and returns a new one
