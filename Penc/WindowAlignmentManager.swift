@@ -121,8 +121,139 @@ class WindowAlignmentManager {
             self.horizontalAlignments.append(HorizontalEdgeAlignment(edge: .TOP, alignTo: enlargedRect.getBottomEdge()))
             self.horizontalAlignments.append(HorizontalEdgeAlignment(edge: .BOTTOM, alignTo: enlargedRect.getTopEdge()))
          
-            // TODO: Devam edeceksin kanki
+            // If windows' vertical edges are aligned (
+            //    leftEdge(A) >|< rightEdge(B)
+            //    OR
+            //    rightEdge(A) >|< leftEdge(B)
+            // ), we also want extra alignments:
+            // - topEdge(A) >|< topEdge(B)
+            // - bottomEdge(A) >|< bottomEdge(B)
+            //
+            // To do this, first we will get the leftest/righest point of our edge
+            // or Window A as an another line segment. (Let's call it LS1)
+            // Next, we will calculate little extension line segments from the
+            // target edges of Window B. And let's call any of them LS2.
+            //
+            //  ↓                ↓  <- these extensions
+            //  -+--------------+-
+            //   |              |
+            //   |   Window B   |
+            //   |              |
+            //  -+--------------+-
+            //  ↑                ↑  <- these extensions
+            //
+            // And the length of these extension is equal to WINDOW_ALIGNMENT_OFFSET.
+            // The trick is that the LS1 and LS2 only overlaps when Window A
+            // and Window B are aligned to each other.
+         
+            // rightEdge(A) >|< leftEdge(B)
+            self.horizontalAlignments.append(contentsOf: [
+                // topEdge(A) >|< topEdge(B)
+                HorizontalEdgeAlignment(
+                    edge: .TOP,
+                    alignTo: HorizontalLineSegment(
+                        y: otherWindow.rect.origin.y + otherWindow.rect.size.height,
+                        x1: otherWindow.rect.origin.x - WINDOW_ALIGNMENT_OFFSET,
+                        x2: otherWindow.rect.origin.x
+                    ),
+                    edgeModifier: rightPointOf(_:),
+                    skipContinuousCollisionCheck: true
+                ),
+                // bottomEdge(A) >|< bottomEdge(B)
+                HorizontalEdgeAlignment(
+                    edge: .BOTTOM,
+                    alignTo: HorizontalLineSegment(
+                        y: otherWindow.rect.origin.y,
+                        x1: otherWindow.rect.origin.x - WINDOW_ALIGNMENT_OFFSET,
+                        x2: otherWindow.rect.origin.x
+                    ),
+                    edgeModifier: rightPointOf(_:),
+                    skipContinuousCollisionCheck: true
+                )
+            ])
+            
+            // leftEdge(A) >|< rightEdge(B)
+            self.horizontalAlignments.append(contentsOf: [
+                // topEdge(A) >|< topEdge(B)
+                HorizontalEdgeAlignment(
+                    edge: .TOP,
+                    alignTo: HorizontalLineSegment(
+                        y: otherWindow.rect.origin.y + otherWindow.rect.size.height,
+                        x1: otherWindow.rect.origin.x + otherWindow.rect.size.width,
+                        x2: otherWindow.rect.origin.x + otherWindow.rect.size.width + WINDOW_ALIGNMENT_OFFSET
+                    ),
+                    edgeModifier: leftPointOf(_:),
+                    skipContinuousCollisionCheck: true
+                ),
+                // bottomEdge(A) >|< bottomEdge(B)
+                HorizontalEdgeAlignment(
+                    edge: .BOTTOM,
+                    alignTo: HorizontalLineSegment(
+                        y: otherWindow.rect.origin.y,
+                        x1: otherWindow.rect.origin.x + otherWindow.rect.size.width,
+                        x2: otherWindow.rect.origin.x + otherWindow.rect.size.width + WINDOW_ALIGNMENT_OFFSET
+                    ),
+                    edgeModifier: leftPointOf(_:),
+                    skipContinuousCollisionCheck: true
+                )
+            ])
+            
+            // Similarly add the extra vertical alignments
+            
+            // bottomEdge(A) >|< topEdge(B)
+            self.verticalAlignments.append(contentsOf: [
+                // leftEdge(A) >|< leftEdge(B)
+                VerticalEdgeAlignment(
+                    edge: .LEFT,
+                    alignTo: VerticalLineSegment(
+                        x: otherWindow.rect.origin.x,
+                        y1: otherWindow.rect.origin.y + otherWindow.rect.size.height,
+                        y2: otherWindow.rect.origin.y + otherWindow.rect.size.height + WINDOW_ALIGNMENT_OFFSET
+                    ),
+                    edgeModifier: bottomPointOf(_:),
+                    skipContinuousCollisionCheck: true
+                ),
+                // rightEdge(A) >|< rightEdge(B)
+                VerticalEdgeAlignment(
+                    edge: .RIGHT,
+                    alignTo: VerticalLineSegment(
+                        x: otherWindow.rect.origin.x + otherWindow.rect.size.width,
+                        y1: otherWindow.rect.origin.y + otherWindow.rect.size.height,
+                        y2: otherWindow.rect.origin.y + otherWindow.rect.size.height + WINDOW_ALIGNMENT_OFFSET
+                    ),
+                    edgeModifier: bottomPointOf(_:),
+                    skipContinuousCollisionCheck: true
+                ),
+            ])
+            
+            // topEdge(A) >|< bottomEdge(B)
+            self.verticalAlignments.append(contentsOf: [
+                // leftEdge(A) >|< leftEdge(B)
+                VerticalEdgeAlignment(
+                    edge: .LEFT,
+                    alignTo: VerticalLineSegment(
+                        x: otherWindow.rect.origin.x,
+                        y1: otherWindow.rect.origin.y - WINDOW_ALIGNMENT_OFFSET,
+                        y2: otherWindow.rect.origin.y
+                    ),
+                    edgeModifier: topPointOf(_:),
+                    skipContinuousCollisionCheck: true
+                ),
+                // rightEdge(A) >|< rightEdge(B)
+                VerticalEdgeAlignment(
+                    edge: .RIGHT,
+                    alignTo: VerticalLineSegment(
+                        x: otherWindow.rect.origin.x + otherWindow.rect.size.width,
+                        y1: otherWindow.rect.origin.y - WINDOW_ALIGNMENT_OFFSET,
+                        y2: otherWindow.rect.origin.y
+                    ),
+                    edgeModifier: topPointOf(_:),
+                    skipContinuousCollisionCheck: true
+                ),
+            ])
         }
+        
+        // TODO: Add screen edges
     }
     
     // This function maps a cursor movement and returns a new one
@@ -252,4 +383,20 @@ internal func getMaximumResistance(mouseMovementInAOtherDirection: CGFloat) -> C
     let absValue = abs(mouseMovementInAOtherDirection)
     if (absValue == 1) { return 94.0 }
     return 139.0
+}
+
+internal func rightPointOf(_ ls: HorizontalLineSegment) -> HorizontalLineSegment {
+    return HorizontalLineSegment(y: ls.y, x1: ls.x2, x2: ls.x2)
+}
+
+internal func leftPointOf(_ ls: HorizontalLineSegment) -> HorizontalLineSegment {
+    return HorizontalLineSegment(y: ls.y, x1: ls.x1, x2: ls.x1)
+}
+
+internal func bottomPointOf(_ ls: VerticalLineSegment) -> VerticalLineSegment {
+    return VerticalLineSegment(x: ls.x, y1: ls.y1, y2: ls.y1)
+}
+
+internal func topPointOf(_ ls: VerticalLineSegment) -> VerticalLineSegment {
+    return VerticalLineSegment(x: ls.x, y1: ls.y2, y2: ls.y2)
 }
