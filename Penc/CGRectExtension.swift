@@ -21,7 +21,6 @@ enum RectAnchorPoint {
     case CENTER
 }
 
-
 extension CGRect {
     // NSRect or CGRect's signiture is => { x, y, width, height }
     // Silica uses top-left corner of the main screen as origin and
@@ -108,5 +107,41 @@ extension CGRect {
         }
         
         return CGPoint(x: x, y: y)
+    }
+    
+    // Works for bottom-left originated rects
+    func getTopEdge() -> HorizontalLineSegment {
+        return HorizontalLineSegment(
+            y: self.origin.y + self.size.height,
+            x1: self.origin.x,
+            x2: self.origin.x + self.size.width
+        )
+    }
+    
+    // Works for bottom-left originated rects
+    func getBottomEdge() -> HorizontalLineSegment {
+        return HorizontalLineSegment(
+            y: self.origin.y,
+            x1: self.origin.x,
+            x2: self.origin.x + self.size.width
+        )
+    }
+    
+    // Works for bottom-left originated rects
+    func getLeftEdge() -> VerticalLineSegment {
+        return VerticalLineSegment(
+            x: self.origin.x,
+            y1: self.origin.y,
+            y2: self.origin.y + self.size.height
+        )
+    }
+    
+    // Works for bottom-left originated rects
+    func getRightEdge() -> VerticalLineSegment {
+        return VerticalLineSegment(
+            x: self.origin.x + self.size.width,
+            y1: self.origin.y,
+            y2: self.origin.y + self.size.height
+        )
     }
 }
