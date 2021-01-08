@@ -346,13 +346,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         else if isEnterKeyPressed { self.onDoubleClickGesture() }
     }
     
-    func onScrollGesture(delta: (x: CGFloat, y: CGFloat)) {
+    func onScrollGesture(delta: (x: CGFloat, y: CGFloat), timestamp: Double) {
         guard self.active else { return }
         guard self.selectedWindow!.isMovable() else { return }
         guard self.windowAlignmentManager != nil else { return }
         
         let rect = self.placeholderWindow.frame
-        let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y))
+        let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: timestamp)
         let newRect = CGRect(
             x: rect.origin.x + newMovement.x,
             y: rect.origin.y + newMovement.y,

@@ -10,6 +10,7 @@ import Foundation
 import Cocoa
 
 let WINDOW_ALIGNMENT_OFFSET: CGFloat = 1.0
+let WINDOW_ALIGNMENT_SPEED_LIMIT: Double = 400
 
 enum VerticalEdgeType {
     case LEFT
@@ -44,6 +45,7 @@ class WindowAlignmentManager {
     private var otherWindows: [WindowInfo] // assuming array starts from frontmost window
     private var totalResistedX: CGFloat = 0.0
     private var totalResistedY: CGFloat = 0.0
+    private var latestTimestamp: Double?
     
     private var verticalAlignments: [VerticalEdgeAlignment] = []
     private var horizontalAlignments: [HorizontalEdgeAlignment] = []
@@ -305,7 +307,7 @@ class WindowAlignmentManager {
     //
     // Assuming bottom-left originated movement
     // So upper direction is +y, right direction is +x
-    func map(movement: (x: CGFloat, y: CGFloat)) -> (x: CGFloat, y: CGFloat) {
+    func map(movement: (x: CGFloat, y: CGFloat), timestamp: Double) -> (x: CGFloat, y: CGFloat) {
         let currentFrame = self.getWindowFrame()
         let currentX = currentFrame.origin.x
         let currentY = currentFrame.origin.y
@@ -316,55 +318,67 @@ class WindowAlignmentManager {
         let currentLeftEdge = currentFrame.getLeftEdge()
         let currentRightEdge = currentFrame.getRightEdge()
         
+        let deltaTime = self.latestTimestamp != nil ? timestamp - self.latestTimestamp! : nil
+        self.latestTimestamp = timestamp
+        let speedX = deltaTime != nil ? Double(movement.x) / deltaTime! : nil
+        let speedY = deltaTime != nil ? Double(movement.y) / deltaTime! : nil
+        
         //------------------//
         //----- X-AXIS -----//
         //------------------//
         
         // If user is not moved x-axis, do not check
         if movement.x != 0 {
-            // Let's check if we're already aligned to something
-            let alignedTarget = self.verticalAlignments.first { (alignment) -> Bool in
-                let currentEdge = alignment.edge == .LEFT ? currentLeftEdge : currentRightEdge
-                let currentEdgeLineSegment = alignment.edgeModifier == nil ? currentEdge : alignment.edgeModifier!(currentEdge)
-                return currentEdgeLineSegment.isOverlapping(with: alignment.alignTo)
-            }
-            
-            // If we already aligned to a target, check the current state
-            if alignedTarget != nil {
-                let maxResistance = getMaximumResistance(mouseMovementInAOtherDirection: movement.y)
-                
-                if abs(self.totalResistedX) < maxResistance {
-                    // Continue resisting
-                    self.totalResistedX = self.totalResistedX + movement.x
-                    newMovement.x = 0
-                } else {
-                    // Break resistance
-                    self.totalResistedX = 0
-                }
+            // If moving above speed limit
+            if speedX != nil && abs(speedX!) >= WINDOW_ALIGNMENT_SPEED_LIMIT {
+                self.totalResistedX = 0
             } else {
-                // We're not already aligned to a target
-                // Let's check whether we're going to align in next step
-                let collidedTarget = self.verticalAlignments.first { (alignment) -> Bool in
-                    if alignment.skipContinuousCollisionCheck != nil &&
-                        alignment.skipContinuousCollisionCheck == true {
-                        return false
-                    }
-                    
+                // Speed limit is not exceeded
+                
+                // Let's check if we're already aligned to something
+                let alignedTarget = self.verticalAlignments.first { (alignment) -> Bool in
                     let currentEdge = alignment.edge == .LEFT ? currentLeftEdge : currentRightEdge
                     let currentEdgeLineSegment = alignment.edgeModifier == nil ? currentEdge : alignment.edgeModifier!(currentEdge)
-                    return currentEdgeLineSegment.checkContinuousCollision(withTarget: alignment.alignTo, movement: movement)
+                    return currentEdgeLineSegment.isOverlapping(with: alignment.alignTo)
                 }
                 
-                if collidedTarget != nil {
-                    let alignedX = collidedTarget!.alignTo.x
-                    let alignedOriginX = collidedTarget!.edge == .RIGHT ? alignedX - currentFrame.size.width : alignedX
+                // If we already aligned to a target, check the current state
+                if alignedTarget != nil {
+                    let maxResistance = getMaximumResistance(mouseMovementInAOtherDirection: movement.y)
                     
-                    let resistedDeltaX = currentX + movement.x - alignedOriginX
-                    self.totalResistedX = self.totalResistedX + resistedDeltaX
-                    newMovement.x = alignedOriginX - currentX
-                }
-            }
-        }
+                    if abs(self.totalResistedX) < maxResistance {
+                        // Continue resisting
+                        self.totalResistedX = self.totalResistedX + movement.x
+                        newMovement.x = 0
+                    } else {
+                        // Break resistance
+                        self.totalResistedX = 0
+                    }
+                } else {
+                    // We're not already aligned to a target
+                    // Let's check whether we're going to align in next step
+                    let collidedTarget = self.verticalAlignments.first { (alignment) -> Bool in
+                        if alignment.skipContinuousCollisionCheck != nil &&
+                            alignment.skipContinuousCollisionCheck == true {
+                            return false
+                        }
+                        
+                        let currentEdge = alignment.edge == .LEFT ? currentLeftEdge : currentRightEdge
+                        let currentEdgeLineSegment = alignment.edgeModifier == nil ? currentEdge : alignment.edgeModifier!(currentEdge)
+                        return currentEdgeLineSegment.checkContinuousCollision(withTarget: alignment.alignTo, movement: movement)
+                    }
+                    
+                    if collidedTarget != nil {
+                        let alignedX = collidedTarget!.alignTo.x
+                        let alignedOriginX = collidedTarget!.edge == .RIGHT ? alignedX - currentFrame.size.width : alignedX
+                        
+                        let resistedDeltaX = currentX + movement.x - alignedOriginX
+                        self.totalResistedX = self.totalResistedX + resistedDeltaX
+                        newMovement.x = alignedOriginX - currentX
+                    }
+                } // end of alignedTarget else
+            } // end of speedX check
+        } // end of movement.x check
         
         //------------------//
         //----- Y-AXIS -----//
@@ -372,50 +386,56 @@ class WindowAlignmentManager {
         
         // If user is not moved y-axis, do not check
         if movement.y != 0 {
-            // Let's check if we're already aligned to something
-            let alignedTarget = self.horizontalAlignments.first { (alignment) -> Bool in
-                let currentEdge = alignment.edge == .TOP ? currentTopEdge : currentBottomEdge
-                let currentEdgeLineSegment = alignment.edgeModifier == nil ? currentEdge : alignment.edgeModifier!(currentEdge)
-                return currentEdgeLineSegment.isOverlapping(with: alignment.alignTo)
-            }
-            
-            // If we already aligned to a target, check the current state
-            if alignedTarget != nil {
-                let maxResistance = getMaximumResistance(mouseMovementInAOtherDirection: movement.x)
-                
-                if abs(self.totalResistedY) < maxResistance {
-                    // Continue resisting
-                    self.totalResistedY = self.totalResistedY + movement.y
-                    newMovement.y = 0
-                } else {
-                    // Break resistance
-                    self.totalResistedY = 0
-                }
+            // If moving above speed limit
+            if speedY != nil && abs(speedY!) >= WINDOW_ALIGNMENT_SPEED_LIMIT {
+                self.totalResistedY = 0
             } else {
-                // We're not already aligned to a target
-                // Let's check whether we're going to align in next step
-                let collidedTarget = self.horizontalAlignments.first { (alignment) -> Bool in
-                    if alignment.skipContinuousCollisionCheck != nil &&
-                        alignment.skipContinuousCollisionCheck == true {
-                        return false
-                    }
-                    
+                // Speed limit is not exceeded
+                
+                // Let's check if we're already aligned to something
+                let alignedTarget = self.horizontalAlignments.first { (alignment) -> Bool in
                     let currentEdge = alignment.edge == .TOP ? currentTopEdge : currentBottomEdge
                     let currentEdgeLineSegment = alignment.edgeModifier == nil ? currentEdge : alignment.edgeModifier!(currentEdge)
-                    return currentEdgeLineSegment.checkContinuousCollision(withTarget: alignment.alignTo, movement: movement)
+                    return currentEdgeLineSegment.isOverlapping(with: alignment.alignTo)
                 }
                 
-                if collidedTarget != nil {
-                    let alignedY = collidedTarget!.alignTo.y
-                    let alignedOriginY = collidedTarget!.edge == .TOP ? alignedY - currentFrame.size.height : alignedY
+                // If we already aligned to a target, check the current state
+                if alignedTarget != nil {
+                    let maxResistance = getMaximumResistance(mouseMovementInAOtherDirection: movement.x)
                     
-                    let resistedDeltaY = currentY + movement.y - alignedOriginY
-                    self.totalResistedY = self.totalResistedY + resistedDeltaY
-                    newMovement.y = alignedOriginY - currentY
-                }
-            }
-            
-        }
+                    if abs(self.totalResistedY) < maxResistance {
+                        // Continue resisting
+                        self.totalResistedY = self.totalResistedY + movement.y
+                        newMovement.y = 0
+                    } else {
+                        // Break resistance
+                        self.totalResistedY = 0
+                    }
+                } else {
+                    // We're not already aligned to a target
+                    // Let's check whether we're going to align in next step
+                    let collidedTarget = self.horizontalAlignments.first { (alignment) -> Bool in
+                        if alignment.skipContinuousCollisionCheck != nil &&
+                            alignment.skipContinuousCollisionCheck == true {
+                            return false
+                        }
+                        
+                        let currentEdge = alignment.edge == .TOP ? currentTopEdge : currentBottomEdge
+                        let currentEdgeLineSegment = alignment.edgeModifier == nil ? currentEdge : alignment.edgeModifier!(currentEdge)
+                        return currentEdgeLineSegment.checkContinuousCollision(withTarget: alignment.alignTo, movement: movement)
+                    }
+                    
+                    if collidedTarget != nil {
+                        let alignedY = collidedTarget!.alignTo.y
+                        let alignedOriginY = collidedTarget!.edge == .TOP ? alignedY - currentFrame.size.height : alignedY
+                        
+                        let resistedDeltaY = currentY + movement.y - alignedOriginY
+                        self.totalResistedY = self.totalResistedY + resistedDeltaY
+                        newMovement.y = alignedOriginY - currentY
+                    }
+                } // end of alignedTarget check
+            } // end of speedY check
+        } // end of movement.y check
         
         return newMovement
     }

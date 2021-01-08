@@ -20,7 +20,7 @@ enum SwipeGestureType {
 }
 
 protocol GestureOverlayWindowDelegate: class {
-    func onScrollGesture(delta: (x: CGFloat, y: CGFloat))
+    func onScrollGesture(delta: (x: CGFloat, y: CGFloat), timestamp: Double)
     func onSwipeGesture(type: SwipeGestureType)
     func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat))
     func onDoubleClickGesture()
@@ -122,7 +122,7 @@ class GestureOverlayWindow: NSWindow {
             if self.reverseScroll { factor *= -1 }
             let delta = (x: factor * event.scrollingDeltaX, y: factor * event.scrollingDeltaY)
             self.latestScrollingDelta = delta
-            self.delegate_?.onScrollGesture(delta: delta)
+            self.delegate_?.onScrollGesture(delta: delta, timestamp: event.timestamp)
         } else if event.phase == NSEvent.Phase.ended {
             // Maybe swiping?
             if self.latestScrollingDelta == nil { return }
