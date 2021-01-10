@@ -23,6 +23,7 @@ protocol GestureOverlayWindowDelegate: class {
     func onScrollGesture(delta: (x: CGFloat, y: CGFloat), timestamp: Double)
     func onSwipeGesture(type: SwipeGestureType)
     func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat))
+    func onMouseMoveGesture(position: (x: CGFloat, y: CGFloat))
     func onDoubleClickGesture()
 }
 
@@ -86,6 +87,12 @@ class GestureOverlayWindow: NSWindow {
     
     override var canBecomeKey: Bool {
         return true
+    }
+    
+    override func mouseMoved(with event: NSEvent) {
+        let mouseX = NSEvent.mouseLocation.x
+        let mouseY = NSEvent.mouseLocation.y // bottom-left origined
+        self.delegate_?.onMouseMoveGesture(position: (x: mouseX, y: mouseY))
     }
     
     override func mouseDragged(with event: NSEvent) {

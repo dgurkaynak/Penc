@@ -141,6 +141,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.gestureOverlayWindow.level = .popUpMenu
         self.gestureOverlayWindow.isOpaque = false
         self.gestureOverlayWindow.ignoresMouseEvents = false
+        self.gestureOverlayWindow.acceptsMouseMovedEvents = true
         self.gestureOverlayWindow.contentView!.allowedTouchTypes = [.indirect]
         self.gestureOverlayWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
     }
@@ -523,6 +524,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
         
         self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
+    }
+    
+    func onMouseMoveGesture(position: (x: CGFloat, y: CGFloat)) {
+        guard self.active else { return }
+        guard self.placeholderWindow.screen != nil else { return }
+        print("mouse moved \(position)")
     }
     
     func menuWillOpen(_ menu: NSMenu) {
