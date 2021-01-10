@@ -217,12 +217,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             Logger.shared.debug("Looking for the window under mouse cursor -- X=\(mouseX), Y=\(mouseY)")
             
             for windowInfo in visibleWindows {
-                let isInRange = (
-                    x: mouseX >= windowInfo.rect.origin.x && mouseX <= (windowInfo.rect.origin.x + windowInfo.rect.size.width),
-                    y: mouseY >= windowInfo.rect.origin.y && mouseY <= (windowInfo.rect.origin.y + windowInfo.rect.size.height)
-                )
-
-                if isInRange.x && isInRange.y {
+                if windowInfo.rect.contains(CGPoint(x: mouseX, y: mouseY)) {
                     Logger.shared.debug("Found a window: \(windowInfo)")
                     if let runningApp = NSRunningApplication.init(processIdentifier: windowInfo.appPid) {
                         let app = SIApplication.init(runningApplication: runningApp)
