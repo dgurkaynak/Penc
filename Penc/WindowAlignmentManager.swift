@@ -41,7 +41,7 @@ struct HorizontalEdgeAlignment {
 }
 
 class WindowAlignmentManager {
-    private var getWindowFrame: () -> CGRect // expects bottom-left originated
+    private var selectedWindowFrame: CGRect // expects bottom-left originated
     private var otherWindows: [Int: WindowInfo]
     private var totalResistedX: CGFloat = 0.0
     private var totalResistedY: CGFloat = 0.0
@@ -51,13 +51,17 @@ class WindowAlignmentManager {
     private var horizontalAlignments: [HorizontalEdgeAlignment] = []
     
     init(
-        getWindowFrame: @escaping () -> CGRect, // expects bottom-left originated
+        selectedWindowFrame: CGRect, // expects bottom-left originated
         otherWindows: [Int: WindowInfo]
     ) {
-        self.getWindowFrame = getWindowFrame
+        self.selectedWindowFrame = selectedWindowFrame
         self.otherWindows = otherWindows
         
         self.buildAlignments()
+    }
+    
+    func updateSelectedWindowFrame(_ selectedWindowFrame: CGRect) {
+        self.selectedWindowFrame = selectedWindowFrame
     }
     
     private func buildAlignments() {
@@ -312,7 +316,7 @@ class WindowAlignmentManager {
     // Assuming bottom-left originated movement
     // So upper direction is +y, right direction is +x
     func map(movement: (x: CGFloat, y: CGFloat), timestamp: Double) -> (x: CGFloat, y: CGFloat) {
-        let currentFrame = self.getWindowFrame()
+        let currentFrame = self.selectedWindowFrame
         let currentX = currentFrame.origin.x
         let currentY = currentFrame.origin.y
         var newMovement = (x: movement.x, y: movement.y)

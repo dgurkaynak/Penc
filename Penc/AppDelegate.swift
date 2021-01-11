@@ -271,12 +271,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             guard windowInfo.windowNumber != self.selectedWindow!.windowID() else { return }
             otherWindowsDictionary[windowInfo.windowNumber] = windowInfo
         }
-        self.windowAlignmentManager = WindowAlignmentManager(getWindowFrame: { () -> CGRect in
-            return self.placeholderWindow.frame
-        }, otherWindows: otherWindowsDictionary)
+        self.windowAlignmentManager = WindowAlignmentManager(
+            selectedWindowFrame: self.placeholderWindow.frame,
+            otherWindows: otherWindowsDictionary
+        )
         
         let selectedWindowRect = self.selectedWindow!.getFrameBottomLeft()
         self.placeholderWindow.setFrame(selectedWindowRect, display: true, animate: false)
+        self.windowAlignmentManager?.updateSelectedWindowFrame(self.placeholderWindow.frame)
         self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
         
         self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
@@ -358,6 +360,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             height: rect.height
         )
         self.placeholderWindow.setFrame(newRect, display: true, animate: false)
+        self.windowAlignmentManager?.updateSelectedWindowFrame(self.placeholderWindow.frame)
         
         self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
     }
