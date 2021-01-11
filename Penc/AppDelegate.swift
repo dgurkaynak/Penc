@@ -266,12 +266,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.active = true
         
         // Setup window alignment manager
-        let otherWindows = visibleWindows.filter { (windowInfo) -> Bool in
-            return windowInfo.windowNumber != self.selectedWindow!.windowID()
+        var otherWindowsDictionary = [Int: WindowInfo]()
+        visibleWindows.forEach { (windowInfo) in
+            guard windowInfo.windowNumber != self.selectedWindow!.windowID() else { return }
+            otherWindowsDictionary[windowInfo.windowNumber] = windowInfo
         }
         self.windowAlignmentManager = WindowAlignmentManager(getWindowFrame: { () -> CGRect in
             return self.placeholderWindow.frame
-        }, otherWindows: otherWindows)
+        }, otherWindows: otherWindowsDictionary)
         
         let selectedWindowRect = self.selectedWindow!.getFrameBottomLeft()
         self.placeholderWindow.setFrame(selectedWindowRect, display: true, animate: false)

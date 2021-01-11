@@ -42,7 +42,7 @@ struct HorizontalEdgeAlignment {
 
 class WindowAlignmentManager {
     private var getWindowFrame: () -> CGRect // expects bottom-left originated
-    private var otherWindows: [WindowInfo] // assuming array starts from frontmost window
+    private var otherWindows: [Int: WindowInfo]
     private var totalResistedX: CGFloat = 0.0
     private var totalResistedY: CGFloat = 0.0
     private var latestTimestamp: Double?
@@ -52,7 +52,7 @@ class WindowAlignmentManager {
     
     init(
         getWindowFrame: @escaping () -> CGRect, // expects bottom-left originated
-        otherWindows: [WindowInfo] // assuming array starts from frontmost window
+        otherWindows: [Int: WindowInfo]
     ) {
         self.getWindowFrame = getWindowFrame
         self.otherWindows = otherWindows
@@ -71,7 +71,11 @@ class WindowAlignmentManager {
         self.horizontalAlignments = []
         
         // Start iterating from the back-most window
-        for otherWindow in self.otherWindows.reversed() {
+        let otherWindowsSorted = self.otherWindows.values.sorted { (a, b) -> Bool in
+            a.zIndex < b.zIndex
+        }
+        
+        for otherWindow in otherWindowsSorted {
             // Increase window size by WINDOW_ALIGNMENT_OFFSET without changing it's center,
             // so our window can perfectly align to it by sepecified offset
             let enlargedRect = CGRect(

@@ -18,6 +18,7 @@ struct WindowInfo {
     var appPid: pid_t
     var windowNumber: Int
     var rect: CGRect // bottom-left originated
+    var zIndex: Int
     
     // Order of windows starts from frontmost visible window
     static func getVisibleWindows() throws -> [WindowInfo] {
@@ -31,6 +32,7 @@ struct WindowInfo {
         }
         
         var visibleWindows: [WindowInfo] = []
+        var zIndex = 0
         
         for windowInfo in visibleWindowsInfo as! [NSDictionary] {
             // Ignore dock, desktop, menubar stuff: https://stackoverflow.com/a/5286921
@@ -56,8 +58,10 @@ struct WindowInfo {
             guard windowY != nil else { continue }
             
             let rect = CGRect(x: windowX!, y: windowY!, width: windowWidth!, height: windowHeight!).topLeft2bottomLeft(NSScreen.screens[0])
-            let window = WindowInfo(appPid: appPid!, windowNumber: windowNumber!, rect: rect)
+            let window = WindowInfo(appPid: appPid!, windowNumber: windowNumber!, rect: rect, zIndex: zIndex)
             visibleWindows.append(window)
+            
+            zIndex = zIndex - 1
         }
         
         return visibleWindows
