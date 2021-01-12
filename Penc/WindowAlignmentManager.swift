@@ -42,7 +42,7 @@ struct HorizontalEdgeAlignment {
 
 class WindowAlignmentManager {
     private var selectedWindowFrame: CGRect // expects bottom-left originated
-    private var otherWindows: [Int: WindowInfo]
+    private var otherWindows: [Int: PWindowHandle]
     private var totalResistedX: CGFloat = 0.0
     private var totalResistedY: CGFloat = 0.0
     private var latestTimestamp: Double?
@@ -52,7 +52,7 @@ class WindowAlignmentManager {
     
     init(
         selectedWindowFrame: CGRect, // expects bottom-left originated
-        otherWindows: [Int: WindowInfo]
+        otherWindows: [Int: PWindowHandle]
     ) {
         self.selectedWindowFrame = selectedWindowFrame
         self.otherWindows = otherWindows
@@ -83,17 +83,17 @@ class WindowAlignmentManager {
             // Increase window size by WINDOW_ALIGNMENT_OFFSET without changing it's center,
             // so our window can perfectly align to it by sepecified offset
             let enlargedRect = CGRect(
-                x: otherWindow.rect.origin.x - WINDOW_ALIGNMENT_OFFSET,
-                y: otherWindow.rect.origin.y - WINDOW_ALIGNMENT_OFFSET,
-                width: otherWindow.rect.width + (2 * WINDOW_ALIGNMENT_OFFSET),
-                height: otherWindow.rect.height + (2 * WINDOW_ALIGNMENT_OFFSET)
+                x: otherWindow.newRect.origin.x - WINDOW_ALIGNMENT_OFFSET,
+                y: otherWindow.newRect.origin.y - WINDOW_ALIGNMENT_OFFSET,
+                width: otherWindow.newRect.width + (2 * WINDOW_ALIGNMENT_OFFSET),
+                height: otherWindow.newRect.height + (2 * WINDOW_ALIGNMENT_OFFSET)
             )
             
             // This enlarged window may be overlapping previous line segments,
             // so let's go check and clip them
             var newVerticalAlignments: [VerticalEdgeAlignment] = []
             for verticalAlignment in self.verticalAlignments {
-                let newLineSegments = verticalAlignment.alignTo.invertedClip(withRegion: otherWindow.rect)
+                let newLineSegments = verticalAlignment.alignTo.invertedClip(withRegion: otherWindow.newRect)
                 for newLineSegment in newLineSegments {
                     let newVerticalAlignment = VerticalEdgeAlignment(
                         edge: verticalAlignment.edge,
@@ -109,7 +109,7 @@ class WindowAlignmentManager {
             // Let's do the same with horizontal alignments
             var newHorizontalAlignmets: [HorizontalEdgeAlignment] = []
             for horizontalAlignment in self.horizontalAlignments {
-                let newLineSegments = horizontalAlignment.alignTo.invertedClip(withRegion: otherWindow.rect)
+                let newLineSegments = horizontalAlignment.alignTo.invertedClip(withRegion: otherWindow.newRect)
                 for newLineSegment in newLineSegments {
                     let newHorizontalAlignment = HorizontalEdgeAlignment(
                         edge: horizontalAlignment.edge,
@@ -163,9 +163,9 @@ class WindowAlignmentManager {
                 HorizontalEdgeAlignment(
                     edge: .TOP,
                     alignTo: HorizontalLineSegment(
-                        y: otherWindow.rect.origin.y + otherWindow.rect.size.height,
-                        x1: otherWindow.rect.origin.x - WINDOW_ALIGNMENT_OFFSET,
-                        x2: otherWindow.rect.origin.x
+                        y: otherWindow.newRect.origin.y + otherWindow.newRect.size.height,
+                        x1: otherWindow.newRect.origin.x - WINDOW_ALIGNMENT_OFFSET,
+                        x2: otherWindow.newRect.origin.x
                     ),
                     edgeModifier: rightPointOf(_:),
                     skipContinuousCollisionCheck: true
@@ -174,9 +174,9 @@ class WindowAlignmentManager {
                 HorizontalEdgeAlignment(
                     edge: .BOTTOM,
                     alignTo: HorizontalLineSegment(
-                        y: otherWindow.rect.origin.y,
-                        x1: otherWindow.rect.origin.x - WINDOW_ALIGNMENT_OFFSET,
-                        x2: otherWindow.rect.origin.x
+                        y: otherWindow.newRect.origin.y,
+                        x1: otherWindow.newRect.origin.x - WINDOW_ALIGNMENT_OFFSET,
+                        x2: otherWindow.newRect.origin.x
                     ),
                     edgeModifier: rightPointOf(_:),
                     skipContinuousCollisionCheck: true
@@ -189,9 +189,9 @@ class WindowAlignmentManager {
                 HorizontalEdgeAlignment(
                     edge: .TOP,
                     alignTo: HorizontalLineSegment(
-                        y: otherWindow.rect.origin.y + otherWindow.rect.size.height,
-                        x1: otherWindow.rect.origin.x + otherWindow.rect.size.width,
-                        x2: otherWindow.rect.origin.x + otherWindow.rect.size.width + WINDOW_ALIGNMENT_OFFSET
+                        y: otherWindow.newRect.origin.y + otherWindow.newRect.size.height,
+                        x1: otherWindow.newRect.origin.x + otherWindow.newRect.size.width,
+                        x2: otherWindow.newRect.origin.x + otherWindow.newRect.size.width + WINDOW_ALIGNMENT_OFFSET
                     ),
                     edgeModifier: leftPointOf(_:),
                     skipContinuousCollisionCheck: true
@@ -200,9 +200,9 @@ class WindowAlignmentManager {
                 HorizontalEdgeAlignment(
                     edge: .BOTTOM,
                     alignTo: HorizontalLineSegment(
-                        y: otherWindow.rect.origin.y,
-                        x1: otherWindow.rect.origin.x + otherWindow.rect.size.width,
-                        x2: otherWindow.rect.origin.x + otherWindow.rect.size.width + WINDOW_ALIGNMENT_OFFSET
+                        y: otherWindow.newRect.origin.y,
+                        x1: otherWindow.newRect.origin.x + otherWindow.newRect.size.width,
+                        x2: otherWindow.newRect.origin.x + otherWindow.newRect.size.width + WINDOW_ALIGNMENT_OFFSET
                     ),
                     edgeModifier: leftPointOf(_:),
                     skipContinuousCollisionCheck: true
@@ -217,9 +217,9 @@ class WindowAlignmentManager {
                 VerticalEdgeAlignment(
                     edge: .LEFT,
                     alignTo: VerticalLineSegment(
-                        x: otherWindow.rect.origin.x,
-                        y1: otherWindow.rect.origin.y + otherWindow.rect.size.height,
-                        y2: otherWindow.rect.origin.y + otherWindow.rect.size.height + WINDOW_ALIGNMENT_OFFSET
+                        x: otherWindow.newRect.origin.x,
+                        y1: otherWindow.newRect.origin.y + otherWindow.newRect.size.height,
+                        y2: otherWindow.newRect.origin.y + otherWindow.newRect.size.height + WINDOW_ALIGNMENT_OFFSET
                     ),
                     edgeModifier: bottomPointOf(_:),
                     skipContinuousCollisionCheck: true
@@ -228,9 +228,9 @@ class WindowAlignmentManager {
                 VerticalEdgeAlignment(
                     edge: .RIGHT,
                     alignTo: VerticalLineSegment(
-                        x: otherWindow.rect.origin.x + otherWindow.rect.size.width,
-                        y1: otherWindow.rect.origin.y + otherWindow.rect.size.height,
-                        y2: otherWindow.rect.origin.y + otherWindow.rect.size.height + WINDOW_ALIGNMENT_OFFSET
+                        x: otherWindow.newRect.origin.x + otherWindow.newRect.size.width,
+                        y1: otherWindow.newRect.origin.y + otherWindow.newRect.size.height,
+                        y2: otherWindow.newRect.origin.y + otherWindow.newRect.size.height + WINDOW_ALIGNMENT_OFFSET
                     ),
                     edgeModifier: bottomPointOf(_:),
                     skipContinuousCollisionCheck: true
@@ -243,9 +243,9 @@ class WindowAlignmentManager {
                 VerticalEdgeAlignment(
                     edge: .LEFT,
                     alignTo: VerticalLineSegment(
-                        x: otherWindow.rect.origin.x,
-                        y1: otherWindow.rect.origin.y - WINDOW_ALIGNMENT_OFFSET,
-                        y2: otherWindow.rect.origin.y
+                        x: otherWindow.newRect.origin.x,
+                        y1: otherWindow.newRect.origin.y - WINDOW_ALIGNMENT_OFFSET,
+                        y2: otherWindow.newRect.origin.y
                     ),
                     edgeModifier: topPointOf(_:),
                     skipContinuousCollisionCheck: true
@@ -254,9 +254,9 @@ class WindowAlignmentManager {
                 VerticalEdgeAlignment(
                     edge: .RIGHT,
                     alignTo: VerticalLineSegment(
-                        x: otherWindow.rect.origin.x + otherWindow.rect.size.width,
-                        y1: otherWindow.rect.origin.y - WINDOW_ALIGNMENT_OFFSET,
-                        y2: otherWindow.rect.origin.y
+                        x: otherWindow.newRect.origin.x + otherWindow.newRect.size.width,
+                        y1: otherWindow.newRect.origin.y - WINDOW_ALIGNMENT_OFFSET,
+                        y2: otherWindow.newRect.origin.y
                     ),
                     edgeModifier: topPointOf(_:),
                     skipContinuousCollisionCheck: true

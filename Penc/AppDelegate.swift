@@ -22,12 +22,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
     let gestureOverlayWindow = GestureOverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
-    let placeholderWindow = PlaceholderWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
-    let placeholderWindowViewController = PlaceholderWindowViewController.freshController()
     let preferencesWindowController = PreferencesWindowController.freshController()
     let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
     var focusedWindow: SIWindow? = nil
-    var selectedWindow: SIWindow? = nil
+    var selectedWindowHandle: PWindowHandle? = nil
     let keyboardListener = KeyboardListener()
     var disabled = false
     var windowAlignmentManager: WindowAlignmentManager? = nil
@@ -60,7 +58,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             self.gestureOverlayWindow.setDelegate(self)
             self.keyboardListener.setDelegate(self)
             
-            self.setupPlaceholderWindow()
             self.setupOverlayWindow()
             self.setupAboutWindow()
             self.onPreferencesChanged()
@@ -127,16 +124,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.statusItem.menu?.delegate = self
     }
     
-    func setupPlaceholderWindow() {
-        self.placeholderWindow.level = .floating
-        self.placeholderWindow.isOpaque = false
-        self.placeholderWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
-        self.placeholderWindow.contentViewController = self.placeholderWindowViewController
-        self.placeholderWindow.delegate = self.placeholderWindowViewController
-        
-        self.placeholderWindowViewController.toggleWindowSizeTextField(Preferences.shared.showWindowSize)
-    }
-    
     func setupOverlayWindow() {
         self.gestureOverlayWindow.level = .popUpMenu
         self.gestureOverlayWindow.isOpaque = false
@@ -169,7 +156,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.keyboardListener.holdActivationModifierKeyTimeout = Double(preferences.holdDuration)
         self.gestureOverlayWindow.swipeThreshold = preferences.swipeThreshold
         self.gestureOverlayWindow.reverseScroll = preferences.reverseScroll
-        self.placeholderWindowViewController.toggleWindowSizeTextField(preferences.showWindowSize)
+        // TODO: Fix this
+//        self.placeholderWindowViewController.toggleWindowSizeTextField(preferences.showWindowSize)
     }
     
     func onActivationStarted() {
@@ -186,8 +174,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
         
         self.focusedWindow = SIWindow.focused()
-        self.selectedWindow = nil
-        
         // If focused window is finder's desktop window, ignore
         if self.focusedWindow?.title() == nil {
             if let focusedApp = self.focusedWindow?.app() {
@@ -198,10 +184,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             }
         }
         
+        self.selectedWindowHandle = nil
+        
         // Get visible windows on the screen
-        var visibleWindows: [WindowInfo] = []
+        var visibleWindowHandles = [PWindowHandle]()
         do {
-            visibleWindows = try WindowInfo.getVisibleWindows()
+            visibleWindowHandles = try PWindowHandle.visibleWindowHandles()
         } catch {
             Logger.shared.error("Not gonna activate, could not get visible windows: \(error.localizedDescription)")
             self.abortSound?.play()
@@ -210,26 +198,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         switch Preferences.shared.windowSelection {
         case "focused":
-            self.selectedWindow = self.focusedWindow
+            if self.focusedWindow != nil {
+                let focusedWindowNumber = self.focusedWindow!.windowID()
+                self.selectedWindowHandle = visibleWindowHandles.first(where: { (windowHandle) -> Bool in
+                    return windowHandle.windowNumber == focusedWindowNumber
+                })
+            }
         case "underCursor":
             let mouseX = NSEvent.mouseLocation.x
             let mouseY = NSEvent.mouseLocation.y // bottom-left origined
             Logger.shared.debug("Looking for the window under mouse cursor -- X=\(mouseX), Y=\(mouseY)")
             
-            for windowInfo in visibleWindows {
-                if windowInfo.rect.contains(CGPoint(x: mouseX, y: mouseY)) {
-                    Logger.shared.debug("Found a window: \(windowInfo)")
-                    if let runningApp = NSRunningApplication.init(processIdentifier: windowInfo.appPid) {
-                        let app = SIApplication.init(runningApplication: runningApp)
-                        let visibleWindows = app.visibleWindows()
-
-                        for case let win as SIWindow in visibleWindows {
-                            if Int(win.windowID()) == windowInfo.windowNumber {
-                                self.selectedWindow = win
-                                break
-                            }
-                        }
-                    }
+            // TODO: Sort by zIndex before iterating
+            for windowHandle in visibleWindowHandles {
+                if windowHandle.newRect.contains(CGPoint(x: mouseX, y: mouseY)) {
+                    self.selectedWindowHandle = windowHandle
                     break
                 }
             }
@@ -239,21 +222,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             return
         }
         
-        Logger.shared.info("Activating... (Window selection: \(Preferences.shared.windowSelection) -- Focused window: \(self.focusedWindow.debugDescription) -- Selected window: \(self.selectedWindow.debugDescription))")
+        Logger.shared.info("Activating... (Window selection: \(Preferences.shared.windowSelection) -- Focused window: \(self.focusedWindow.debugDescription) -- Selected window: \(self.selectedWindowHandle.debugDescription))")
         
-        guard self.selectedWindow != nil else {
+        guard self.selectedWindowHandle != nil else {
             self.abortSound?.play()
             return
         }
         
-        let selectedScreen = self.selectedWindow!.screen()
+        let selectedScreen = self.selectedWindowHandle!.siWindow?.screen()
         guard selectedScreen != nil else {
             Logger.shared.info("Not gonna activate, there is no selected screen")
             self.abortSound?.play()
             return
         }
         
-        if let app = NSRunningApplication.init(processIdentifier: self.selectedWindow!.processIdentifier()) {
+        // TODO: Test this
+        if let app = NSRunningApplication.init(processIdentifier: self.selectedWindowHandle!.appPid) {
             if let appBundleId = app.bundleIdentifier {
                 if Preferences.shared.disabledApps.contains(appBundleId) {
                     Logger.shared.info("Not gonna activate, Penc is disabled for \(appBundleId)")
@@ -266,22 +250,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.active = true
         
         // Setup window alignment manager
-        var otherWindowsDictionary = [Int: WindowInfo]()
-        visibleWindows.forEach { (windowInfo) in
-            guard windowInfo.windowNumber != self.selectedWindow!.windowID() else { return }
-            otherWindowsDictionary[windowInfo.windowNumber] = windowInfo
+        var otherWindowHandlesDictionary = [Int: PWindowHandle]()
+        visibleWindowHandles.forEach { (windowHandle) in
+            guard windowHandle.windowNumber != self.selectedWindowHandle!.windowNumber else { return }
+            otherWindowHandlesDictionary[windowHandle.windowNumber] = windowHandle
         }
         self.windowAlignmentManager = WindowAlignmentManager(
-            selectedWindowFrame: self.placeholderWindow.frame,
-            otherWindows: otherWindowsDictionary
+            selectedWindowFrame: self.selectedWindowHandle!.newRect,
+            otherWindows: otherWindowHandlesDictionary
         )
-        
-        let selectedWindowRect = self.selectedWindow!.getFrameBottomLeft()
-        self.placeholderWindow.setFrame(selectedWindowRect, display: true, animate: false)
-        self.windowAlignmentManager?.updateSelectedWindowFrame(self.placeholderWindow.frame)
-        self.placeholderWindow.makeKeyAndOrderFront(self.placeholderWindow)
-        
-        self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
+
+        self.selectedWindowHandle!.updateFrame(self.selectedWindowHandle!.newRect)
+        self.windowAlignmentManager?.updateSelectedWindowFrame(self.selectedWindowHandle!.newRect)
+        self.selectedWindowHandle!.placeholder.window.makeKeyAndOrderFront(self.selectedWindowHandle!.placeholder.window)
         
         self.gestureOverlayWindow.setFrame(selectedScreen!.frame, display: true, animate: false)
         self.gestureOverlayWindow.makeKeyAndOrderFront(self.gestureOverlayWindow)
@@ -298,15 +279,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             return
         }
         
-        self.selectedWindow!.setFrameBottomLeft(self.placeholderWindow.frame)
+        self.selectedWindowHandle!.applyNewFrame()
         self.focusedWindow?.focusThisWindowOnly()
-        self.placeholderWindow.orderOut(self.placeholderWindow)
+        self.selectedWindowHandle!.placeholder.window.orderOut(self.selectedWindowHandle!.placeholder.window)
         self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
         self.gestureOverlayWindow.clear()
         
         self.windowAlignmentManager = nil
         self.focusedWindow = nil
-        self.selectedWindow = nil
+        self.selectedWindowHandle = nil
         self.active = false
     }
     
@@ -316,13 +297,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         Logger.shared.info("Aborted activation")
         
         self.focusedWindow?.focus()
-        self.placeholderWindow.orderOut(self.placeholderWindow)
+        self.selectedWindowHandle?.placeholder.window.orderOut(self.selectedWindowHandle?.placeholder.window)
         self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
         self.gestureOverlayWindow.clear()
         
         self.windowAlignmentManager = nil
         self.focusedWindow = nil
-        self.selectedWindow = nil
+        self.selectedWindowHandle = nil
         self.active = false
     }
     
@@ -348,10 +329,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     func onScrollGesture(delta: (x: CGFloat, y: CGFloat), timestamp: Double) {
         guard self.active else { return }
-        guard self.selectedWindow!.isMovable() else { return }
+        guard self.selectedWindowHandle != nil else { return }
+        guard self.selectedWindowHandle!.siWindow?.isMovable() ?? false else { return }
         guard self.windowAlignmentManager != nil else { return }
         
-        let rect = self.placeholderWindow.frame
+        let rect = self.selectedWindowHandle!.newRect
         let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: timestamp)
         let newRect = CGRect(
             x: rect.origin.x + newMovement.x,
@@ -359,225 +341,228 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             width: rect.width,
             height: rect.height
         )
-        self.placeholderWindow.setFrame(newRect, display: true, animate: false)
-        self.windowAlignmentManager?.updateSelectedWindowFrame(self.placeholderWindow.frame)
-        
-        self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
+        self.selectedWindowHandle!.updateFrame(newRect)
+        self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
     }
     
     func onSwipeGesture(type: SwipeGestureType) {
         guard self.active else { return }
-        guard self.placeholderWindow.screen != nil else { return }
+        guard self.selectedWindowHandle != nil else { return }
+        let placeholderWindowScreen = self.selectedWindowHandle!.placeholder.window.screen
+        guard placeholderWindowScreen != nil else { return }
         
-        let screenNumber = self.placeholderWindow.screen?.getScreenNumber()
+        let screenNumber = placeholderWindowScreen!.getScreenNumber()
         guard screenNumber != nil else { return }
         let actions = Preferences.shared.getCustomActions(forScreenNumber: screenNumber!)
         
+        let isResizable = self.selectedWindowHandle!.siWindow?.isResizable() ?? false
+        let isMovable = self.selectedWindowHandle!.siWindow?.isMovable() ?? false
+        
         switch (type) {
         case .SWIPE_TOP:
-            if self.selectedWindow!.isResizable() {
-                let newRect = self.placeholderWindow.frame.resizeBy(
-                    screen: self.placeholderWindow.screen!,
+            if isResizable {
+                let newRect = self.selectedWindowHandle!.newRect.resizeBy(
+                    screen: placeholderWindowScreen!,
                     ratio: (
                         width: CGFloat(actions["top"]![0]),
                         height: CGFloat(actions["top"]![1])
                     )
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
             
-            if self.selectedWindow!.isMovable() {
-                let newRect = self.placeholderWindow.frame.setPositionOf(
+            if isMovable {
+                let newRect = self.selectedWindowHandle!.newRect.setPositionOf(
                     anchorPoint: .TOP_CENTER,
-                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .TOP_CENTER)
+                    toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .TOP_CENTER)
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
         case .SWIPE_TOP_RIGHT:
-            if self.selectedWindow!.isResizable() {
-                let newRect = self.placeholderWindow.frame.resizeBy(
-                    screen: self.placeholderWindow.screen!,
+            if isResizable {
+                let newRect = self.selectedWindowHandle!.newRect.resizeBy(
+                    screen: placeholderWindowScreen!,
                     ratio: (
                         width: CGFloat(actions["topRight"]![0]),
                         height: CGFloat(actions["topRight"]![1])
                     )
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
             
-            if self.selectedWindow!.isMovable() {
-                let newRect = self.placeholderWindow.frame.setPositionOf(
+            if isMovable {
+                let newRect = self.selectedWindowHandle!.newRect.setPositionOf(
                     anchorPoint: .TOP_RIGHT,
-                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .TOP_RIGHT)
+                    toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .TOP_RIGHT)
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
         case .SWIPE_RIGHT:
-            if self.selectedWindow!.isResizable() {
-                let newRect = self.placeholderWindow.frame.resizeBy(
-                    screen: self.placeholderWindow.screen!,
+            if isResizable {
+                let newRect = self.selectedWindowHandle!.newRect.resizeBy(
+                    screen: placeholderWindowScreen!,
                     ratio: (
                         width: CGFloat(actions["right"]![0]),
                         height: CGFloat(actions["right"]![1])
                     )
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
             
-            if self.selectedWindow!.isMovable() {
-                let newRect = self.placeholderWindow.frame.setPositionOf(
+            if isMovable {
+                let newRect = self.selectedWindowHandle!.newRect.setPositionOf(
                     anchorPoint: .RIGHT_CENTER,
-                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .RIGHT_CENTER)
+                    toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .RIGHT_CENTER)
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
         case .SWIPE_BOTTOM_RIGHT:
-            if self.selectedWindow!.isResizable() {
-                let newRect = self.placeholderWindow.frame.resizeBy(
-                    screen: self.placeholderWindow.screen!,
+            if isResizable {
+                let newRect = self.selectedWindowHandle!.newRect.resizeBy(
+                    screen: placeholderWindowScreen!,
                     ratio: (
                         width: CGFloat(actions["bottomRight"]![0]),
                         height: CGFloat(actions["bottomRight"]![1])
                     )
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
             
-            if self.selectedWindow!.isMovable() {
-                let newRect = self.placeholderWindow.frame.setPositionOf(
+            if isMovable {
+                let newRect = self.selectedWindowHandle!.newRect.setPositionOf(
                     anchorPoint: .BOTTOM_RIGHT,
-                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_RIGHT)
+                    toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_RIGHT)
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
         case .SWIPE_BOTTOM:
-            if self.selectedWindow!.isResizable() {
-                let newRect = self.placeholderWindow.frame.resizeBy(
-                    screen: self.placeholderWindow.screen!,
+            if isResizable {
+                let newRect = self.selectedWindowHandle!.newRect.resizeBy(
+                    screen: placeholderWindowScreen!,
                     ratio: (
                         width: CGFloat(actions["bottom"]![0]),
                         height: CGFloat(actions["bottom"]![1])
                     )
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
             
-            if self.selectedWindow!.isMovable() {
-                let newRect = self.placeholderWindow.frame.setPositionOf(
+            if isMovable {
+                let newRect = self.selectedWindowHandle!.newRect.setPositionOf(
                     anchorPoint: .BOTTOM_CENTER,
-                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_CENTER)
+                    toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_CENTER)
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
         case .SWIPE_BOTTOM_LEFT:
-            if self.selectedWindow!.isResizable() {
-                let newRect = self.placeholderWindow.frame.resizeBy(
-                    screen: self.placeholderWindow.screen!,
+            if isResizable {
+                let newRect = self.selectedWindowHandle!.newRect.resizeBy(
+                    screen: placeholderWindowScreen!,
                     ratio: (
                         width: CGFloat(actions["bottomLeft"]![0]),
                         height: CGFloat(actions["bottomLeft"]![1])
                     )
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
             
-            if self.selectedWindow!.isMovable() {
-                let newRect = self.placeholderWindow.frame.setPositionOf(
+            if isMovable {
+                let newRect = self.selectedWindowHandle!.newRect.setPositionOf(
                     anchorPoint: .BOTTOM_LEFT,
-                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_LEFT)
+                    toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_LEFT)
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
         case .SWIPE_LEFT:
-            if self.selectedWindow!.isResizable() {
-                let newRect = self.placeholderWindow.frame.resizeBy(
-                    screen: self.placeholderWindow.screen!,
+            if isResizable {
+                let newRect = self.selectedWindowHandle!.newRect.resizeBy(
+                    screen: placeholderWindowScreen!,
                     ratio: (
                         width: CGFloat(actions["left"]![0]),
                         height: CGFloat(actions["left"]![1])
                     )
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
             
-            if self.selectedWindow!.isMovable() {
-                let newRect = self.placeholderWindow.frame.setPositionOf(
+            if isMovable {
+                let newRect = self.selectedWindowHandle!.newRect.setPositionOf(
                     anchorPoint: .LEFT_CENTER,
-                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .LEFT_CENTER)
+                    toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .LEFT_CENTER)
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
         case .SWIPE_TOP_LEFT:
-            if self.selectedWindow!.isResizable() {
-                let newRect = self.placeholderWindow.frame.resizeBy(
-                    screen: self.placeholderWindow.screen!,
+            if isResizable {
+                let newRect = self.selectedWindowHandle!.newRect.resizeBy(
+                    screen: placeholderWindowScreen!,
                     ratio: (
                         width: CGFloat(actions["topLeft"]![0]),
                         height: CGFloat(actions["topLeft"]![1])
                     )
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
             
-            if self.selectedWindow!.isMovable() {
-                let newRect = self.placeholderWindow.frame.setPositionOf(
+            if isMovable {
+                let newRect = self.selectedWindowHandle!.newRect.setPositionOf(
                     anchorPoint: .TOP_LEFT,
-                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .TOP_LEFT)
+                    toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .TOP_LEFT)
                 )
-                self.placeholderWindow.setFrame(newRect, display: false)
+                self.selectedWindowHandle!.updateFrame(newRect)
             }
         }
-        
-        self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
     }
     
     func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat)) {
         guard self.active else { return }
-        guard self.selectedWindow!.isResizable() else { return }
-        guard self.placeholderWindow.screen != nil else { return }
+        guard self.selectedWindowHandle != nil else { return }
+        let placeholderWindowScreen = self.selectedWindowHandle!.placeholder.window.screen
+        guard placeholderWindowScreen != nil else { return }
+        guard self.selectedWindowHandle!.siWindow?.isResizable() ?? false else { return }
         
-        let newRect = self.placeholderWindow.frame
+        let newRect = self.selectedWindowHandle!.newRect
             .resizeBy(factor: factor)
-            .fitInVisibleFrame(ofScreen: self.placeholderWindow.screen!)
-        self.placeholderWindow.setFrame(newRect, display: false)
-        
-        self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
+            .fitInVisibleFrame(ofScreen: placeholderWindowScreen!)
+        self.selectedWindowHandle!.updateFrame(newRect)
     }
     
     func onDoubleClickGesture() {
         guard self.active else { return }
-        guard self.placeholderWindow.screen != nil else { return }
+        guard self.selectedWindowHandle != nil else { return }
+        let placeholderWindowScreen = self.selectedWindowHandle!.placeholder.window.screen
+        guard placeholderWindowScreen != nil else { return }
         
-        let screenNumber = self.placeholderWindow.screen?.getScreenNumber()
+        let screenNumber = placeholderWindowScreen!.getScreenNumber()
         guard screenNumber != nil else { return }
         let actions = Preferences.shared.getCustomActions(forScreenNumber: screenNumber!)
         
-        if self.selectedWindow!.isResizable() {
-            let newRect = self.placeholderWindow.frame.resizeBy(
-                screen: self.placeholderWindow.screen!,
+        let isResizable = self.selectedWindowHandle!.siWindow?.isResizable() ?? false
+        let isMovable = self.selectedWindowHandle!.siWindow?.isMovable() ?? false
+        
+        if isResizable {
+            let newRect = self.selectedWindowHandle!.newRect.resizeBy(
+                screen: placeholderWindowScreen!,
                 ratio: (
                     width: CGFloat(actions["dblClick"]![0]),
                     height: CGFloat(actions["dblClick"]![1])
                 )
             )
-            self.placeholderWindow.setFrame(newRect, display: false)
+            self.selectedWindowHandle!.updateFrame(newRect)
         }
         
-        if self.selectedWindow!.isMovable() {
-            let newRect = self.placeholderWindow.frame.setPositionOf(
+        if isMovable {
+            let newRect = self.selectedWindowHandle!.newRect.setPositionOf(
                 anchorPoint: .CENTER,
-                toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .CENTER)
+                toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .CENTER)
             )
-            self.placeholderWindow.setFrame(newRect, display: false)
+            self.selectedWindowHandle!.updateFrame(newRect)
         }
-        
-        self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
     }
     
     func onMouseMoveGesture(position: (x: CGFloat, y: CGFloat)) {
         guard self.active else { return }
-        guard self.placeholderWindow.screen != nil else { return }
-        print("mouse moved \(position)")
+//        print("mouse moved \(position)")
     }
     
     func menuWillOpen(_ menu: NSMenu) {
