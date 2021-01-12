@@ -12,7 +12,6 @@
 		9417B7C11FADB16300749BC8 /* GestureOverlayWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9417B7C01FADB16300749BC8 /* GestureOverlayWindow.swift */; };
 		9417B7CB1FB04A0100749BC8 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9417B7CA1FB04A0100749BC8 /* Preferences.swift */; };
 		94490CA124D2FD220010C713 /* NSScreenExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94490CA024D2FD220010C713 /* NSScreenExtension.swift */; };
-		94490CA324D4B1BD0010C713 /* NSWindowExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94490CA224D4B1BD0010C713 /* NSWindowExtension.swift */; };
 		945195A41FA88B8B00FA53B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945195A31FA88B8B00FA53B4 /* AppDelegate.swift */; };
 		945195A81FA88B8B00FA53B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 945195A71FA88B8B00FA53B4 /* Assets.xcassets */; };
 		945195AB1FA88B8B00FA53B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 945195A91FA88B8B00FA53B4 /* Main.storyboard */; };
@@ -60,7 +59,6 @@
 		9417B7C01FADB16300749BC8 /* GestureOverlayWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GestureOverlayWindow.swift; sourceTree = "<group>"; };
 		9417B7CA1FB04A0100749BC8 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		94490CA024D2FD220010C713 /* NSScreenExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSScreenExtension.swift; sourceTree = "<group>"; };
-		94490CA224D4B1BD0010C713 /* NSWindowExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSWindowExtension.swift; sourceTree = "<group>"; };
 		945195A01FA88B8B00FA53B4 /* Penc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Penc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		945195A31FA88B8B00FA53B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		945195A71FA88B8B00FA53B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -167,7 +165,6 @@
 				94C88E9520AC189A00F4B83E /* WindowHelper.swift */,
 				94C1640524CB12C6005A564F /* Logger.swift */,
 				94490CA024D2FD220010C713 /* NSScreenExtension.swift */,
-				94490CA224D4B1BD0010C713 /* NSWindowExtension.swift */,
 				946C90AF25A19FB6007BDA76 /* LineSegment.swift */,
 				946C90B325A1C09E007BDA76 /* WindowInfo.swift */,
 				946C90BF25A1CB9C007BDA76 /* WindowAlignmentManager.swift */,
@@ -372,7 +369,6 @@
 			files = (
 				94490CA124D2FD220010C713 /* NSScreenExtension.swift in Sources */,
 				94C88E9620AC189A00F4B83E /* WindowHelper.swift in Sources */,
-				94490CA324D4B1BD0010C713 /* NSWindowExtension.swift in Sources */,
 				94763F731FA8DE5800D60C27 /* CGRectExtension.swift in Sources */,
 				94C88E9220AB6E5600F4B83E /* PlaceholderWindow.swift in Sources */,
 				9417B7CB1FB04A0100749BC8 /* Preferences.swift in Sources */,

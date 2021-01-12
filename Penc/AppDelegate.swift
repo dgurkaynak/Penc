@@ -376,115 +376,155 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         switch (type) {
         case .SWIPE_TOP:
             if self.selectedWindow!.isResizable() {
-                self.placeholderWindow.resizeBy(screenRatio: (
-                    width: CGFloat(actions["top"]![0]),
-                    height: CGFloat(actions["top"]![1])
-                ))
+                let newRect = self.placeholderWindow.frame.resizeBy(
+                    screen: self.placeholderWindow.screen!,
+                    ratio: (
+                        width: CGFloat(actions["top"]![0]),
+                        height: CGFloat(actions["top"]![1])
+                    )
+                )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
             
             if self.selectedWindow!.isMovable() {
-                self.placeholderWindow.setPosition(
-                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .TOP_CENTER),
-                    byAnchorPoint: .TOP_CENTER
+                let newRect = self.placeholderWindow.frame.setPositionOf(
+                    anchorPoint: .TOP_CENTER,
+                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .TOP_CENTER)
                 )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
         case .SWIPE_TOP_RIGHT:
             if self.selectedWindow!.isResizable() {
-                self.placeholderWindow.resizeBy(screenRatio: (
-                    width: CGFloat(actions["topRight"]![0]),
-                    height: CGFloat(actions["topRight"]![1])
-                ))
+                let newRect = self.placeholderWindow.frame.resizeBy(
+                    screen: self.placeholderWindow.screen!,
+                    ratio: (
+                        width: CGFloat(actions["topRight"]![0]),
+                        height: CGFloat(actions["topRight"]![1])
+                    )
+                )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
             
             if self.selectedWindow!.isMovable() {
-                self.placeholderWindow.setPosition(
-                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .TOP_RIGHT),
-                    byAnchorPoint: .TOP_RIGHT
+                let newRect = self.placeholderWindow.frame.setPositionOf(
+                    anchorPoint: .TOP_RIGHT,
+                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .TOP_RIGHT)
                 )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
         case .SWIPE_RIGHT:
             if self.selectedWindow!.isResizable() {
-                self.placeholderWindow.resizeBy(screenRatio: (
-                    width: CGFloat(actions["right"]![0]),
-                    height: CGFloat(actions["right"]![1])
-                ))
+                let newRect = self.placeholderWindow.frame.resizeBy(
+                    screen: self.placeholderWindow.screen!,
+                    ratio: (
+                        width: CGFloat(actions["right"]![0]),
+                        height: CGFloat(actions["right"]![1])
+                    )
+                )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
             
             if self.selectedWindow!.isMovable() {
-                self.placeholderWindow.setPosition(
-                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .RIGHT_CENTER),
-                    byAnchorPoint: .RIGHT_CENTER
+                let newRect = self.placeholderWindow.frame.setPositionOf(
+                    anchorPoint: .RIGHT_CENTER,
+                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .RIGHT_CENTER)
                 )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
         case .SWIPE_BOTTOM_RIGHT:
             if self.selectedWindow!.isResizable() {
-                self.placeholderWindow.resizeBy(screenRatio: (
-                    width: CGFloat(actions["bottomRight"]![0]),
-                    height: CGFloat(actions["bottomRight"]![1])
-                ))
+                let newRect = self.placeholderWindow.frame.resizeBy(
+                    screen: self.placeholderWindow.screen!,
+                    ratio: (
+                        width: CGFloat(actions["bottomRight"]![0]),
+                        height: CGFloat(actions["bottomRight"]![1])
+                    )
+                )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
             
             if self.selectedWindow!.isMovable() {
-                self.placeholderWindow.setPosition(
-                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_RIGHT),
-                    byAnchorPoint: .BOTTOM_RIGHT
+                let newRect = self.placeholderWindow.frame.setPositionOf(
+                    anchorPoint: .BOTTOM_RIGHT,
+                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_RIGHT)
                 )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
         case .SWIPE_BOTTOM:
             if self.selectedWindow!.isResizable() {
-                self.placeholderWindow.resizeBy(screenRatio: (
-                    width: CGFloat(actions["bottom"]![0]),
-                    height: CGFloat(actions["bottom"]![1])
-                ))
+                let newRect = self.placeholderWindow.frame.resizeBy(
+                    screen: self.placeholderWindow.screen!,
+                    ratio: (
+                        width: CGFloat(actions["bottom"]![0]),
+                        height: CGFloat(actions["bottom"]![1])
+                    )
+                )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
             
             if self.selectedWindow!.isMovable() {
-                self.placeholderWindow.setPosition(
-                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_CENTER),
-                    byAnchorPoint: .BOTTOM_CENTER
+                let newRect = self.placeholderWindow.frame.setPositionOf(
+                    anchorPoint: .BOTTOM_CENTER,
+                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_CENTER)
                 )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
         case .SWIPE_BOTTOM_LEFT:
             if self.selectedWindow!.isResizable() {
-                self.placeholderWindow.resizeBy(screenRatio: (
-                    width: CGFloat(actions["bottomLeft"]![0]),
-                    height: CGFloat(actions["bottomLeft"]![1])
-                ))
+                let newRect = self.placeholderWindow.frame.resizeBy(
+                    screen: self.placeholderWindow.screen!,
+                    ratio: (
+                        width: CGFloat(actions["bottomLeft"]![0]),
+                        height: CGFloat(actions["bottomLeft"]![1])
+                    )
+                )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
             
             if self.selectedWindow!.isMovable() {
-                self.placeholderWindow.setPosition(
-                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_LEFT),
-                    byAnchorPoint: .BOTTOM_LEFT
+                let newRect = self.placeholderWindow.frame.setPositionOf(
+                    anchorPoint: .BOTTOM_LEFT,
+                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_LEFT)
                 )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
         case .SWIPE_LEFT:
             if self.selectedWindow!.isResizable() {
-                self.placeholderWindow.resizeBy(screenRatio: (
-                    width: CGFloat(actions["left"]![0]),
-                    height: CGFloat(actions["left"]![1])
-                ))
+                let newRect = self.placeholderWindow.frame.resizeBy(
+                    screen: self.placeholderWindow.screen!,
+                    ratio: (
+                        width: CGFloat(actions["left"]![0]),
+                        height: CGFloat(actions["left"]![1])
+                    )
+                )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
             
             if self.selectedWindow!.isMovable() {
-                self.placeholderWindow.setPosition(
-                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .LEFT_CENTER),
-                    byAnchorPoint: .LEFT_CENTER
+                let newRect = self.placeholderWindow.frame.setPositionOf(
+                    anchorPoint: .LEFT_CENTER,
+                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .LEFT_CENTER)
                 )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
         case .SWIPE_TOP_LEFT:
             if self.selectedWindow!.isResizable() {
-                self.placeholderWindow.resizeBy(screenRatio: (
-                    width: CGFloat(actions["topLeft"]![0]),
-                    height: CGFloat(actions["topLeft"]![1])
-                ))
+                let newRect = self.placeholderWindow.frame.resizeBy(
+                    screen: self.placeholderWindow.screen!,
+                    ratio: (
+                        width: CGFloat(actions["topLeft"]![0]),
+                        height: CGFloat(actions["topLeft"]![1])
+                    )
+                )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
             
             if self.selectedWindow!.isMovable() {
-                self.placeholderWindow.setPosition(
-                    self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .TOP_LEFT),
-                    byAnchorPoint: .TOP_LEFT
+                let newRect = self.placeholderWindow.frame.setPositionOf(
+                    anchorPoint: .TOP_LEFT,
+                    toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .TOP_LEFT)
                 )
+                self.placeholderWindow.setFrame(newRect, display: false)
             }
         }
         
@@ -496,7 +536,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.selectedWindow!.isResizable() else { return }
         guard self.placeholderWindow.screen != nil else { return }
         
-        self.placeholderWindow.resizeBy(factor: factor)
+        let newRect = self.placeholderWindow.frame
+            .resizeBy(factor: factor)
+            .fitInVisibleFrame(ofScreen: self.placeholderWindow.screen!)
+        self.placeholderWindow.setFrame(newRect, display: false)
         
         self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
     }
@@ -510,17 +553,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         let actions = Preferences.shared.getCustomActions(forScreenNumber: screenNumber!)
         
         if self.selectedWindow!.isResizable() {
-            self.placeholderWindow.resizeBy(screenRatio: (
-                width: CGFloat(actions["dblClick"]![0]),
-                height: CGFloat(actions["dblClick"]![1])
-            ))
+            let newRect = self.placeholderWindow.frame.resizeBy(
+                screen: self.placeholderWindow.screen!,
+                ratio: (
+                    width: CGFloat(actions["dblClick"]![0]),
+                    height: CGFloat(actions["dblClick"]![1])
+                )
+            )
+            self.placeholderWindow.setFrame(newRect, display: false)
         }
         
         if self.selectedWindow!.isMovable() {
-            self.placeholderWindow.setPosition(
-                self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .CENTER),
-                byAnchorPoint: .CENTER
+            let newRect = self.placeholderWindow.frame.setPositionOf(
+                anchorPoint: .CENTER,
+                toPosition: self.placeholderWindow.screen!.visibleFrame.getPointOf(anchorPoint: .CENTER)
             )
+            self.placeholderWindow.setFrame(newRect, display: false)
         }
         
         self.placeholderWindowViewController.updateWindowSizeTextField(self.placeholderWindow.frame)
