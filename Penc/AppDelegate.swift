@@ -21,7 +21,7 @@ extension Notification.Name {
 class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate, KeyboardListenerDelegate, PreferencesDelegate, NSMenuDelegate {
     
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
-    let gestureOverlayWindow = GestureOverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
+    var gestureOverlayWindows = [GestureOverlayWindow]()
     let preferencesWindowController = PreferencesWindowController.freshController()
     let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
     var focusedWindow: SIWindow? = nil
@@ -55,10 +55,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         if checkPermissions() {
             constructMenu()
             Preferences.shared.setDelegate(self)
-            self.gestureOverlayWindow.setDelegate(self)
             self.keyboardListener.setDelegate(self)
             
-            self.setupOverlayWindow()
             self.setupAboutWindow()
             self.onPreferencesChanged()
             
@@ -124,13 +122,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.statusItem.menu?.delegate = self
     }
     
-    func setupOverlayWindow() {
-        self.gestureOverlayWindow.level = .popUpMenu
-        self.gestureOverlayWindow.isOpaque = false
-        self.gestureOverlayWindow.ignoresMouseEvents = false
-        self.gestureOverlayWindow.acceptsMouseMovedEvents = true
-        self.gestureOverlayWindow.contentView!.allowedTouchTypes = [.indirect]
-        self.gestureOverlayWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
+    func createGestureOverlayWindow() -> GestureOverlayWindow {
+        let gestureOverlayWindow = GestureOverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
+        gestureOverlayWindow.setDelegate(self)
+        
+        gestureOverlayWindow.level = .popUpMenu
+        gestureOverlayWindow.isOpaque = false
+        gestureOverlayWindow.ignoresMouseEvents = false
+        gestureOverlayWindow.acceptsMouseMovedEvents = true
+        gestureOverlayWindow.contentView!.allowedTouchTypes = [.indirect]
+        gestureOverlayWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
+        
+        return gestureOverlayWindow
     }
     
     @objc func openPreferencesWindow(_ sender: Any?) {
@@ -154,8 +157,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.keyboardListener.activationModifierKey = preferences.activationModifierKey
         self.keyboardListener.secondActivationModifierKeyPress = Double(preferences.activationSensitivity)
         self.keyboardListener.holdActivationModifierKeyTimeout = Double(preferences.holdDuration)
-        self.gestureOverlayWindow.swipeThreshold = preferences.swipeThreshold
-        self.gestureOverlayWindow.reverseScroll = preferences.reverseScroll
+        self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
+            gestureOverlayWindow.swipeThreshold = preferences.swipeThreshold
+            gestureOverlayWindow.reverseScroll = preferences.reverseScroll
+        }
         // TODO: Fix this
 //        self.placeholderWindowViewController.toggleWindowSizeTextField(preferences.showWindowSize)
     }
@@ -229,13 +234,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             return
         }
         
-        let selectedScreen = self.selectedWindowHandle!.siWindow?.screen()
-        guard selectedScreen != nil else {
-            Logger.shared.info("Not gonna activate, there is no selected screen")
-            self.abortSound?.play()
-            return
-        }
-        
         // TODO: Test this
         if let app = NSRunningApplication.init(processIdentifier: self.selectedWindowHandle!.appPid) {
             if let appBundleId = app.bundleIdentifier {
@@ -264,8 +262,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.windowAlignmentManager?.updateSelectedWindowFrame(self.selectedWindowHandle!.newRect)
         self.selectedWindowHandle!.placeholder.window.makeKeyAndOrderFront(self.selectedWindowHandle!.placeholder.window)
         
-        self.gestureOverlayWindow.setFrame(selectedScreen!.frame, display: true, animate: false)
-        self.gestureOverlayWindow.makeKeyAndOrderFront(self.gestureOverlayWindow)
+        for (index, screen) in NSScreen.screens.enumerated() {
+            if !self.gestureOverlayWindows.indices.contains(index) {
+                self.gestureOverlayWindows.append(self.createGestureOverlayWindow())
+            }
+            
+            let gestureOverlayWindow = self.gestureOverlayWindows[index]
+            gestureOverlayWindow.setFrame(screen.frame, display: true, animate: false)
+            gestureOverlayWindow.makeKeyAndOrderFront(gestureOverlayWindow)
+        }
         
         NSApplication.shared.activate(ignoringOtherApps: true)
     }
@@ -282,8 +287,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.selectedWindowHandle!.applyNewFrame()
         self.focusedWindow?.focusThisWindowOnly()
         self.selectedWindowHandle!.placeholder.window.orderOut(self.selectedWindowHandle!.placeholder.window)
-        self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
-        self.gestureOverlayWindow.clear()
+        self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
+            gestureOverlayWindow.orderOut(gestureOverlayWindow)
+            gestureOverlayWindow.clear()
+        }
         
         self.windowAlignmentManager = nil
         self.focusedWindow = nil
@@ -298,8 +305,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         self.focusedWindow?.focus()
         self.selectedWindowHandle?.placeholder.window.orderOut(self.selectedWindowHandle?.placeholder.window)
-        self.gestureOverlayWindow.orderOut(self.gestureOverlayWindow)
-        self.gestureOverlayWindow.clear()
+        self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
+            gestureOverlayWindow.orderOut(gestureOverlayWindow)
+            gestureOverlayWindow.clear()
+        }
         
         self.windowAlignmentManager = nil
         self.focusedWindow = nil
