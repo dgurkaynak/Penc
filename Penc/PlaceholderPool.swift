@@ -18,7 +18,7 @@ class PlaceholderPool {
         let window = PlaceholderWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
         let windowViewController = PlaceholderWindowViewController.freshController()
         
-        window.level = .floating
+        window.level = .popUpMenu
         window.isOpaque = false
         window.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
         window.contentViewController = windowViewController

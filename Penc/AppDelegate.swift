@@ -21,6 +21,7 @@ extension Notification.Name {
 class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate, KeyboardListenerDelegate, PreferencesDelegate, NSMenuDelegate {
     
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
+    var colorOverlayWindows = [NSWindow]()
     var gestureOverlayWindows = [GestureOverlayWindow]()
     let preferencesWindowController = PreferencesWindowController.freshController()
     let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
@@ -134,6 +135,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         gestureOverlayWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
         
         return gestureOverlayWindow
+    }
+    
+    func createColorOverlayWindow() -> NSWindow {
+        let colorOverlayWindow = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
+        
+        colorOverlayWindow.level = .popUpMenu
+        colorOverlayWindow.isOpaque = false
+        colorOverlayWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
+        
+        return colorOverlayWindow
     }
     
     @objc func openPreferencesWindow(_ sender: Any?) {
@@ -260,8 +271,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
 
         self.selectedWindowHandle!.updateFrame(self.selectedWindowHandle!.newRect)
         self.windowAlignmentManager?.updateSelectedWindowFrame(self.selectedWindowHandle!.newRect)
+        
+        // Show color overlay windows for each screen
+        for (index, screen) in NSScreen.screens.enumerated() {
+            if !self.colorOverlayWindows.indices.contains(index) {
+                self.colorOverlayWindows.append(self.createColorOverlayWindow())
+            }
+            
+            let colorOverlayWindow = self.colorOverlayWindows[index]
+            colorOverlayWindow.setFrame(screen.frame, display: true, animate: false)
+            colorOverlayWindow.makeKeyAndOrderFront(colorOverlayWindow)
+        }
+        
+        // Show selected window placeholder
         self.selectedWindowHandle!.placeholder.window.makeKeyAndOrderFront(self.selectedWindowHandle!.placeholder.window)
         
+        // Show gesture overlay window for each screen
         for (index, screen) in NSScreen.screens.enumerated() {
             if !self.gestureOverlayWindows.indices.contains(index) {
                 self.gestureOverlayWindows.append(self.createGestureOverlayWindow())
@@ -286,6 +311,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         self.selectedWindowHandle!.applyNewFrame()
         self.focusedWindow?.focusThisWindowOnly()
+        self.colorOverlayWindows.forEach { (colorOverlayWindow) in
+            colorOverlayWindow.orderOut(colorOverlayWindow)
+        }
         self.selectedWindowHandle!.placeholder.window.orderOut(self.selectedWindowHandle!.placeholder.window)
         self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
             gestureOverlayWindow.orderOut(gestureOverlayWindow)
@@ -304,6 +332,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         Logger.shared.info("Aborted activation")
         
         self.focusedWindow?.focus()
+        self.colorOverlayWindows.forEach { (colorOverlayWindow) in
+            colorOverlayWindow.orderOut(colorOverlayWindow)
+        }
         self.selectedWindowHandle?.placeholder.window.orderOut(self.selectedWindowHandle?.placeholder.window)
         self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
             gestureOverlayWindow.orderOut(gestureOverlayWindow)
