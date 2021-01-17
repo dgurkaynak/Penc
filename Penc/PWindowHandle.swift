@@ -49,8 +49,12 @@ class PWindowHandle {
     }
     
     func applyNewFrame() {
-        guard self.newRect != self.oldRect else { return }
+        guard self.isChanged() else { return }
         self.siWindow?.setFrameBottomLeft(self.newRect)
+    }
+    
+    func isChanged() -> Bool {
+        return self.newRect != self.oldRect
     }
     
     var siWindow: SIWindow? {
@@ -77,6 +81,7 @@ class PWindowHandle {
         PlaceholderPool.shared.release(self.placeholder)
     }
     
+    // Returns ordered from frontmost to backmost
     static func visibleWindowHandles() throws -> [PWindowHandle] {
         guard NSScreen.screens.indices.contains(0) else {
             throw PWindowHandleError.noScreens

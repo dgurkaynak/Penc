@@ -27,6 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
     var focusedWindow: SIWindow? = nil
     var selectedWindowHandle: PWindowHandle? = nil
+    var windowHandles = [PWindowHandle]() // ordered from frontmost to backmost
     let keyboardListener = KeyboardListener()
     var disabled = false
     var windowAlignmentManager: WindowAlignmentManager? = nil
@@ -142,7 +143,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         colorOverlayWindow.level = .popUpMenu
         colorOverlayWindow.isOpaque = false
-        colorOverlayWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.5)
+        colorOverlayWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
         
         return colorOverlayWindow
     }
@@ -200,7 +201,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             }
         }
         
-        self.selectedWindowHandle = nil
+        var initiallySelectedWindowHandle: PWindowHandle? = nil
         
         // Get visible windows on the screen
         var visibleWindowHandles = [PWindowHandle]()
@@ -216,7 +217,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         case "focused":
             if self.focusedWindow != nil {
                 let focusedWindowNumber = self.focusedWindow!.windowID()
-                self.selectedWindowHandle = visibleWindowHandles.first(where: { (windowHandle) -> Bool in
+                initiallySelectedWindowHandle = visibleWindowHandles.first(where: { (windowHandle) -> Bool in
                     return windowHandle.windowNumber == focusedWindowNumber
                 })
             }
@@ -225,10 +226,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             let mouseY = NSEvent.mouseLocation.y // bottom-left origined
             Logger.shared.debug("Looking for the window under mouse cursor -- X=\(mouseX), Y=\(mouseY)")
             
-            // TODO: Sort by zIndex before iterating
             for windowHandle in visibleWindowHandles {
                 if windowHandle.newRect.contains(CGPoint(x: mouseX, y: mouseY)) {
-                    self.selectedWindowHandle = windowHandle
+                    initiallySelectedWindowHandle = windowHandle
                     break
                 }
             }
@@ -238,15 +238,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             return
         }
         
-        Logger.shared.info("Activating... (Window selection: \(Preferences.shared.windowSelection) -- Focused window: \(self.focusedWindow.debugDescription) -- Selected window: \(self.selectedWindowHandle.debugDescription))")
+        Logger.shared.info("Activating... (Window selection: \(Preferences.shared.windowSelection) -- Focused window: \(self.focusedWindow.debugDescription) -- Selected window: \(initiallySelectedWindowHandle.debugDescription))")
         
-        guard self.selectedWindowHandle != nil else {
+        guard initiallySelectedWindowHandle != nil else {
             self.abortSound?.play()
             return
         }
         
         // TODO: Test this
-        if let app = NSRunningApplication.init(processIdentifier: self.selectedWindowHandle!.appPid) {
+        if let app = NSRunningApplication.init(processIdentifier: initiallySelectedWindowHandle!.appPid) {
             if let appBundleId = app.bundleIdentifier {
                 if Preferences.shared.disabledApps.contains(appBundleId) {
                     Logger.shared.info("Not gonna activate, Penc is disabled for \(appBundleId)")
@@ -257,26 +257,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
         
         self.active = true
-        
-        // Setup window alignment manager
-        var otherWindowHandlesDictionary = [Int: PWindowHandle]()
-        visibleWindowHandles.forEach { (windowHandle) in
-            guard windowHandle.windowNumber != self.selectedWindowHandle!.windowNumber else { return }
-            otherWindowHandlesDictionary[windowHandle.windowNumber] = windowHandle
-        }
-        self.windowAlignmentManager = WindowAlignmentManager(
-            selectedWindowFrame: self.selectedWindowHandle!.newRect,
-            otherWindows: otherWindowHandlesDictionary
-        )
-        
-        // TODO: Delete following line, it's a temp hack
-        // to get window title initially and update it in
-        // placeholder window
-        let _ = self.selectedWindowHandle!.siWindow
-        
-        self.selectedWindowHandle!.refreshPlaceholderTitle()
-        self.selectedWindowHandle!.updateFrame(self.selectedWindowHandle!.newRect)
-        self.windowAlignmentManager?.updateSelectedWindowFrame(self.selectedWindowHandle!.newRect)
+        self.windowHandles = visibleWindowHandles
         
         // Show color overlay windows for each screen
         for (index, screen) in NSScreen.screens.enumerated() {
@@ -289,8 +270,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             colorOverlayWindow.makeKeyAndOrderFront(colorOverlayWindow)
         }
         
-        // Show selected window placeholder
-        self.selectedWindowHandle!.placeholder.window.makeKeyAndOrderFront(self.selectedWindowHandle!.placeholder.window)
+        // Set-up initial placeholder windows & order them
+        self.windowHandles.forEach { (windowHandle) in
+            windowHandle.updateFrame(windowHandle.newRect)
+            windowHandle.placeholder.window.alphaValue = 0
+            
+            windowHandle.placeholder.window.makeKeyAndOrderFront(windowHandle.placeholder.window)
+        }
+        
+        // Now handle the initially selected window
+        self.selectWindow(initiallySelectedWindowHandle!)
         
         // Show gesture overlay window for each screen
         for (index, screen) in NSScreen.screens.enumerated() {
@@ -306,6 +295,37 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         NSApplication.shared.activate(ignoringOtherApps: true)
     }
     
+    func selectWindow(_ newWindowHandle: PWindowHandle?) {
+        if self.selectedWindowHandle != nil {
+            // TODO: Check if it's rect is changed,
+            // if changed, set it a custom style
+            self.selectedWindowHandle!.placeholder.window.alphaValue = self.selectedWindowHandle!.isChanged() ? 0.5 : 0
+        }
+        
+        // If no window is selected, early terminate
+        if newWindowHandle == nil {
+            self.selectedWindowHandle = nil
+            return
+        }
+        
+        let _ = newWindowHandle!.siWindow // force to get siwindow instance
+        newWindowHandle!.refreshPlaceholderTitle()
+        newWindowHandle!.placeholder.window.alphaValue = 1 // show it
+        self.selectedWindowHandle = newWindowHandle
+        
+        // TODO: Do this once, just on activatation start
+        // Setup window alignment manager
+        var otherWindowHandlesDictionary = [Int: PWindowHandle]()
+        self.windowHandles.forEach { (windowHandle) in
+            guard windowHandle.windowNumber != newWindowHandle!.windowNumber else { return }
+            otherWindowHandlesDictionary[windowHandle.windowNumber] = windowHandle
+        }
+        self.windowAlignmentManager = WindowAlignmentManager(
+            selectedWindowFrame: newWindowHandle!.newRect,
+            otherWindows: otherWindowHandlesDictionary
+        )
+    }
+    
     func onActivationCompleted() {
         guard self.active else { return }
         
@@ -315,12 +335,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             return
         }
         
-        self.selectedWindowHandle!.applyNewFrame()
         self.focusedWindow?.focusThisWindowOnly()
+        
+        self.windowHandles.forEach { (windowHandle) in
+            windowHandle.applyNewFrame()
+            windowHandle.placeholder.window.orderOut(windowHandle.placeholder.window)
+        }
         self.colorOverlayWindows.forEach { (colorOverlayWindow) in
             colorOverlayWindow.orderOut(colorOverlayWindow)
         }
-        self.selectedWindowHandle!.placeholder.window.orderOut(self.selectedWindowHandle!.placeholder.window)
         self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
             gestureOverlayWindow.orderOut(gestureOverlayWindow)
             gestureOverlayWindow.clear()
@@ -329,6 +352,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.windowAlignmentManager = nil
         self.focusedWindow = nil
         self.selectedWindowHandle = nil
+        self.windowHandles = []
         self.active = false
     }
     
@@ -338,10 +362,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         Logger.shared.info("Aborted activation")
         
         self.focusedWindow?.focus()
+        
+        self.windowHandles.forEach { (windowHandle) in
+            windowHandle.placeholder.window.orderOut(windowHandle.placeholder.window)
+        }
         self.colorOverlayWindows.forEach { (colorOverlayWindow) in
             colorOverlayWindow.orderOut(colorOverlayWindow)
         }
-        self.selectedWindowHandle?.placeholder.window.orderOut(self.selectedWindowHandle?.placeholder.window)
         self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
             gestureOverlayWindow.orderOut(gestureOverlayWindow)
             gestureOverlayWindow.clear()
@@ -350,6 +377,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.windowAlignmentManager = nil
         self.focusedWindow = nil
         self.selectedWindowHandle = nil
+        self.windowHandles = []
         self.active = false
     }
     
@@ -608,7 +636,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     func onMouseMoveGesture(position: (x: CGFloat, y: CGFloat)) {
         guard self.active else { return }
-//        print("mouse moved \(position)")
+        // TODO: Throttle this
+        
+        let mouseX = NSEvent.mouseLocation.x
+        let mouseY = NSEvent.mouseLocation.y // bottom-left origined
+        
+        var windowUnderCursor: PWindowHandle? = nil
+        
+        for windowHandle in self.windowHandles {
+            if windowHandle.newRect.contains(CGPoint(x: mouseX, y: mouseY)) {
+                windowUnderCursor = windowHandle
+                break
+            }
+        }
+        
+        self.selectWindow(windowUnderCursor)
     }
     
     func menuWillOpen(_ menu: NSMenu) {
