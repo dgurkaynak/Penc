@@ -747,7 +747,7 @@
                                 </buttonCell>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UJ4-ah-crj">
-                                <rect key="frame" x="18" y="131" width="162" height="16"/>
+                                <rect key="frame" x="18" y="128" width="162" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Window selection:" id="WG0-Sd-wUd">
                                     <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -755,7 +755,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dQs-be-uu7">
-                                <rect key="frame" x="18" y="106" width="162" height="16"/>
+                                <rect key="frame" x="18" y="103" width="162" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Reverse scroll:" id="yyv-pA-L9g">
                                     <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -798,7 +798,7 @@
                                 </textFieldCell>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="D3y-ue-4R3">
-                                <rect key="frame" x="186" y="126" width="77" height="25"/>
+                                <rect key="frame" x="186" y="123" width="77" height="25"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Swd-QP-kG3" id="0Rw-gC-eIA">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -812,7 +812,7 @@
                                 </popUpButtonCell>
                             </popUpButton>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uTQ-vH-3ZI">
-                                <rect key="frame" x="186" y="105" width="22" height="18"/>
+                                <rect key="frame" x="186" y="102" width="22" height="18"/>
                                 <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="zkl-Ck-t7E">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -831,7 +831,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8Vb-2D-Kvf">
-                                <rect key="frame" x="18" y="81" width="162" height="16"/>
+                                <rect key="frame" x="18" y="78" width="162" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Show window size:" id="Mvj-tU-E3h">
                                     <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -839,7 +839,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wmj-S9-uLl">
-                                <rect key="frame" x="186" y="80" width="22" height="18"/>
+                                <rect key="frame" x="186" y="77" width="22" height="18"/>
                                 <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="DZI-Eq-mJ2">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -860,7 +860,7 @@
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ST3-Vw-j0t" secondAttribute="trailing" constant="20" symbolic="YES" id="FEG-LW-nWW"/>
                             <constraint firstItem="YKv-hh-Gxc" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" symbolic="YES" id="FFG-fB-N0V"/>
                             <constraint firstItem="S5h-MR-UgN" firstAttribute="leading" secondItem="YKv-hh-Gxc" secondAttribute="trailing" constant="5" id="GVq-Hh-eJa"/>
-                            <constraint firstItem="D3y-ue-4R3" firstAttribute="top" secondItem="6xw-ip-1OK" secondAttribute="bottom" constant="5" id="Hf8-9V-Xkj"/>
+                            <constraint firstItem="D3y-ue-4R3" firstAttribute="top" secondItem="6xw-ip-1OK" secondAttribute="bottom" constant="8" id="Hf8-9V-Xkj"/>
                             <constraint firstItem="GTi-YS-OlM" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="Hty-bV-Gux"/>
                             <constraint firstItem="D3y-ue-4R3" firstAttribute="leading" secondItem="UJ4-ah-crj" secondAttribute="trailing" constant="10" id="I99-5o-cz3"/>
                             <constraint firstItem="UJ4-ah-crj" firstAttribute="centerY" secondItem="D3y-ue-4R3" secondAttribute="centerY" id="ITh-Bs-l7S"/>
