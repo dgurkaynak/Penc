@@ -1262,49 +1262,47 @@
                         <rect key="frame" x="0.0" y="0.0" width="216" height="263"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ini-iq-NC3">
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ini-iq-NC3">
                                 <rect key="frame" x="84" y="176" width="48" height="48"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="Gqw-RI-MEw"/>
+                                    <constraint firstAttribute="width" constant="48" id="ppr-vb-0MT"/>
+                                </constraints>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="penc-logo-64" id="9hc-k0-Gyo"/>
                             </imageView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EOF-zo-KDG">
-                                <rect key="frame" x="91" y="151" width="35" height="17"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Penc" id="kzO-17-gcV">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EOF-zo-KDG">
+                                <rect key="frame" x="88" y="152" width="40" height="16"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Penc" id="kzO-17-gcV">
                                     <font key="font" metaFont="systemBold"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6wy-cz-hK5">
-                                <rect key="frame" x="18" y="110" width="180" height="17"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6wy-cz-hK5">
+                                <rect key="frame" x="55" y="113" width="106" height="14"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Version 1.0.0 (612)" id="Mmb-Cb-WOa">
                                     <font key="font" metaFont="message" size="11"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qbX-e6-liR">
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qbX-e6-liR">
                                 <rect key="frame" x="28" y="66" width="161" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Source code on Github" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nnq-gA-WFv">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="message" size="11"/>
                                 </buttonCell>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oBn-Bg-2L0">
-                                <rect key="frame" x="18" y="37" width="180" height="17"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oBn-Bg-2L0">
+                                <rect key="frame" x="58" y="40" width="101" height="14"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Copyright © 2017" id="gdA-Yk-3bk">
                                     <font key="font" metaFont="message" size="11"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JMh-Pw-rAZ">
-                                <rect key="frame" x="18" y="20" width="180" height="17"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JMh-Pw-rAZ">
+                                <rect key="frame" x="60" y="23" width="97" height="14"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Deniz Gurkaynak" id="4n8-EB-s1z">
                                     <font key="font" metaFont="message" size="11"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1312,6 +1310,20 @@
                                 </textFieldCell>
                             </textField>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="Ini-iq-NC3" firstAttribute="centerX" secondItem="FQX-bE-nqK" secondAttribute="centerX" id="1LY-P3-Jht"/>
+                            <constraint firstItem="oBn-Bg-2L0" firstAttribute="top" secondItem="qbX-e6-liR" secondAttribute="bottom" constant="19" id="5nr-2d-e2E"/>
+                            <constraint firstItem="Ini-iq-NC3" firstAttribute="top" secondItem="FQX-bE-nqK" secondAttribute="top" constant="39" id="BTH-nW-zlF"/>
+                            <constraint firstItem="EOF-zo-KDG" firstAttribute="centerX" secondItem="Ini-iq-NC3" secondAttribute="centerX" id="Jm3-6f-GxW"/>
+                            <constraint firstItem="EOF-zo-KDG" firstAttribute="top" secondItem="Ini-iq-NC3" secondAttribute="bottom" constant="8" id="Luc-zO-zgU"/>
+                            <constraint firstItem="6wy-cz-hK5" firstAttribute="centerX" secondItem="EOF-zo-KDG" secondAttribute="centerX" id="TmK-GW-772"/>
+                            <constraint firstItem="qbX-e6-liR" firstAttribute="top" secondItem="6wy-cz-hK5" secondAttribute="bottom" constant="19" id="fbN-mV-k9i"/>
+                            <constraint firstItem="oBn-Bg-2L0" firstAttribute="centerX" secondItem="qbX-e6-liR" secondAttribute="centerX" id="j7J-Sf-HTJ"/>
+                            <constraint firstItem="JMh-Pw-rAZ" firstAttribute="centerX" secondItem="oBn-Bg-2L0" secondAttribute="centerX" id="kqx-P8-9mr"/>
+                            <constraint firstItem="JMh-Pw-rAZ" firstAttribute="top" secondItem="oBn-Bg-2L0" secondAttribute="bottom" constant="3" id="m3e-xI-gdo"/>
+                            <constraint firstItem="qbX-e6-liR" firstAttribute="centerX" secondItem="6wy-cz-hK5" secondAttribute="centerX" id="nh9-Gd-mgk"/>
+                            <constraint firstItem="6wy-cz-hK5" firstAttribute="top" secondItem="EOF-zo-KDG" secondAttribute="bottom" constant="25" id="qn4-nC-Zdu"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="sourceCodeButton" destination="qbX-e6-liR" id="1k1-l4-rj1"/>
