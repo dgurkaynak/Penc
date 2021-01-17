@@ -24,8 +24,6 @@ class PlaceholderPool {
         window.contentViewController = windowViewController
         window.delegate = windowViewController
         
-//        windowViewController.toggleWindowSizeTextField(Preferences.shared.showWindowSize)
-        
         return (window: window, windowViewController: windowViewController)
     }
     

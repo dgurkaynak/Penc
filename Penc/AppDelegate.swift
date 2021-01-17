@@ -173,8 +173,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             gestureOverlayWindow.swipeThreshold = preferences.swipeThreshold
             gestureOverlayWindow.reverseScroll = preferences.reverseScroll
         }
-        // TODO: Delete this
-//        self.placeholderWindowViewController.toggleWindowSizeTextField(preferences.showWindowSize)
     }
     
     func onActivationStarted() {
