@@ -50,6 +50,7 @@ class PWindowHandle {
     
     func applyNewFrame() {
         guard self.isChanged() else { return }
+        self.oldRect = self.newRect
         self.siWindow?.setFrameBottomLeft(self.newRect)
     }
     

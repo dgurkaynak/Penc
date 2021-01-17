@@ -143,7 +143,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         colorOverlayWindow.level = .popUpMenu
         colorOverlayWindow.isOpaque = false
-        colorOverlayWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
+        colorOverlayWindow.backgroundColor = NSColor(calibratedRed: 1.0, green: 1.0, blue: 1.0, alpha: 0.1)
         
         return colorOverlayWindow
     }
@@ -190,19 +190,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             return
         }
         
-        self.focusedWindow = SIWindow.focused()
-        // If focused window is finder's desktop window, ignore
-        if self.focusedWindow?.title() == nil {
-            if let focusedApp = self.focusedWindow?.app() {
-                if focusedApp.title() == "Finder" {
-                    Logger.shared.debug("Desktop is focused, ignoring")
-                    self.focusedWindow = nil
-                }
-            }
-        }
-        
-        var initiallySelectedWindowHandle: PWindowHandle? = nil
-        
         // Get visible windows on the screen
         var visibleWindowHandles = [PWindowHandle]()
         do {
@@ -213,15 +200,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             return
         }
         
-        switch Preferences.shared.windowSelection {
-        case "focused":
-            if self.focusedWindow != nil {
-                let focusedWindowNumber = self.focusedWindow!.windowID()
-                initiallySelectedWindowHandle = visibleWindowHandles.first(where: { (windowHandle) -> Bool in
-                    return windowHandle.windowNumber == focusedWindowNumber
-                })
+        var focusedWindow = SIWindow.focused()
+        // If focused window is finder's desktop window, ignore
+        if focusedWindow?.title() == nil {
+            if let focusedApp = focusedWindow?.app() {
+                if focusedApp.title() == "Finder" {
+                    Logger.shared.debug("Desktop is focused, ignoring")
+                    focusedWindow = nil
+                }
             }
-        case "underCursor":
+        }
+        
+        var initiallySelectedWindowHandle: PWindowHandle? = nil
+        
+        if Preferences.shared.windowSelection == "focused" && focusedWindow != nil {
+            let focusedWindowNumber = focusedWindow!.windowID()
+            initiallySelectedWindowHandle = visibleWindowHandles.first(where: { (windowHandle) -> Bool in
+                return windowHandle.windowNumber == focusedWindowNumber
+            })
+        } else if Preferences.shared.windowSelection == "underCursor" {
             let mouseX = NSEvent.mouseLocation.x
             let mouseY = NSEvent.mouseLocation.y // bottom-left origined
             Logger.shared.debug("Looking for the window under mouse cursor -- X=\(mouseX), Y=\(mouseY)")
@@ -232,31 +229,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     break
                 }
             }
-        default:
-            Logger.shared.error("Not gonna activate, unknown window selection: \(Preferences.shared.windowSelection)")
-            self.abortSound?.play()
-            return
-        }
-        
-        Logger.shared.info("Activating... (Window selection: \(Preferences.shared.windowSelection) -- Focused window: \(self.focusedWindow.debugDescription) -- Selected window: \(initiallySelectedWindowHandle.debugDescription))")
-        
-        guard initiallySelectedWindowHandle != nil else {
-            self.abortSound?.play()
-            return
-        }
-        
-        // TODO: Test this
-        if let app = NSRunningApplication.init(processIdentifier: initiallySelectedWindowHandle!.appPid) {
-            if let appBundleId = app.bundleIdentifier {
-                if Preferences.shared.disabledApps.contains(appBundleId) {
-                    Logger.shared.info("Not gonna activate, Penc is disabled for \(appBundleId)")
-                    self.abortSound?.play()
-                    return
-                }
-            }
         }
         
         self.active = true
+        self.focusedWindow = focusedWindow
         self.windowHandles = visibleWindowHandles
         
         // Show color overlay windows for each screen
@@ -279,7 +255,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
         
         // Now handle the initially selected window
-        self.selectWindow(initiallySelectedWindowHandle!)
+        self.selectWindow(initiallySelectedWindowHandle)
         
         // Show gesture overlay window for each screen
         for (index, screen) in NSScreen.screens.enumerated() {
@@ -306,6 +282,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         if newWindowHandle == nil {
             self.selectedWindowHandle = nil
             return
+        }
+        
+        // Check if the window's app is ignored
+        if let app = NSRunningApplication.init(processIdentifier: newWindowHandle!.appPid) {
+            if let appBundleId = app.bundleIdentifier {
+                if Preferences.shared.disabledApps.contains(appBundleId) {
+                    self.selectedWindowHandle = nil
+                    return
+                }
+            }
         }
         
         let _ = newWindowHandle!.siWindow // force to get siwindow instance
