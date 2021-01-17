@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -723,7 +723,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="4FL-Yz-kg9" id="ABp-7V-qY8">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="message"/>
+                                    <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="L87-Gl-4Xq">
                                         <items>
                                             <menuItem title="Item 1" state="on" id="4FL-Yz-kg9"/>
@@ -740,14 +740,14 @@
                                 <rect key="frame" x="18" y="22" width="149" height="18"/>
                                 <buttonCell key="cell" type="check" title="Launch Penc at login" bezelStyle="regularSquare" imagePosition="left" inset="2" id="diT-tc-QfE">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="message"/>
+                                    <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lbR-8e-hcN">
                                 <rect key="frame" x="299" y="13" width="143" height="32"/>
                                 <buttonCell key="cell" type="push" title="Reset to defaults" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="w0O-n5-E5V">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="message"/>
+                                    <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UJ4-ah-crj">
@@ -810,7 +810,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Swd-QP-kG3" id="0Rw-gC-eIA">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="message"/>
+                                    <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="eom-uP-B1N">
                                         <items>
                                             <menuItem title="Item 1" state="on" id="Swd-QP-kG3"/>
@@ -825,7 +825,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="zkl-Ck-t7E">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="message"/>
+                                    <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nrU-Zu-llV">
@@ -856,7 +856,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="DZI-Eq-mJ2">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="message"/>
+                                    <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                         </subviews>
@@ -909,7 +909,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="↖︎" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r69-5G-oc7">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="message"/>
+                                                <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8hN-1a-RMZ">
@@ -917,7 +917,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="↗︎" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UmU-Fy-wKh">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="message"/>
+                                                <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n17-Gu-lbt">
@@ -925,7 +925,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="↙︎" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dJl-hf-JX6">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="message"/>
+                                                <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PK8-Xu-q7D">
@@ -933,7 +933,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="↘︎" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uCi-jZ-rOS">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="message"/>
+                                                <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zlg-GP-zYW">
@@ -941,7 +941,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="↑" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sFd-8L-zzA">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="message"/>
+                                                <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cba-Je-4ne">
@@ -949,7 +949,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="↓" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vfn-iG-pTm">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="message"/>
+                                                <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0df-MA-J9N">
@@ -957,7 +957,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="←" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vT7-yQ-SP7">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="message"/>
+                                                <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B1F-x0-4Cf">
@@ -965,7 +965,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="→" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="31E-w5-EHx">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="message"/>
+                                                <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dAh-H5-X2j">
@@ -973,7 +973,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="Dbl-click" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="L19-EN-MAa">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                <font key="font" metaFont="message"/>
+                                                <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
                                     </subviews>
@@ -984,7 +984,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="nhE-a6-q9u" id="IDm-N3-k5N">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="message"/>
+                                    <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="lEy-KX-yhX">
                                         <items>
                                             <menuItem title="Item 1" state="on" id="nhE-a6-q9u"/>
@@ -1175,7 +1175,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="⟳" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xVF-ks-MJK">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="message"/>
+                                    <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2ZU-nY-cvc">
@@ -1330,14 +1330,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <box boxType="custom" borderWidth="3" cornerRadius="5" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="VYT-K1-tfH">
+                            <box boxType="custom" borderType="none" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="VYT-K1-tfH">
                                 <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                                 <view key="contentView" id="cI5-e1-jMR">
-                                    <rect key="frame" x="3" y="3" width="444" height="294"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="75B-r5-JDK">
-                                            <rect key="frame" x="163" y="133" width="119" height="28"/>
+                                            <rect key="frame" x="166" y="136" width="119" height="28"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="450 x 300" id="Gx3-DL-HSR">
                                                 <font key="font" metaFont="system" size="24"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1350,8 +1350,6 @@
                                         <constraint firstItem="75B-r5-JDK" firstAttribute="centerY" secondItem="cI5-e1-jMR" secondAttribute="centerY" id="cj6-cG-6la"/>
                                     </constraints>
                                 </view>
-                                <color key="borderColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="fillColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                             </box>
                         </subviews>
                         <constraints>
