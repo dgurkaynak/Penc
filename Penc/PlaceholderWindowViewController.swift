@@ -11,6 +11,7 @@ import Cocoa
 class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
     @IBOutlet var box: NSBox!
     @IBOutlet var windowSizeTextField: NSTextField!
+    @IBOutlet var windowTitleTextField: NSTextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +22,10 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
         self.box.cornerRadius = 5
         self.box.borderColor = NSColor(calibratedRed: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.25)
+    }
+    
+    func updateWindowTitleTextField(_ title: String) {
+        self.windowTitleTextField.stringValue = title
     }
     
     func updateWindowSizeTextField(_ windowFrame: CGRect) {

@@ -268,7 +268,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             selectedWindowFrame: self.selectedWindowHandle!.newRect,
             otherWindows: otherWindowHandlesDictionary
         )
-
+        
+        // TODO: Delete following line, it's a temp hack
+        // to get window title initially and update it in
+        // placeholder window
+        let _ = self.selectedWindowHandle!.siWindow
+        
+        self.selectedWindowHandle!.refreshPlaceholderTitle()
         self.selectedWindowHandle!.updateFrame(self.selectedWindowHandle!.newRect)
         self.windowAlignmentManager?.updateSelectedWindowFrame(self.selectedWindowHandle!.newRect)
         

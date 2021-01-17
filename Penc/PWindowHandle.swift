@@ -17,6 +17,7 @@ enum PWindowHandleError: Error {
 
 class PWindowHandle {
     public private(set) var appPid: pid_t
+    public private(set) var appName: String
     public private(set) var windowNumber: Int
     public private(set) var zIndex: Int
     public private(set) var oldRect: CGRect // bottom-left originated
@@ -26,12 +27,19 @@ class PWindowHandle {
     
     private var _siWindow: SIWindow?
     
-    private init(appPid: pid_t, windowNumber: Int, zIndex: Int, frame: CGRect) {
+    private init(appPid: pid_t, appName: String, windowNumber: Int, zIndex: Int, frame: CGRect) {
         self.appPid = appPid
+        self.appName = appName
         self.windowNumber = windowNumber
         self.zIndex = zIndex
         self.oldRect = frame
         self.newRect = frame
+    }
+    
+    func refreshPlaceholderTitle() {
+        let title = self._siWindow != nil ? self._siWindow!.title() : nil
+        let newTitle = title != nil ? "\(title!) — \(self.appName)" : self.appName
+        self.placeholder.windowViewController.updateWindowTitleTextField(newTitle)
     }
     
     func updateFrame(_ newFrame: CGRect) {
@@ -88,6 +96,7 @@ class PWindowHandle {
             guard windowLayer == 0 else { continue }
             
             let appPid = windowInfo["kCGWindowOwnerPID"] as? pid_t
+            let appName = windowInfo["kCGWindowOwnerName"] as? String
             let windowNumber = windowInfo["kCGWindowNumber"] as? Int
             let windowBounds = windowInfo["kCGWindowBounds"] as? NSDictionary
             
@@ -106,7 +115,13 @@ class PWindowHandle {
             guard windowY != nil else { continue }
             
             let rect = CGRect(x: windowX!, y: windowY!, width: windowWidth!, height: windowHeight!).topLeft2bottomLeft(NSScreen.screens[0])
-            let windowHandle = PWindowHandle(appPid: appPid!, windowNumber: windowNumber!, zIndex: zIndex, frame: rect)
+            let windowHandle = PWindowHandle(
+                appPid: appPid!,
+                appName: appName ?? "Unnamed App",
+                windowNumber: windowNumber!,
+                zIndex: zIndex,
+                frame: rect
+            )
             visibleWindowHandles.append(windowHandle)
             
             zIndex = zIndex - 1

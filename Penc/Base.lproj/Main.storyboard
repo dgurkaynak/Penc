@@ -1434,18 +1434,28 @@
                                     <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="75B-r5-JDK">
-                                            <rect key="frame" x="166" y="136" width="119" height="28"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="450 x 300" id="Gx3-DL-HSR">
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zB0-Iz-bnG">
+                                            <rect key="frame" x="153" y="136" width="144" height="28"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Window Title" id="ziJ-Io-tKp">
                                                 <font key="font" metaFont="system" size="24"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="75B-r5-JDK">
+                                            <rect key="frame" x="183" y="114" width="84" height="19"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="450 x 300" id="Gx3-DL-HSR">
+                                                <font key="font" metaFont="system" size="16"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="75B-r5-JDK" firstAttribute="centerX" secondItem="cI5-e1-jMR" secondAttribute="centerX" id="EVj-hQ-K0o"/>
-                                        <constraint firstItem="75B-r5-JDK" firstAttribute="centerY" secondItem="cI5-e1-jMR" secondAttribute="centerY" id="cj6-cG-6la"/>
+                                        <constraint firstItem="zB0-Iz-bnG" firstAttribute="centerX" secondItem="cI5-e1-jMR" secondAttribute="centerX" id="JF9-sn-nlg"/>
+                                        <constraint firstItem="zB0-Iz-bnG" firstAttribute="centerY" secondItem="cI5-e1-jMR" secondAttribute="centerY" id="TGG-6S-rqx"/>
+                                        <constraint firstItem="75B-r5-JDK" firstAttribute="centerX" secondItem="zB0-Iz-bnG" secondAttribute="centerX" id="giD-w1-gf6"/>
+                                        <constraint firstItem="75B-r5-JDK" firstAttribute="top" secondItem="zB0-Iz-bnG" secondAttribute="bottom" constant="3" id="uE5-1W-fdN"/>
                                     </constraints>
                                 </view>
                             </box>
@@ -1460,6 +1470,7 @@
                     <connections>
                         <outlet property="box" destination="VYT-K1-tfH" id="2FC-6G-Mfr"/>
                         <outlet property="windowSizeTextField" destination="75B-r5-JDK" id="5uN-ak-Nuo"/>
+                        <outlet property="windowTitleTextField" destination="zB0-Iz-bnG" id="N5S-lU-Ada"/>
                     </connections>
                 </viewController>
                 <customObject id="wYq-Lv-GOz" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
