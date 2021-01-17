@@ -143,7 +143,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         colorOverlayWindow.level = .popUpMenu
         colorOverlayWindow.isOpaque = false
-        colorOverlayWindow.backgroundColor = NSColor(calibratedRed: 1.0, green: 1.0, blue: 1.0, alpha: 0.1)
+        colorOverlayWindow.backgroundColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.75)
         
         return colorOverlayWindow
     }
@@ -173,7 +173,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             gestureOverlayWindow.swipeThreshold = preferences.swipeThreshold
             gestureOverlayWindow.reverseScroll = preferences.reverseScroll
         }
-        // TODO: Fix this
+        // TODO: Delete this
 //        self.placeholderWindowViewController.toggleWindowSizeTextField(preferences.showWindowSize)
     }
     
@@ -249,8 +249,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         // Set-up initial placeholder windows & order them
         self.windowHandles.reversed().forEach { (windowHandle) in
             windowHandle.updateFrame(windowHandle.newRect)
-            windowHandle.placeholder.window.alphaValue = 0
-            
+            windowHandle.placeholder.windowViewController.styleNormal()
             windowHandle.placeholder.window.makeKeyAndOrderFront(windowHandle.placeholder.window)
         }
         
@@ -273,9 +272,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     func selectWindow(_ newWindowHandle: PWindowHandle?) {
         if self.selectedWindowHandle != nil {
-            // TODO: Check if it's rect is changed,
-            // if changed, set it a custom style
-            self.selectedWindowHandle!.placeholder.window.alphaValue = self.selectedWindowHandle!.isChanged() ? 0.5 : 0
+            self.selectedWindowHandle!.placeholder.windowViewController.styleNormal()
         }
         
         // If no window is selected, early terminate
@@ -296,11 +293,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         let _ = newWindowHandle!.siWindow // force to get siwindow instance
         newWindowHandle!.refreshPlaceholderTitle()
-        newWindowHandle!.placeholder.window.alphaValue = 1 // show it
+        newWindowHandle!.placeholder.windowViewController.styleHover()
         self.selectedWindowHandle = newWindowHandle
         
         // TODO: Do this once, just on activatation start
         // Setup window alignment manager
+        // TODO: This is not working i guess?
         var otherWindowHandlesDictionary = [Int: PWindowHandle]()
         self.windowHandles.forEach { (windowHandle) in
             guard windowHandle.windowNumber != newWindowHandle!.windowNumber else { return }
