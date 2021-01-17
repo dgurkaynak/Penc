@@ -272,17 +272,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     }
     
     func selectWindow(_ newWindowHandle: PWindowHandle?) {
-        // If newWindowHandle equals to current one, noop
-        if newWindowHandle != nil &&
-            self.selectedWindowHandle != nil &&
-            newWindowHandle! === self.selectedWindowHandle! {
-            return
-        }
-        
-        // Check if there is previously selected window
         if self.selectedWindowHandle != nil {
-            self.selectedWindowHandle!.applyNewFrame()
-            self.selectedWindowHandle!.placeholder.window.alphaValue = 0
+            // TODO: Check if it's rect is changed,
+            // if changed, set it a custom style
+            self.selectedWindowHandle!.placeholder.window.alphaValue = self.selectedWindowHandle!.isChanged() ? 0.5 : 0
         }
         
         // If no window is selected, early terminate
