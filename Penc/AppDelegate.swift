@@ -247,7 +247,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
         
         // Set-up initial placeholder windows & order them
-        self.windowHandles.forEach { (windowHandle) in
+        self.windowHandles.reversed().forEach { (windowHandle) in
             windowHandle.updateFrame(windowHandle.newRect)
             windowHandle.placeholder.window.alphaValue = 0
             
