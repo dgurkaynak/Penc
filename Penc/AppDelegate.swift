@@ -285,7 +285,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             return
         }
         
-        newWindowHandle!.placeholder.windowViewController.styleHover()
+        newWindowHandle!.placeholder.windowViewController.styleSelected()
         self.selectedWindowHandle = newWindowHandle
         
         // TODO: Do this once, just on activatation start

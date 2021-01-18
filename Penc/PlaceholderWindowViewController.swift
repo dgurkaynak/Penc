@@ -33,7 +33,7 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
         self.box.fillColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.75)
     }
     
-    func styleHover() {
+    func styleSelected() {
         self.box.borderWidth = 5
         self.box.borderColor = NSColor(calibratedRed: 0.106, green: 0.537, blue: 0.937, alpha: 1.0)
         self.box.fillColor = NSColor(calibratedRed: 0.05, green: 0.05, blue: 0.05, alpha: 0.95)
