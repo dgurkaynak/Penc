@@ -18,6 +18,7 @@ enum PWindowHandleError: Error {
 class PWindowHandle {
     public private(set) var appPid: pid_t
     public private(set) var appName: String
+    public private(set) var runningApp: NSRunningApplication?
     public private(set) var windowNumber: Int
     public private(set) var zIndex: Int
     public private(set) var oldRect: CGRect // bottom-left originated
@@ -30,6 +31,7 @@ class PWindowHandle {
     private init(appPid: pid_t, appName: String, windowNumber: Int, zIndex: Int, frame: CGRect) {
         self.appPid = appPid
         self.appName = appName
+        self.runningApp = NSRunningApplication.init(processIdentifier: appPid)
         self.windowNumber = windowNumber
         self.zIndex = zIndex
         self.oldRect = frame
@@ -40,6 +42,15 @@ class PWindowHandle {
         let title = self._siWindow != nil ? self._siWindow!.title() : nil
         let newTitle = title != nil ? "\(title!) — \(self.appName)" : self.appName
         self.placeholder.windowViewController.updateWindowTitleTextField(newTitle)
+    }
+    
+    func refreshAppIconImage() {
+        if self.runningApp == nil {
+            self.placeholder.windowViewController.imageView.image = nil
+            return
+        }
+        
+        self.placeholder.windowViewController.imageView.image = self.runningApp!.icon
     }
     
     func updateFrame(_ newFrame: CGRect) {
@@ -63,7 +74,7 @@ class PWindowHandle {
         get {
             if self._siWindow != nil { return self._siWindow! }
             
-            if let runningApp = NSRunningApplication.init(processIdentifier: self.appPid) {
+            if let runningApp = self.runningApp {
                 let app = SIApplication.init(runningApplication: runningApp)
                 let visibleWindows = app.visibleWindows()
 

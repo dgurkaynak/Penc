@@ -12,6 +12,7 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
     @IBOutlet var box: NSBox!
     @IBOutlet var windowSizeTextField: NSTextField!
     @IBOutlet var windowTitleTextField: NSTextField!
+    @IBOutlet var imageView: NSImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,8 +20,10 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
         // Do view setup here.
         self.box.borderType = .grooveBorder
         self.box.cornerRadius = 5
-        self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.75)
+        self.box.fillColor = NSColor(calibratedRed: 0, green: 0, blue: 0, alpha: 0.5)
         self.styleNormal()
+        
+        self.imageView.imageScaling = .scaleProportionallyUpOrDown
     }
     
     func styleNormal() {
@@ -29,14 +32,16 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
         
         self.windowSizeTextField.alphaValue = 0
         self.windowTitleTextField.alphaValue = 0
+        self.imageView.alphaValue = 0
     }
     
     func styleHover() {
-        self.box.borderWidth = 3
+        self.box.borderWidth = 4
         self.box.borderColor = NSColor(calibratedRed: 0.106, green: 0.537, blue: 0.937, alpha: 1.0)
         
         self.windowSizeTextField.alphaValue = 1
         self.windowTitleTextField.alphaValue = 1
+        self.imageView.alphaValue = 1
     }
     
     func updateWindowTitleTextField(_ title: String) {

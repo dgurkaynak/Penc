@@ -1385,26 +1385,36 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zB0-Iz-bnG">
-                                            <rect key="frame" x="153" y="136" width="144" height="28"/>
+                                            <rect key="frame" x="174" y="99" width="102" height="19"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Window Title" id="ziJ-Io-tKp">
-                                                <font key="font" metaFont="system" size="24"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="75B-r5-JDK">
-                                            <rect key="frame" x="183" y="114" width="84" height="19"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="450 x 300" id="Gx3-DL-HSR">
                                                 <font key="font" metaFont="system" size="16"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="75B-r5-JDK">
+                                            <rect key="frame" x="198" y="85" width="54" height="11"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="450 x 300" id="Gx3-DL-HSR">
+                                                <font key="font" metaFont="miniSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kje-J1-v7w">
+                                            <rect key="frame" x="201" y="126" width="48" height="48"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="48" id="Vv3-Ma-l3k"/>
+                                                <constraint firstAttribute="width" constant="48" id="ctK-4y-2vQ"/>
+                                            </constraints>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="2dA-O0-VbC"/>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="zB0-Iz-bnG" firstAttribute="centerX" secondItem="cI5-e1-jMR" secondAttribute="centerX" id="JF9-sn-nlg"/>
-                                        <constraint firstItem="zB0-Iz-bnG" firstAttribute="centerY" secondItem="cI5-e1-jMR" secondAttribute="centerY" id="TGG-6S-rqx"/>
+                                        <constraint firstItem="kje-J1-v7w" firstAttribute="centerX" secondItem="zB0-Iz-bnG" secondAttribute="centerX" id="4F3-IQ-MPk"/>
+                                        <constraint firstItem="kje-J1-v7w" firstAttribute="centerY" secondItem="cI5-e1-jMR" secondAttribute="centerY" id="9ZO-bD-kBd"/>
                                         <constraint firstItem="75B-r5-JDK" firstAttribute="centerX" secondItem="zB0-Iz-bnG" secondAttribute="centerX" id="giD-w1-gf6"/>
+                                        <constraint firstItem="zB0-Iz-bnG" firstAttribute="top" secondItem="kje-J1-v7w" secondAttribute="bottom" constant="8" id="guT-cU-2oM"/>
+                                        <constraint firstItem="kje-J1-v7w" firstAttribute="centerX" secondItem="cI5-e1-jMR" secondAttribute="centerX" id="t9q-46-LuU"/>
                                         <constraint firstItem="75B-r5-JDK" firstAttribute="top" secondItem="zB0-Iz-bnG" secondAttribute="bottom" constant="3" id="uE5-1W-fdN"/>
                                     </constraints>
                                 </view>
@@ -1419,6 +1429,7 @@
                     </view>
                     <connections>
                         <outlet property="box" destination="VYT-K1-tfH" id="2FC-6G-Mfr"/>
+                        <outlet property="imageView" destination="kje-J1-v7w" id="zwC-Sj-A4K"/>
                         <outlet property="windowSizeTextField" destination="75B-r5-JDK" id="5uN-ak-Nuo"/>
                         <outlet property="windowTitleTextField" destination="zB0-Iz-bnG" id="N5S-lU-Ada"/>
                     </connections>

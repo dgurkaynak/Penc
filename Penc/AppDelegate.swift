@@ -192,6 +192,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         var visibleWindowHandles = [PWindowHandle]()
         do {
             visibleWindowHandles = try PWindowHandle.visibleWindowHandles()
+            
+            // Filter the windows owned by disabled apps
+            visibleWindowHandles = visibleWindowHandles.filter({ (windowHandle) -> Bool in
+                if windowHandle.runningApp == nil { return true }
+                if windowHandle.runningApp!.bundleIdentifier == nil { return true }
+                return !Preferences.shared.disabledApps.contains(windowHandle.runningApp!.bundleIdentifier!)
+            })
         } catch {
             Logger.shared.error("Not gonna activate, could not get visible windows: \(error.localizedDescription)")
             self.abortSound?.play()
@@ -242,6 +249,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.windowHandles.reversed().forEach { (windowHandle) in
             windowHandle.updateFrame(windowHandle.newRect)
             windowHandle.placeholder.windowViewController.styleNormal()
+            windowHandle.refreshAppIconImage()
             windowHandle.placeholder.window.makeKeyAndOrderFront(windowHandle.placeholder.window)
         }
         
@@ -271,16 +279,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         if newWindowHandle == nil {
             self.selectedWindowHandle = nil
             return
-        }
-        
-        // Check if the window's app is ignored
-        if let app = NSRunningApplication.init(processIdentifier: newWindowHandle!.appPid) {
-            if let appBundleId = app.bundleIdentifier {
-                if Preferences.shared.disabledApps.contains(appBundleId) {
-                    self.selectedWindowHandle = nil
-                    return
-                }
-            }
         }
         
         let _ = newWindowHandle!.siWindow // force to get siwindow instance
