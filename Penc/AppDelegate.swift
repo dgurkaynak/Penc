@@ -211,21 +211,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         var initiallySelectedWindowHandle: PWindowHandle? = nil
         
-        if Preferences.shared.windowSelection == "focused" && focusedWindow != nil {
-            let focusedWindowNumber = focusedWindow!.windowID()
-            initiallySelectedWindowHandle = visibleWindowHandles.first(where: { (windowHandle) -> Bool in
-                return windowHandle.windowNumber == focusedWindowNumber
-            })
-        } else if Preferences.shared.windowSelection == "underCursor" {
-            let mouseX = NSEvent.mouseLocation.x
-            let mouseY = NSEvent.mouseLocation.y // bottom-left origined
-            Logger.shared.debug("Looking for the window under mouse cursor -- X=\(mouseX), Y=\(mouseY)")
-            
-            for windowHandle in visibleWindowHandles {
-                if windowHandle.newRect.contains(CGPoint(x: mouseX, y: mouseY)) {
-                    initiallySelectedWindowHandle = windowHandle
-                    break
-                }
+        // Select the window under cursor
+        let mouseX = NSEvent.mouseLocation.x
+        let mouseY = NSEvent.mouseLocation.y // bottom-left origined
+        Logger.shared.debug("Looking for the window under mouse cursor -- X=\(mouseX), Y=\(mouseY)")
+        
+        for windowHandle in visibleWindowHandles {
+            if windowHandle.newRect.contains(CGPoint(x: mouseX, y: mouseY)) {
+                initiallySelectedWindowHandle = windowHandle
+                break
             }
         }
         
