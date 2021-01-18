@@ -249,7 +249,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.windowHandles.reversed().forEach { (windowHandle) in
             windowHandle.updateFrame(windowHandle.newRect)
             windowHandle.placeholder.windowViewController.styleNormal()
+            
+            let _ = windowHandle.siWindow // force to get siwindow instance
+            windowHandle.refreshPlaceholderTitle()
             windowHandle.refreshAppIconImage()
+            
             windowHandle.placeholder.window.makeKeyAndOrderFront(windowHandle.placeholder.window)
         }
         
@@ -281,8 +285,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             return
         }
         
-        let _ = newWindowHandle!.siWindow // force to get siwindow instance
-        newWindowHandle!.refreshPlaceholderTitle()
         newWindowHandle!.placeholder.windowViewController.styleHover()
         self.selectedWindowHandle = newWindowHandle
         
