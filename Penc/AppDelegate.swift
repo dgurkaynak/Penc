@@ -144,14 +144,16 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         colorOverlayWindow.level = .popUpMenu
         colorOverlayWindow.isOpaque = false
         
-        // TODO: Is there any way to detect isReduceTransparencyEnabled?
-        // https://developer.apple.com/documentation/uikit/uiaccessibility/1615074-isreducetransparencyenabled
-        let blurView = NSVisualEffectView(frame: colorOverlayWindow.frame)
-        blurView.blendingMode = .behindWindow
-        blurView.material = .dark
-        blurView.state = .active
-        blurView.autoresizingMask = [.width, .height]
-        colorOverlayWindow.contentView?.addSubview(blurView)
+        if !NSWorkspace.shared.accessibilityDisplayShouldReduceTransparency {
+            let blurView = NSVisualEffectView(frame: colorOverlayWindow.frame)
+            blurView.blendingMode = .behindWindow
+            blurView.material = .dark
+            blurView.state = .active
+            blurView.autoresizingMask = [.width, .height]
+            colorOverlayWindow.contentView?.addSubview(blurView)
+        } else {
+            colorOverlayWindow.backgroundColor = NSColor(white: 0.15, alpha: 0.8)
+        }
         
         return colorOverlayWindow
     }
