@@ -600,22 +600,31 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         let isResizable = self.selectedWindowHandle!.siWindow?.isResizable() ?? false
         let isMovable = self.selectedWindowHandle!.siWindow?.isMovable() ?? false
         
+        var newRect = self.selectedWindowHandle!.newRect
+        
         if isResizable {
-            let newRect = self.selectedWindowHandle!.newRect.resizeBy(
+            newRect = newRect.resizeBy(
                 screen: placeholderWindowScreen!,
                 ratio: (
                     width: CGFloat(actions["dblClick"]![0]),
                     height: CGFloat(actions["dblClick"]![1])
                 )
             )
-            self.selectedWindowHandle!.updateFrame(newRect)
         }
         
         if isMovable {
-            let newRect = self.selectedWindowHandle!.newRect.setPositionOf(
+            newRect = newRect.setPositionOf(
                 anchorPoint: .CENTER,
                 toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .CENTER)
             )
+        }
+        
+        if self.selectedWindowHandle!.previousRectBeforeDblClick != nil &&
+            self.selectedWindowHandle!.newRect == newRect {
+            self.selectedWindowHandle!.updateFrame(self.selectedWindowHandle!.previousRectBeforeDblClick!)
+            self.selectedWindowHandle!.previousRectBeforeDblClick = nil
+        } else {
+            self.selectedWindowHandle!.previousRectBeforeDblClick = self.selectedWindowHandle!.newRect
             self.selectedWindowHandle!.updateFrame(newRect)
         }
     }

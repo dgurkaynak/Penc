@@ -21,6 +21,7 @@ class PWindowHandle {
     public private(set) var windowNumber: Int
     public private(set) var zIndex: Int
     public private(set) var oldRect: CGRect // bottom-left originated
+    var previousRectBeforeDblClick: CGRect? // bottom-left originated
     public private(set) var newRect: CGRect // bottom-left originated
     
     let placeholder = PlaceholderPool.shared.acquire()
