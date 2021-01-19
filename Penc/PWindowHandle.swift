@@ -20,7 +20,7 @@ class PWindowHandle {
     public private(set) var runningApp: NSRunningApplication?
     public private(set) var windowNumber: Int
     public private(set) var zIndex: Int
-    public private(set) var oldRect: CGRect // bottom-left originated
+    public private(set) var initialRect: CGRect // bottom-left originated
     var previousRectBeforeDblClick: CGRect? // bottom-left originated
     public private(set) var newRect: CGRect // bottom-left originated
     
@@ -33,7 +33,7 @@ class PWindowHandle {
         self.runningApp = NSRunningApplication.init(processIdentifier: appPid)
         self.windowNumber = windowNumber
         self.zIndex = zIndex
-        self.oldRect = frame
+        self.initialRect = frame
         self.newRect = frame
     }
     
@@ -59,12 +59,12 @@ class PWindowHandle {
     
     func applyNewFrame() {
         guard self.isChanged() else { return }
-        self.oldRect = self.newRect
+        self.initialRect = self.newRect
         self.siWindow?.setFrameBottomLeft(self.newRect)
     }
     
     func isChanged() -> Bool {
-        return self.newRect != self.oldRect
+        return self.newRect != self.initialRect
     }
     
     var siWindow: SIWindow? {
