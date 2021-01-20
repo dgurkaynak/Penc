@@ -281,6 +281,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             gestureOverlayWindow.makeKeyAndOrderFront(gestureOverlayWindow)
         }
         
+        // If there are multiple screens, only the frontmost gesture overlay window
+        // recieves magnify events. I guess this is one of macOS's restrictions and
+        // we can't do anything. However, the only thing we can do is that we can set
+        // the gesture overlay window in the selected window's screen as the frontmost
+        // window, so when a person activates the Penc, it can do magnify gesture right away.
+        let initiallySelectedWindowScreen = initiallySelectedWindowHandle?.placeholder.window.screen
+        if initiallySelectedWindowScreen != nil {
+            let gestureOverlayWindow = self.gestureOverlayWindows.first { (window) -> Bool in
+                return window.screen === initiallySelectedWindowScreen
+            }
+            gestureOverlayWindow?.makeKeyAndOrderFront(gestureOverlayWindow)
+        }
+        
         NSApplication.shared.activate(ignoringOtherApps: true)
     }
     
