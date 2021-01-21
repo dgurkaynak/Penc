@@ -29,15 +29,12 @@ struct VerticalEdgeAlignment {
     var alignTo: VerticalLineSegment
     // If you want to modify the edge (line segment) before alignment/collision check
     var edgeModifier: ((_ lineSegment: VerticalLineSegment) -> VerticalLineSegment)?
-    // Pass it true if you want NOT to check continous collision
-    var skipContinuousCollisionCheck: Bool?
 }
 
 struct HorizontalEdgeAlignment {
     var edge: HorizontalEdgeType
     var alignTo: HorizontalLineSegment
     var edgeModifier: ((_ lineSegment: HorizontalLineSegment) -> HorizontalLineSegment)?
-    var skipContinuousCollisionCheck: Bool?
 }
 
 class WindowAlignmentManager {
@@ -98,8 +95,7 @@ class WindowAlignmentManager {
                     let newVerticalAlignment = VerticalEdgeAlignment(
                         edge: verticalAlignment.edge,
                         alignTo: newLineSegment,
-                        edgeModifier: verticalAlignment.edgeModifier,
-                        skipContinuousCollisionCheck: verticalAlignment.skipContinuousCollisionCheck
+                        edgeModifier: verticalAlignment.edgeModifier
                     )
                     newVerticalAlignments.append(newVerticalAlignment)
                 }
@@ -114,8 +110,7 @@ class WindowAlignmentManager {
                     let newHorizontalAlignment = HorizontalEdgeAlignment(
                         edge: horizontalAlignment.edge,
                         alignTo: newLineSegment,
-                        edgeModifier: horizontalAlignment.edgeModifier,
-                        skipContinuousCollisionCheck: horizontalAlignment.skipContinuousCollisionCheck
+                        edgeModifier: horizontalAlignment.edgeModifier
                     )
                     newHorizontalAlignmets.append(newHorizontalAlignment)
                 }
@@ -167,8 +162,7 @@ class WindowAlignmentManager {
                         x1: otherWindow.newRect.origin.x - WINDOW_ALIGNMENT_OFFSET,
                         x2: otherWindow.newRect.origin.x
                     ),
-                    edgeModifier: rightPointOf(_:),
-                    skipContinuousCollisionCheck: true
+                    edgeModifier: rightPointOf(_:)
                 ),
                 // bottomEdge(A) >|< bottomEdge(B)
                 HorizontalEdgeAlignment(
@@ -178,8 +172,7 @@ class WindowAlignmentManager {
                         x1: otherWindow.newRect.origin.x - WINDOW_ALIGNMENT_OFFSET,
                         x2: otherWindow.newRect.origin.x
                     ),
-                    edgeModifier: rightPointOf(_:),
-                    skipContinuousCollisionCheck: true
+                    edgeModifier: rightPointOf(_:)
                 )
             ])
             
@@ -193,8 +186,7 @@ class WindowAlignmentManager {
                         x1: otherWindow.newRect.origin.x + otherWindow.newRect.size.width,
                         x2: otherWindow.newRect.origin.x + otherWindow.newRect.size.width + WINDOW_ALIGNMENT_OFFSET
                     ),
-                    edgeModifier: leftPointOf(_:),
-                    skipContinuousCollisionCheck: true
+                    edgeModifier: leftPointOf(_:)
                 ),
                 // bottomEdge(A) >|< bottomEdge(B)
                 HorizontalEdgeAlignment(
@@ -204,8 +196,7 @@ class WindowAlignmentManager {
                         x1: otherWindow.newRect.origin.x + otherWindow.newRect.size.width,
                         x2: otherWindow.newRect.origin.x + otherWindow.newRect.size.width + WINDOW_ALIGNMENT_OFFSET
                     ),
-                    edgeModifier: leftPointOf(_:),
-                    skipContinuousCollisionCheck: true
+                    edgeModifier: leftPointOf(_:)
                 )
             ])
             
@@ -221,8 +212,7 @@ class WindowAlignmentManager {
                         y1: otherWindow.newRect.origin.y + otherWindow.newRect.size.height,
                         y2: otherWindow.newRect.origin.y + otherWindow.newRect.size.height + WINDOW_ALIGNMENT_OFFSET
                     ),
-                    edgeModifier: bottomPointOf(_:),
-                    skipContinuousCollisionCheck: true
+                    edgeModifier: bottomPointOf(_:)
                 ),
                 // rightEdge(A) >|< rightEdge(B)
                 VerticalEdgeAlignment(
@@ -232,8 +222,7 @@ class WindowAlignmentManager {
                         y1: otherWindow.newRect.origin.y + otherWindow.newRect.size.height,
                         y2: otherWindow.newRect.origin.y + otherWindow.newRect.size.height + WINDOW_ALIGNMENT_OFFSET
                     ),
-                    edgeModifier: bottomPointOf(_:),
-                    skipContinuousCollisionCheck: true
+                    edgeModifier: bottomPointOf(_:)
                 )
             ])
             
@@ -247,8 +236,7 @@ class WindowAlignmentManager {
                         y1: otherWindow.newRect.origin.y - WINDOW_ALIGNMENT_OFFSET,
                         y2: otherWindow.newRect.origin.y
                     ),
-                    edgeModifier: topPointOf(_:),
-                    skipContinuousCollisionCheck: true
+                    edgeModifier: topPointOf(_:)
                 ),
                 // rightEdge(A) >|< rightEdge(B)
                 VerticalEdgeAlignment(
@@ -258,8 +246,7 @@ class WindowAlignmentManager {
                         y1: otherWindow.newRect.origin.y - WINDOW_ALIGNMENT_OFFSET,
                         y2: otherWindow.newRect.origin.y
                     ),
-                    edgeModifier: topPointOf(_:),
-                    skipContinuousCollisionCheck: true
+                    edgeModifier: topPointOf(_:)
                 )
             ])
         }
@@ -366,11 +353,6 @@ class WindowAlignmentManager {
                     // We're not already aligned to a target
                     // Let's check whether we're going to align in next step
                     let collidedTarget = self.verticalAlignments.first { (alignment) -> Bool in
-                        if alignment.skipContinuousCollisionCheck != nil &&
-                            alignment.skipContinuousCollisionCheck == true {
-                            return false
-                        }
-                        
                         let currentEdge = alignment.edge == .LEFT ? currentLeftEdge : currentRightEdge
                         let currentEdgeLineSegment = alignment.edgeModifier == nil ? currentEdge : alignment.edgeModifier!(currentEdge)
                         return currentEdgeLineSegment.checkContinuousCollision(withTarget: alignment.alignTo, movement: movement)
@@ -423,11 +405,6 @@ class WindowAlignmentManager {
                     // We're not already aligned to a target
                     // Let's check whether we're going to align in next step
                     let collidedTarget = self.horizontalAlignments.first { (alignment) -> Bool in
-                        if alignment.skipContinuousCollisionCheck != nil &&
-                            alignment.skipContinuousCollisionCheck == true {
-                            return false
-                        }
-                        
                         let currentEdge = alignment.edge == .TOP ? currentTopEdge : currentBottomEdge
                         let currentEdgeLineSegment = alignment.edgeModifier == nil ? currentEdge : alignment.edgeModifier!(currentEdge)
                         return currentEdgeLineSegment.checkContinuousCollision(withTarget: alignment.alignTo, movement: movement)
