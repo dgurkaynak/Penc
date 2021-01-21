@@ -128,6 +128,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         let gestureOverlayWindow = GestureOverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
         gestureOverlayWindow.setDelegate(self)
         
+        gestureOverlayWindow.swipeDetectionVelocityThreshold = Preferences.shared.swipeDetectionVelocityThreshold
+        
         gestureOverlayWindow.level = .popUpMenu
         gestureOverlayWindow.isOpaque = false
         gestureOverlayWindow.ignoresMouseEvents = false
@@ -180,7 +182,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.keyboardListener.secondActivationModifierKeyPress = Double(preferences.activationSensitivity)
         self.keyboardListener.holdActivationModifierKeyTimeout = Double(preferences.holdDuration)
         self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
-            gestureOverlayWindow.swipeThreshold = preferences.swipeThreshold
+            gestureOverlayWindow.swipeDetectionVelocityThreshold = preferences.swipeDetectionVelocityThreshold
             gestureOverlayWindow.reverseScroll = preferences.reverseScroll
         }
     }
@@ -409,14 +411,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         else if isEnterKeyPressed { self.onDoubleClickGesture() }
     }
     
-    func onScrollGesture(delta: (x: CGFloat, y: CGFloat), timestamp: Double) {
+    func onScrollGesture(delta: (x: CGFloat, y: CGFloat, timestamp: Double)) {
         guard self.active else { return }
         guard self.selectedWindowHandle != nil else { return }
         guard self.selectedWindowHandle!.siWindow?.isMovable() ?? false else { return }
         guard self.windowAlignmentManager != nil else { return }
         
         let rect = self.selectedWindowHandle!.newRect
-        let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: timestamp)
+        let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: delta.timestamp)
         let newRect = CGRect(
             x: rect.origin.x + newMovement.x,
             y: rect.origin.y + newMovement.y,

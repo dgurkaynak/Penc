@@ -14,8 +14,8 @@ class PreferencesGeneralViewController: NSViewController {
     @IBOutlet var doublePressSensitivityLabel: NSTextField!
     @IBOutlet var holdDurationSlider: NSSlider!
     @IBOutlet var holdDurationLabel: NSTextField!
-    @IBOutlet var swipeSensitivitySlider: NSSlider!
-    @IBOutlet var swipeSensitivityLabel: NSTextField!
+    @IBOutlet var swipeDetectionThresholdSlider: NSSlider!
+    @IBOutlet var swipeDetectionThresholdLabel: NSTextField!
     @IBOutlet var launchAtLoginCheckbox: NSButton!
     @IBOutlet var resetDefaultsButton: NSButton!
     @IBOutlet var modifierKeyPopUpButton: NSPopUpButton!
@@ -43,8 +43,8 @@ class PreferencesGeneralViewController: NSViewController {
         self.holdDurationSlider.target = self
         self.holdDurationSlider.action = #selector(onHoldDurationSliderChange)
         
-        self.swipeSensitivitySlider.target = self
-        self.swipeSensitivitySlider.action = #selector(onSwipeSensitivitySliderChange)
+        self.swipeDetectionThresholdSlider.target = self
+        self.swipeDetectionThresholdSlider.action = #selector(onSwipeSensitivitySliderChange)
         
         self.reverseScrollCheckbox.target = self
         self.reverseScrollCheckbox.action = #selector(onReverseScrollCheckboxChange)
@@ -81,10 +81,9 @@ class PreferencesGeneralViewController: NSViewController {
         self.holdDurationSlider.integerValue = holdDuration
         self.holdDurationLabel.stringValue = "\(holdDuration) ms"
         
-        let swipeThreshold = Float(Preferences.shared.swipeThreshold)
-        let sliderValue = 55 - swipeThreshold
-        self.swipeSensitivitySlider.floatValue = sliderValue
-        self.swipeSensitivityLabel.stringValue = String(format: "%.2f", sliderValue)
+        let swipeDetectionThreshold = Preferences.shared.swipeDetectionVelocityThreshold
+        self.swipeDetectionThresholdSlider.doubleValue = swipeDetectionThreshold
+        self.swipeDetectionThresholdLabel.stringValue = String(format: "%.0f px/s", swipeDetectionThreshold)
         
         self.reverseScrollCheckbox.state = Preferences.shared.reverseScroll ? .on : .off
         
@@ -124,9 +123,9 @@ class PreferencesGeneralViewController: NSViewController {
     }
     
     @objc private func onSwipeSensitivitySliderChange() {
-        self.swipeSensitivityLabel.stringValue = String(format: "%.2f", self.swipeSensitivitySlider.floatValue)
-        Preferences.shared.swipeThreshold = CGFloat(55 - self.swipeSensitivitySlider.floatValue)
-        Logger.shared.info("Set swipe threshold \(Preferences.shared.swipeThreshold)")
+        self.swipeDetectionThresholdLabel.stringValue = String(format: "%.0f px/s", self.swipeDetectionThresholdSlider.doubleValue)
+        Preferences.shared.swipeDetectionVelocityThreshold = self.swipeDetectionThresholdSlider.doubleValue
+        Logger.shared.info("Set swipe detection threshold \(Preferences.shared.swipeDetectionVelocityThreshold) px/s")
     }
     
     @objc private func onReverseScrollCheckboxChange() {

@@ -20,7 +20,7 @@ final class Preferences {
     private static let key_activationModifierKey = "activationModifierKey"
     private static let key_activationSensitivity = "activationSensitivity"
     private static let key_holdDuration = "holdDuration"
-    private static let key_swipeThreshold = "swipeThreshold"
+    private static let key_swipeDetectionVelocityThreshold = "swipeDetectionVelocityThreshold"
     private static let key_disabledApps = "disabledApps"
     private static let key_reverseScroll = "reverseScroll"
     private static let key_customActionsForScreenPrefix = "customActionsForScreen"
@@ -48,9 +48,9 @@ final class Preferences {
         }
     }
     
-    var swipeThreshold: CGFloat {
+    var swipeDetectionVelocityThreshold: Double {
         didSet {
-            UserDefaults.standard.set(self.swipeThreshold, forKey: Preferences.key_swipeThreshold)
+            UserDefaults.standard.set(self.swipeDetectionVelocityThreshold, forKey: Preferences.key_swipeDetectionVelocityThreshold)
             self.delegate?.onPreferencesChanged()
         }
     }
@@ -104,12 +104,12 @@ final class Preferences {
             self.holdDuration = holdDuration!
         }
         
-        let swipeThreshold = defaults.object(forKey: Preferences.key_swipeThreshold) as? CGFloat
-        if swipeThreshold == nil {
-            self.swipeThreshold = 25.0
-            UserDefaults.standard.set(self.swipeThreshold, forKey: Preferences.key_swipeThreshold)
+        let swipeDetectionVelocityThreshold = defaults.object(forKey: Preferences.key_swipeDetectionVelocityThreshold) as? Double
+        if swipeDetectionVelocityThreshold == nil {
+            self.swipeDetectionVelocityThreshold = 500
+            UserDefaults.standard.set(self.swipeDetectionVelocityThreshold, forKey: Preferences.key_swipeDetectionVelocityThreshold)
         } else {
-            self.swipeThreshold = swipeThreshold!
+            self.swipeDetectionVelocityThreshold = swipeDetectionVelocityThreshold!
         }
         
         let disabledApps = defaults.object(forKey: Preferences.key_disabledApps) as? [String]
@@ -161,7 +161,7 @@ final class Preferences {
         self.activationModifierKey = .command
         self.activationSensitivity = 0.3
         self.holdDuration = 0.1
-        self.swipeThreshold = 25.0
+        self.swipeDetectionVelocityThreshold = 500
         self.disabledApps = []
         self.reverseScroll = false
     }

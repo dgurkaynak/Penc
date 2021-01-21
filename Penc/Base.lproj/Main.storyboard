@@ -688,7 +688,7 @@
             <objects>
                 <viewController storyboardIdentifier="PreferencesGeneralViewController" id="XfG-lQ-9wD" customClass="PreferencesGeneralViewController" customModule="Penc" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="456" height="224"/>
+                        <rect key="frame" x="0.0" y="0.0" width="524" height="224"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YKv-hh-Gxc">
@@ -700,16 +700,16 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ufP-Hn-wBR">
-                                <rect key="frame" x="18" y="158" width="162" height="16"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Double-press speed:" id="It5-pY-Jir">
+                                <rect key="frame" x="18" y="158" width="214" height="16"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Double-press detection threshold:" id="It5-pY-Jir">
                                     <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w3P-Nz-Pfg">
-                                <rect key="frame" x="18" y="108" width="162" height="16"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Swipe sensitivity:" id="rO1-fZ-wGH">
+                                <rect key="frame" x="18" y="108" width="214" height="16"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Swipe detection threshold:" id="rO1-fZ-wGH">
                                     <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -730,7 +730,7 @@
                                 </popUpButtonCell>
                             </popUpButton>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="GTi-YS-OlM">
-                                <rect key="frame" x="0.0" y="59" width="456" height="5"/>
+                                <rect key="frame" x="0.0" y="59" width="524" height="5"/>
                             </box>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="Fsm-xo-OLp">
                                 <rect key="frame" x="18" y="22" width="149" height="18"/>
@@ -740,22 +740,22 @@
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lbR-8e-hcN">
-                                <rect key="frame" x="299" y="13" width="143" height="32"/>
+                                <rect key="frame" x="367" y="13" width="143" height="32"/>
                                 <buttonCell key="cell" type="push" title="Reset to defaults" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="w0O-n5-E5V">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dQs-be-uu7">
-                                <rect key="frame" x="18" y="82" width="162" height="16"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Reverse scroll:" id="yyv-pA-L9g">
+                                <rect key="frame" x="18" y="82" width="214" height="16"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Reverse scroll direction:" id="yyv-pA-L9g">
                                     <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vo3-Rr-lXS">
-                                <rect key="frame" x="18" y="133" width="162" height="16"/>
+                                <rect key="frame" x="18" y="133" width="214" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Hold duration to activate:" id="0jS-Ad-W4i">
                                     <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -763,18 +763,18 @@
                                 </textFieldCell>
                             </textField>
                             <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ttP-Ev-cdl">
-                                <rect key="frame" x="186" y="156" width="190" height="19"/>
+                                <rect key="frame" x="238" y="156" width="190" height="19"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="186" id="8P3-fY-gPS"/>
                                 </constraints>
                                 <sliderCell key="cell" continuous="YES" state="on" alignment="left" maxValue="1000" doubleValue="300" tickMarkPosition="above" sliderType="linear" id="TUJ-8c-1mv"/>
                             </slider>
                             <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6xw-ip-1OK">
-                                <rect key="frame" x="186" y="106" width="190" height="19"/>
-                                <sliderCell key="cell" continuous="YES" state="on" alignment="left" maxValue="50" doubleValue="30" tickMarkPosition="above" sliderType="linear" id="FFc-Z2-pxK"/>
+                                <rect key="frame" x="238" y="106" width="190" height="19"/>
+                                <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="250" maxValue="1500" doubleValue="500" tickMarkPosition="above" sliderType="linear" id="FFc-Z2-pxK"/>
                             </slider>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ST3-Vw-j0t">
-                                <rect key="frame" x="380" y="158" width="50" height="16"/>
+                                <rect key="frame" x="432" y="158" width="50" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="300 ms" id="Boa-41-5eC">
                                     <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -782,26 +782,26 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JMn-Mr-0Q2">
-                                <rect key="frame" x="380" y="108" width="21" height="16"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="30" id="rj2-NC-ILc">
+                                <rect key="frame" x="432" y="108" width="58" height="16"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="500 px/s" id="rj2-NC-ILc">
                                     <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uTQ-vH-3ZI">
-                                <rect key="frame" x="186" y="81" width="22" height="18"/>
+                                <rect key="frame" x="238" y="81" width="22" height="18"/>
                                 <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="zkl-Ck-t7E">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                             </button>
                             <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nrU-Zu-llV">
-                                <rect key="frame" x="186" y="131" width="190" height="19"/>
+                                <rect key="frame" x="238" y="131" width="190" height="19"/>
                                 <sliderCell key="cell" continuous="YES" state="on" alignment="left" maxValue="500" doubleValue="100" tickMarkPosition="above" sliderType="linear" id="OzN-et-YtC"/>
                             </slider>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SKe-Wz-fMv">
-                                <rect key="frame" x="380" y="133" width="48" height="16"/>
+                                <rect key="frame" x="432" y="133" width="48" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="100 ms" id="Sz0-0X-6PX">
                                     <font key="font" metaFont="message"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -841,7 +841,7 @@
                             <constraint firstItem="S5h-MR-UgN" firstAttribute="centerY" secondItem="YKv-hh-Gxc" secondAttribute="centerY" id="X3H-gj-gcr"/>
                             <constraint firstItem="JMn-Mr-0Q2" firstAttribute="centerY" secondItem="6xw-ip-1OK" secondAttribute="centerY" id="XhR-3X-fTq"/>
                             <constraint firstItem="uTQ-vH-3ZI" firstAttribute="top" secondItem="6xw-ip-1OK" secondAttribute="bottom" constant="11" id="Y2i-3v-BFD"/>
-                            <constraint firstItem="ttP-Ev-cdl" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="188" id="Z6S-ra-Meu"/>
+                            <constraint firstItem="ttP-Ev-cdl" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="240" id="Z6S-ra-Meu"/>
                             <constraint firstItem="uTQ-vH-3ZI" firstAttribute="leading" secondItem="dQs-be-uu7" secondAttribute="trailing" constant="10" id="acK-1m-btB"/>
                             <constraint firstItem="w3P-Nz-Pfg" firstAttribute="leading" secondItem="vo3-Rr-lXS" secondAttribute="leading" id="g98-kx-zP2"/>
                             <constraint firstItem="6xw-ip-1OK" firstAttribute="leading" secondItem="nrU-Zu-llV" secondAttribute="leading" id="gPi-Zc-DVc"/>
@@ -867,13 +867,13 @@
                         <outlet property="modifierKeyPopUpButton" destination="S5h-MR-UgN" id="bSA-e1-xei"/>
                         <outlet property="resetDefaultsButton" destination="lbR-8e-hcN" id="Xie-Wj-Lh6"/>
                         <outlet property="reverseScrollCheckbox" destination="uTQ-vH-3ZI" id="aJ7-fc-l0s"/>
-                        <outlet property="swipeSensitivityLabel" destination="JMn-Mr-0Q2" id="ryB-da-kZl"/>
-                        <outlet property="swipeSensitivitySlider" destination="6xw-ip-1OK" id="a9C-Xg-zRt"/>
+                        <outlet property="swipeDetectionThresholdLabel" destination="JMn-Mr-0Q2" id="ryB-da-kZl"/>
+                        <outlet property="swipeDetectionThresholdSlider" destination="6xw-ip-1OK" id="a9C-Xg-zRt"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="637" y="674"/>
+            <point key="canvasLocation" x="669" y="674"/>
         </scene>
         <!--Preferences Customize Actions View Controller-->
         <scene sceneID="guu-Sa-stz">
@@ -1244,7 +1244,7 @@
                 </viewController>
                 <customObject id="cxr-mH-jc9" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1256.5" y="667.5"/>
+            <point key="canvasLocation" x="1328" y="667"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="GsQ-HE-c66">
