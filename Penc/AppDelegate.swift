@@ -311,16 +311,25 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         newWindowHandle!.placeholder.windowViewController.styleSelected()
         self.selectedWindowHandle = newWindowHandle
         
-        // TODO: Do this once, just on activatation start
-        // Setup window alignment manager
-        // TODO: This is not working i guess?
+        self.reloadWindowAlignmentManager()
+    }
+    
+    // If the selected window is changed, or one of the other window's
+    // frame or zIndex is changed, we need to re-calculate window alignment
+    // targets in the WindowAlignmentManager. The only optimization we can
+    // do is: when changing the frame of selected window, calling
+    // self.windowAlignmentManager.updateSelectedWindowFrame(_: CGRect) method,
+    // instead of a hard reload.
+    func reloadWindowAlignmentManager() {
+        guard self.selectedWindowHandle != nil else { return }
+        
         var otherWindowHandlesDictionary = [Int: PWindowHandle]()
         self.windowHandles.forEach { (windowHandle) in
-            guard windowHandle.windowNumber != newWindowHandle!.windowNumber else { return }
+            guard windowHandle.windowNumber != self.selectedWindowHandle!.windowNumber else { return }
             otherWindowHandlesDictionary[windowHandle.windowNumber] = windowHandle
         }
         self.windowAlignmentManager = WindowAlignmentManager(
-            selectedWindowFrame: newWindowHandle!.newRect,
+            selectedWindowFrame: self.selectedWindowHandle!.newRect,
             otherWindows: otherWindowHandlesDictionary
         )
     }
@@ -442,6 +451,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     )
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -450,6 +460,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .TOP_CENTER)
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_TOP_RIGHT:
             if isResizable {
@@ -461,6 +472,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     )
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -469,6 +481,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .TOP_RIGHT)
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_RIGHT:
             if isResizable {
@@ -480,6 +493,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     )
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -488,6 +502,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .RIGHT_CENTER)
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_BOTTOM_RIGHT:
             if isResizable {
@@ -499,6 +514,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     )
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -507,6 +523,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_RIGHT)
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_BOTTOM:
             if isResizable {
@@ -518,6 +535,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     )
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -526,6 +544,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_CENTER)
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_BOTTOM_LEFT:
             if isResizable {
@@ -537,6 +556,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     )
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -545,6 +565,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_LEFT)
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_LEFT:
             if isResizable {
@@ -556,6 +577,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     )
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -564,6 +586,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .LEFT_CENTER)
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_TOP_LEFT:
             if isResizable {
@@ -575,6 +598,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     )
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -583,6 +607,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .TOP_LEFT)
                 )
                 self.selectedWindowHandle!.updateFrame(newRect)
+                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         }
     }
@@ -598,6 +623,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             .resizeBy(factor: factor)
             .fitInVisibleFrame(ofScreen: placeholderWindowScreen!)
         self.selectedWindowHandle!.updateFrame(newRect)
+        self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
     }
     
     func onDoubleClickGesture() {
@@ -636,9 +662,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             self.selectedWindowHandle!.newRect == newRect {
             self.selectedWindowHandle!.updateFrame(self.selectedWindowHandle!.previousRectBeforeDblClick!)
             self.selectedWindowHandle!.previousRectBeforeDblClick = nil
+            self.windowAlignmentManager?.updateSelectedWindowFrame(self.selectedWindowHandle!.previousRectBeforeDblClick!)
         } else {
             self.selectedWindowHandle!.previousRectBeforeDblClick = self.selectedWindowHandle!.newRect
             self.selectedWindowHandle!.updateFrame(newRect)
+            self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
         }
     }
     
