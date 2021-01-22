@@ -672,6 +672,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
     }
     
+    func onMouseDragGesture(position: (x: CGFloat, y: CGFloat), delta: (x: CGFloat, y: CGFloat), timestamp: Double) {
+        guard self.active else { return }
+        guard self.selectedWindowHandle != nil else { return }
+        guard self.selectedWindowHandle!.siWindow?.isMovable() ?? false else { return }
+        guard self.windowAlignmentManager != nil else { return }
+        
+        let rect = self.selectedWindowHandle!.newRect
+        let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: timestamp)
+        let newRect = CGRect(
+            x: rect.origin.x + newMovement.x,
+            y: rect.origin.y + newMovement.y,
+            width: rect.width,
+            height: rect.height
+        )
+        self.selectedWindowHandle!.updateFrame(newRect)
+        self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
+    }
+    
     func onMouseMoveGesture(position: (x: CGFloat, y: CGFloat)) {
         guard self.active else { return }
         // TODO: Throttle this

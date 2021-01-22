@@ -25,6 +25,11 @@ protocol GestureOverlayWindowDelegate: class {
     func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat))
     func onMouseMoveGesture(position: (x: CGFloat, y: CGFloat))
     func onDoubleClickGesture()
+    func onMouseDragGesture(
+        position: (x: CGFloat, y: CGFloat),
+        delta: (x: CGFloat, y: CGFloat),
+        timestamp: Double
+    )
 }
 
 class GestureOverlayWindow: NSWindow {
@@ -96,8 +101,16 @@ class GestureOverlayWindow: NSWindow {
     }
     
     override func mouseDragged(with event: NSEvent) {
-//        let delta = (x: -1 * event.deltaX, y: -1 * event.deltaY)
-//        self.delegate_?.onMoveGesture(gestureOverlayWindow: self, delta: delta)
+        let position = (
+            x: NSEvent.mouseLocation.x,
+            y: NSEvent.mouseLocation.y // bottom-left origined
+        )
+        let delta = (x: -1 * event.deltaX, y: -1 * event.deltaY)
+        self.delegate_?.onMouseDragGesture(
+            position: position,
+            delta: delta,
+            timestamp: event.timestamp
+        )
     }
     
     override func mouseDown(with event: NSEvent) {
