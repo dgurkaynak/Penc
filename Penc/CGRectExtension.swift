@@ -216,4 +216,65 @@ extension CGRect {
             height: self.size.height + (delta.height * 2)
         )
     }
+    
+    func resizeBy(handle: PWindowResizeHandle, delta: (x: CGFloat, y: CGFloat)) -> CGRect {
+        switch handle {
+        case .TOP:
+            return CGRect(
+                x: self.origin.x,
+                y: self.origin.y,
+                width: self.size.width,
+                height: self.size.height + delta.y
+            )
+        case .TOP_LEFT:
+            return CGRect(
+                x: self.origin.x + delta.x,
+                y: self.origin.y,
+                width: self.size.width - delta.x,
+                height: self.size.height + delta.y
+            )
+        case .LEFT:
+            return CGRect(
+                x: self.origin.x + delta.x,
+                y: self.origin.y,
+                width: self.size.width - delta.x,
+                height: self.size.height
+            )
+        case .BOTTOM_LEFT:
+            return CGRect(
+                x: self.origin.x + delta.x,
+                y: self.origin.y + delta.y,
+                width: self.size.width - delta.x,
+                height: self.size.height - delta.y
+            )
+        case .BOTTOM:
+            return CGRect(
+                x: self.origin.x,
+                y: self.origin.y + delta.y,
+                width: self.size.width,
+                height: self.size.height - delta.y
+            )
+        case .BOTTOM_RIGHT:
+            return CGRect(
+                x: self.origin.x,
+                y: self.origin.y + delta.y,
+                width: self.size.width + delta.x,
+                height: self.size.height - delta.y
+            )
+        case .RIGHT:
+            return CGRect(
+                x: self.origin.x,
+                y: self.origin.y,
+                width: self.size.width + delta.x,
+                height: self.size.height
+            )
+        case .TOP_RIGHT:
+            return CGRect(
+                x: self.origin.x,
+                y: self.origin.y,
+                width: self.size.width + delta.x,
+                height: self.size.height + delta.y
+            )
+        }
+    }
 }

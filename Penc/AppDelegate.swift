@@ -46,6 +46,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         hotSpot: NSPoint(x: 8, y: 8)
     )
     
+    var activeResizeHandle: PWindowResizeHandle?
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         
@@ -376,6 +378,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.windowHandles = []
         self.active = false
         NSCursor.arrow.set()
+        self.activeResizeHandle = nil
     }
     
     func onActivationAborted() {
@@ -402,6 +405,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.windowHandles = []
         self.active = false
         NSCursor.arrow.set()
+        self.activeResizeHandle = nil
     }
     
     func onKeyDownWhileActivated(pressedKeys: Set<UInt16>) {
@@ -441,6 +445,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.selectedWindowHandle!.updateFrame(newRect)
         self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
         NSCursor.arrow.set()
+        self.activeResizeHandle = nil
     }
     
     func onSwipeGesture(type: SwipeGestureType) {
@@ -628,6 +633,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
         
         NSCursor.arrow.set()
+        self.activeResizeHandle = nil
     }
     
     func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat)) {
@@ -643,6 +649,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.selectedWindowHandle!.updateFrame(newRect)
         self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
         NSCursor.arrow.set()
+        self.activeResizeHandle = nil
     }
     
     func onDoubleClickGesture() {
@@ -689,6 +696,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
         
         NSCursor.arrow.set()
+        self.activeResizeHandle = nil
     }
     
     func onMouseDragGesture(position: (x: CGFloat, y: CGFloat), delta: (x: CGFloat, y: CGFloat), timestamp: Double) {
@@ -697,16 +705,26 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.selectedWindowHandle!.siWindow?.isMovable() ?? false else { return }
         guard self.windowAlignmentManager != nil else { return }
         
-        let rect = self.selectedWindowHandle!.newRect
-        let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: timestamp)
-        let newRect = CGRect(
-            x: rect.origin.x + newMovement.x,
-            y: rect.origin.y + newMovement.y,
-            width: rect.width,
-            height: rect.height
-        )
-        self.selectedWindowHandle!.updateFrame(newRect)
-        self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
+        if self.activeResizeHandle == nil {
+            let rect = self.selectedWindowHandle!.newRect
+            let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: timestamp)
+            let newRect = CGRect(
+                x: rect.origin.x + newMovement.x,
+                y: rect.origin.y + newMovement.y,
+                width: rect.width,
+                height: rect.height
+            )
+            self.selectedWindowHandle!.updateFrame(newRect)
+            self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
+        } else {
+            let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: timestamp)
+            let newRect = self.selectedWindowHandle!.newRect.resizeBy(
+                handle: self.activeResizeHandle!,
+                delta: newMovement
+            )
+            self.selectedWindowHandle!.updateFrame(newRect)
+            self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
+        }
     }
     
     func onMouseMoveGesture(position: (x: CGFloat, y: CGFloat)) {
@@ -725,6 +743,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         self.selectWindow(windowUnderCursor)
         
+        self.activeResizeHandle = nil
         var cursor = NSCursor.arrow
         
         if self.selectedWindowHandle != nil {
@@ -736,20 +755,28 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                 switch resizeHandleUnderCursor!.type {
                 case .TOP:
                     cursor = NSCursor.resizeUpDown
+                    self.activeResizeHandle = .TOP
                 case .TOP_LEFT:
                     cursor = self.northWestSouthEastResizeCursor
+                    self.activeResizeHandle = .TOP_LEFT
                 case .LEFT:
                     cursor = NSCursor.resizeLeftRight
+                    self.activeResizeHandle = .LEFT
                 case .BOTTOM_LEFT:
                     cursor = self.northEastSouthWestResizeCursor
+                    self.activeResizeHandle = .BOTTOM_LEFT
                 case .BOTTOM:
                     cursor = NSCursor.resizeUpDown
+                    self.activeResizeHandle = .BOTTOM
                 case .BOTTOM_RIGHT:
                     cursor = self.northWestSouthEastResizeCursor
+                    self.activeResizeHandle = .BOTTOM_RIGHT
                 case .RIGHT:
                     cursor = NSCursor.resizeLeftRight
+                    self.activeResizeHandle = .RIGHT
                 case .TOP_RIGHT:
                     cursor = self.northEastSouthWestResizeCursor
+                    self.activeResizeHandle = .TOP_RIGHT
                 }
             }
         }
