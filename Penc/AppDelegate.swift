@@ -33,7 +33,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     var windowAlignmentManager: WindowAlignmentManager? = nil
     var active = false
     var updater = SUUpdater()
+    
     let abortSound = NSSound(named: "Funk")
+    
+    // https://stackoverflow.com/questions/49297201/diagonal-resizing-mouse-pointer#comment85695817_49344105
+    let northWestSouthEastResizeCursor = NSCursor.init(
+        image: NSImage(byReferencingFile: "/System/Library/Frameworks/WebKit.framework/Versions/Current/Frameworks/WebCore.framework/Resources/northWestSouthEastResizeCursor.png")!,
+        hotSpot: NSPoint(x: 8, y: 8)
+    )
+    let northEastSouthWestResizeCursor = NSCursor.init(
+        image: NSImage(byReferencingFile: "/System/Library/Frameworks/WebKit.framework/Versions/Current/Frameworks/WebCore.framework/Resources/northEastSouthWestResizeCursor.png")!,
+        hotSpot: NSPoint(x: 8, y: 8)
+    )
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -364,6 +375,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.selectedWindowHandle = nil
         self.windowHandles = []
         self.active = false
+        NSCursor.arrow.set()
     }
     
     func onActivationAborted() {
@@ -389,6 +401,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.selectedWindowHandle = nil
         self.windowHandles = []
         self.active = false
+        NSCursor.arrow.set()
     }
     
     func onKeyDownWhileActivated(pressedKeys: Set<UInt16>) {
@@ -427,6 +440,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         )
         self.selectedWindowHandle!.updateFrame(newRect)
         self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
+        NSCursor.arrow.set()
     }
     
     func onSwipeGesture(type: SwipeGestureType) {
@@ -612,6 +626,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                 self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         }
+        
+        NSCursor.arrow.set()
     }
     
     func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat)) {
@@ -626,6 +642,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             .fitInVisibleFrame(ofScreen: placeholderWindowScreen!)
         self.selectedWindowHandle!.updateFrame(newRect)
         self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
+        NSCursor.arrow.set()
     }
     
     func onDoubleClickGesture() {
@@ -663,13 +680,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         if self.selectedWindowHandle!.previousRectBeforeDblClick != nil &&
             self.selectedWindowHandle!.newRect == newRect {
             self.selectedWindowHandle!.updateFrame(self.selectedWindowHandle!.previousRectBeforeDblClick!)
-            self.selectedWindowHandle!.previousRectBeforeDblClick = nil
             self.windowAlignmentManager?.updateSelectedWindowFrame(self.selectedWindowHandle!.previousRectBeforeDblClick!)
+            self.selectedWindowHandle!.previousRectBeforeDblClick = nil
         } else {
             self.selectedWindowHandle!.previousRectBeforeDblClick = self.selectedWindowHandle!.newRect
             self.selectedWindowHandle!.updateFrame(newRect)
             self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
         }
+        
+        NSCursor.arrow.set()
     }
     
     func onMouseDragGesture(position: (x: CGFloat, y: CGFloat), delta: (x: CGFloat, y: CGFloat), timestamp: Double) {
@@ -692,21 +711,50 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     func onMouseMoveGesture(position: (x: CGFloat, y: CGFloat)) {
         guard self.active else { return }
-        // TODO: Throttle this
+        // TODO: Should we throttle this?
         
         let mouseX = NSEvent.mouseLocation.x
         let mouseY = NSEvent.mouseLocation.y // bottom-left origined
         
-        var windowUnderCursor: PWindowHandle? = nil
+        let windowUnderCursor = self.windowHandles.first { (windowHandle) -> Bool in
+            return windowHandle.newRect.contains(CGPoint(x: mouseX, y: mouseY))
+        }
+    
+        // TODO: If windowUnderCursor === self.selectedWindowHandle,
+        // do we need to select window again?
         
-        for windowHandle in self.windowHandles {
-            if windowHandle.newRect.contains(CGPoint(x: mouseX, y: mouseY)) {
-                windowUnderCursor = windowHandle
-                break
+        self.selectWindow(windowUnderCursor)
+        
+        var cursor = NSCursor.arrow
+        
+        if self.selectedWindowHandle != nil {
+            let resizeHandleUnderCursor = self.selectedWindowHandle!.resizeHandleRects.first { (resizeHandle) -> Bool in
+                return resizeHandle.rect.contains(CGPoint(x: mouseX, y: mouseY))
+            }
+            
+            if resizeHandleUnderCursor != nil {
+                switch resizeHandleUnderCursor!.type {
+                case .TOP:
+                    cursor = NSCursor.resizeUpDown
+                case .TOP_LEFT:
+                    cursor = self.northWestSouthEastResizeCursor
+                case .LEFT:
+                    cursor = NSCursor.resizeLeftRight
+                case .BOTTOM_LEFT:
+                    cursor = self.northEastSouthWestResizeCursor
+                case .BOTTOM:
+                    cursor = NSCursor.resizeUpDown
+                case .BOTTOM_RIGHT:
+                    cursor = self.northWestSouthEastResizeCursor
+                case .RIGHT:
+                    cursor = NSCursor.resizeLeftRight
+                case .TOP_RIGHT:
+                    cursor = self.northEastSouthWestResizeCursor
+                }
             }
         }
         
-        self.selectWindow(windowUnderCursor)
+        cursor.set()
     }
     
     func menuWillOpen(_ menu: NSMenu) {

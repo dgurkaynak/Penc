@@ -10,6 +10,19 @@ import Foundation
 import Cocoa
 import Silica
 
+let WINDOW_RESIZE_HANDLE_SIZE: CGFloat = 20
+
+enum PWindowResizeHandle {
+    case TOP
+    case TOP_LEFT
+    case LEFT
+    case BOTTOM_LEFT
+    case BOTTOM
+    case BOTTOM_RIGHT
+    case RIGHT
+    case TOP_RIGHT
+}
+
 enum PWindowHandleError: Error {
     case noScreens
     case unexpectedNilResponse
@@ -23,6 +36,10 @@ class PWindowHandle {
     public private(set) var initialRect: CGRect // bottom-left originated
     var previousRectBeforeDblClick: CGRect? // bottom-left originated
     public private(set) var newRect: CGRect // bottom-left originated
+    public private(set) var resizeHandleRects = [(
+        type: PWindowResizeHandle,
+        rect: CGRect
+    )]()
     
     let placeholder = PlaceholderPool.shared.acquire()
     
@@ -35,6 +52,85 @@ class PWindowHandle {
         self.zIndex = zIndex
         self.initialRect = frame
         self.newRect = frame
+        
+        self.refreshResizeHandleRects()
+    }
+    
+    func refreshResizeHandleRects() {
+        self.resizeHandleRects = [
+            (
+                type: .TOP,
+                rect: CGRect(
+                    x: self.newRect.origin.x + WINDOW_RESIZE_HANDLE_SIZE,
+                    y: self.newRect.origin.y + self.newRect.size.height - WINDOW_RESIZE_HANDLE_SIZE,
+                    width: self.newRect.size.width - (2 * WINDOW_RESIZE_HANDLE_SIZE),
+                    height: WINDOW_RESIZE_HANDLE_SIZE
+                )
+            ),
+            (
+                type: .TOP_LEFT,
+                rect: CGRect(
+                    x: self.newRect.origin.x,
+                    y: self.newRect.origin.y + self.newRect.size.height - WINDOW_RESIZE_HANDLE_SIZE,
+                    width: WINDOW_RESIZE_HANDLE_SIZE,
+                    height: WINDOW_RESIZE_HANDLE_SIZE
+                )
+            ),
+            (
+                type: .LEFT,
+                rect: CGRect(
+                    x: self.newRect.origin.x,
+                    y: self.newRect.origin.y + WINDOW_RESIZE_HANDLE_SIZE,
+                    width: WINDOW_RESIZE_HANDLE_SIZE,
+                    height: self.newRect.size.height - (2 * WINDOW_RESIZE_HANDLE_SIZE)
+                )
+            ),
+            (
+                type: .BOTTOM_LEFT,
+                rect: CGRect(
+                    x: self.newRect.origin.x,
+                    y: self.newRect.origin.y,
+                    width: WINDOW_RESIZE_HANDLE_SIZE,
+                    height: WINDOW_RESIZE_HANDLE_SIZE
+                )
+            ),
+            (
+                type: .BOTTOM,
+                rect: CGRect(
+                    x: self.newRect.origin.x + WINDOW_RESIZE_HANDLE_SIZE,
+                    y: self.newRect.origin.y,
+                    width: self.newRect.size.width - (2 * WINDOW_RESIZE_HANDLE_SIZE),
+                    height: WINDOW_RESIZE_HANDLE_SIZE
+                )
+            ),
+            (
+                type: .BOTTOM_RIGHT,
+                rect: CGRect(
+                    x: self.newRect.origin.x + self.newRect.size.width - WINDOW_RESIZE_HANDLE_SIZE,
+                    y: self.newRect.origin.y,
+                    width: WINDOW_RESIZE_HANDLE_SIZE,
+                    height: WINDOW_RESIZE_HANDLE_SIZE
+                )
+            ),
+            (
+                type: .RIGHT,
+                rect: CGRect(
+                    x: self.newRect.origin.x + self.newRect.size.width - WINDOW_RESIZE_HANDLE_SIZE,
+                    y: self.newRect.origin.y + WINDOW_RESIZE_HANDLE_SIZE,
+                    width: WINDOW_RESIZE_HANDLE_SIZE,
+                    height: self.newRect.size.height - (2 * WINDOW_RESIZE_HANDLE_SIZE)
+                )
+            ),
+            (
+                type: .TOP_RIGHT,
+                rect: CGRect(
+                    x: self.newRect.origin.x + self.newRect.size.width - WINDOW_RESIZE_HANDLE_SIZE,
+                    y: self.newRect.origin.y + self.newRect.size.height - WINDOW_RESIZE_HANDLE_SIZE,
+                    width: WINDOW_RESIZE_HANDLE_SIZE,
+                    height: WINDOW_RESIZE_HANDLE_SIZE
+                )
+            )
+        ]
     }
     
     func refreshPlaceholderTitle() {
@@ -55,6 +151,8 @@ class PWindowHandle {
         self.newRect = newFrame
         self.placeholder.window.setFrame(self.newRect, display: true, animate: false)
         self.placeholder.windowViewController.updateWindowSizeTextField(self.newRect)
+        
+        self.refreshResizeHandleRects()
     }
     
     func applyNewFrame() {
