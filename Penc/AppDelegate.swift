@@ -12,6 +12,7 @@ import ApplicationServices
 import Silica
 import Sparkle
 
+let WINDOW_ADJECENT_RESIZE_DETECTION_SIZE: CGFloat = 10
 
 extension Notification.Name {
     static let killLauncher = Notification.Name("killLauncher")
@@ -36,6 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     let abortSound = NSSound(named: "Funk")
     
+    // NSCursor does not have diagonal resize cursor's built-in, so here comes some hack
     // https://stackoverflow.com/questions/49297201/diagonal-resizing-mouse-pointer#comment85695817_49344105
     let northWestSouthEastResizeCursor = NSCursor.init(
         image: NSImage(byReferencingFile: "/System/Library/Frameworks/WebKit.framework/Versions/Current/Frameworks/WebCore.framework/Resources/northWestSouthEastResizeCursor.png")!,
@@ -47,6 +49,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     )
     
     var activeResizeHandle: PWindowResizeHandle?
+    var alignedWindowHandlesToResizeSimultaneously = [(
+        resizingEdge: PWindowResizeHandle,
+        windowHandle: PWindowHandle
+    )]()
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -444,8 +450,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         )
         self.selectedWindowHandle!.updateFrame(newRect)
         self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
+        
         NSCursor.arrow.set()
         self.activeResizeHandle = nil
+        self.alignedWindowHandlesToResizeSimultaneously.forEach { (data) in
+            data.windowHandle.placeholder.windowViewController.styleNormal()
+        }
+        self.alignedWindowHandlesToResizeSimultaneously = []
     }
     
     func onSwipeGesture(type: SwipeGestureType) {
@@ -634,6 +645,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         NSCursor.arrow.set()
         self.activeResizeHandle = nil
+        self.alignedWindowHandlesToResizeSimultaneously.forEach { (data) in
+            data.windowHandle.placeholder.windowViewController.styleNormal()
+        }
+        self.alignedWindowHandlesToResizeSimultaneously = []
     }
     
     func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat)) {
@@ -648,8 +663,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             .fitInVisibleFrame(ofScreen: placeholderWindowScreen!)
         self.selectedWindowHandle!.updateFrame(newRect)
         self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
+        
         NSCursor.arrow.set()
         self.activeResizeHandle = nil
+        self.alignedWindowHandlesToResizeSimultaneously.forEach { (data) in
+            data.windowHandle.placeholder.windowViewController.styleNormal()
+        }
+        self.alignedWindowHandlesToResizeSimultaneously = []
     }
     
     func onDoubleClickGesture() {
@@ -697,6 +717,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         NSCursor.arrow.set()
         self.activeResizeHandle = nil
+        self.alignedWindowHandlesToResizeSimultaneously.forEach { (data) in
+            data.windowHandle.placeholder.windowViewController.styleNormal()
+        }
+        self.alignedWindowHandlesToResizeSimultaneously = []
     }
     
     func onMouseDragGesture(position: (x: CGFloat, y: CGFloat), delta: (x: CGFloat, y: CGFloat), timestamp: Double) {
@@ -706,6 +730,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         guard self.windowAlignmentManager != nil else { return }
         
         if self.activeResizeHandle == nil {
+            // move window
             let rect = self.selectedWindowHandle!.newRect
             let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: timestamp)
             let newRect = CGRect(
@@ -717,13 +742,24 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             self.selectedWindowHandle!.updateFrame(newRect)
             self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
         } else {
-            let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: timestamp)
+            // resize window
+//            let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: timestamp)
+            let newMovement = (x: -delta.x, y: delta.y)
             let newRect = self.selectedWindowHandle!.newRect.resizeBy(
                 handle: self.activeResizeHandle!,
                 delta: newMovement
             )
             self.selectedWindowHandle!.updateFrame(newRect)
             self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
+            
+            self.alignedWindowHandlesToResizeSimultaneously.forEach { (data) in
+                let newRect = data.windowHandle.newRect.resizeBy(
+                    handle: data.resizingEdge,
+                    delta: newMovement
+                )
+                data.windowHandle.updateFrame(newRect)
+                // TODO: What about self.windowAlignmentManager
+            }
         }
     }
     
@@ -744,6 +780,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.selectWindow(windowUnderCursor)
         
         self.activeResizeHandle = nil
+        self.alignedWindowHandlesToResizeSimultaneously.forEach { (data) in
+            data.windowHandle.placeholder.windowViewController.styleNormal()
+        }
+        self.alignedWindowHandlesToResizeSimultaneously = []
+        
         var cursor = NSCursor.arrow
         
         if self.selectedWindowHandle != nil {
@@ -756,24 +797,52 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                 case .TOP:
                     cursor = NSCursor.resizeUpDown
                     self.activeResizeHandle = .TOP
+                    let alignedWindows = self.getAlignedWindowHandlesToResizeSimultaneously(selectedResizeHandle: .TOP)
+                    self.alignedWindowHandlesToResizeSimultaneously = alignedWindows.map({ (windowHandle) -> (resizingEdge: PWindowResizeHandle, windowHandle: PWindowHandle) in
+                        return (
+                            resizingEdge: .BOTTOM,
+                            windowHandle: windowHandle
+                        )
+                    })
                 case .TOP_LEFT:
                     cursor = self.northWestSouthEastResizeCursor
                     self.activeResizeHandle = .TOP_LEFT
                 case .LEFT:
                     cursor = NSCursor.resizeLeftRight
                     self.activeResizeHandle = .LEFT
+                    let alignedWindows = self.getAlignedWindowHandlesToResizeSimultaneously(selectedResizeHandle: .LEFT)
+                    self.alignedWindowHandlesToResizeSimultaneously = alignedWindows.map({ (windowHandle) -> (resizingEdge: PWindowResizeHandle, windowHandle: PWindowHandle) in
+                        return (
+                            resizingEdge: .RIGHT,
+                            windowHandle: windowHandle
+                        )
+                    })
                 case .BOTTOM_LEFT:
                     cursor = self.northEastSouthWestResizeCursor
                     self.activeResizeHandle = .BOTTOM_LEFT
                 case .BOTTOM:
                     cursor = NSCursor.resizeUpDown
                     self.activeResizeHandle = .BOTTOM
+                    let alignedWindows = self.getAlignedWindowHandlesToResizeSimultaneously(selectedResizeHandle: .BOTTOM)
+                    self.alignedWindowHandlesToResizeSimultaneously = alignedWindows.map({ (windowHandle) -> (resizingEdge: PWindowResizeHandle, windowHandle: PWindowHandle) in
+                        return (
+                            resizingEdge: .TOP,
+                            windowHandle: windowHandle
+                        )
+                    })
                 case .BOTTOM_RIGHT:
                     cursor = self.northWestSouthEastResizeCursor
                     self.activeResizeHandle = .BOTTOM_RIGHT
                 case .RIGHT:
                     cursor = NSCursor.resizeLeftRight
                     self.activeResizeHandle = .RIGHT
+                    let alignedWindows = self.getAlignedWindowHandlesToResizeSimultaneously(selectedResizeHandle: .RIGHT)
+                    self.alignedWindowHandlesToResizeSimultaneously = alignedWindows.map({ (windowHandle) -> (resizingEdge: PWindowResizeHandle, windowHandle: PWindowHandle) in
+                        return (
+                            resizingEdge: .LEFT,
+                            windowHandle: windowHandle
+                        )
+                    })
                 case .TOP_RIGHT:
                     cursor = self.northEastSouthWestResizeCursor
                     self.activeResizeHandle = .TOP_RIGHT
@@ -782,6 +851,77 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
         
         cursor.set()
+        
+        self.alignedWindowHandlesToResizeSimultaneously.forEach { (data) in
+            data.windowHandle.placeholder.windowViewController.styleSelected()
+        }
+    }
+    
+    func getAlignedWindowHandlesToResizeSimultaneously(selectedResizeHandle: PWindowResizeHandle) -> [PWindowHandle] {
+        guard self.selectedWindowHandle != nil else { return [] }
+        
+        var windowHandles = [PWindowHandle]()
+        
+        switch selectedResizeHandle {
+        case .TOP:
+            let targetRect = CGRect(
+                x: self.selectedWindowHandle!.newRect.origin.x,
+                y: self.selectedWindowHandle!.newRect.origin.y + self.selectedWindowHandle!.newRect.size.height - (WINDOW_ADJECENT_RESIZE_DETECTION_SIZE / 2),
+                width: self.selectedWindowHandle!.newRect.size.width,
+                height: WINDOW_ADJECENT_RESIZE_DETECTION_SIZE
+            )
+            windowHandles = self.windowHandles.filter({ (windowHandle) -> Bool in
+                let edge = windowHandle.newRect.getBottomEdge()
+                let edgeRect = CGRect(x: edge.x1, y: edge.y, width: edge.x2 - edge.x1, height: 0)
+                return targetRect.intersects(edgeRect)
+            })
+        case .TOP_LEFT:
+            return []
+        case .LEFT:
+            let targetRect = CGRect(
+                x: self.selectedWindowHandle!.newRect.origin.x - (WINDOW_ADJECENT_RESIZE_DETECTION_SIZE / 2),
+                y: self.selectedWindowHandle!.newRect.origin.y,
+                width: WINDOW_ADJECENT_RESIZE_DETECTION_SIZE,
+                height: self.selectedWindowHandle!.newRect.size.height
+            )
+            windowHandles = self.windowHandles.filter({ (windowHandle) -> Bool in
+                let edge = windowHandle.newRect.getRightEdge()
+                let edgeRect = CGRect(x: edge.x, y: edge.y1, width: 0, height: edge.y2 - edge.y1)
+                return targetRect.intersects(edgeRect)
+            })
+        case .BOTTOM_LEFT:
+            return []
+        case .BOTTOM:
+            let targetRect = CGRect(
+                x: self.selectedWindowHandle!.newRect.origin.x,
+                y: self.selectedWindowHandle!.newRect.origin.y - (WINDOW_ADJECENT_RESIZE_DETECTION_SIZE / 2),
+                width: self.selectedWindowHandle!.newRect.size.width,
+                height: WINDOW_ADJECENT_RESIZE_DETECTION_SIZE
+            )
+            windowHandles = self.windowHandles.filter({ (windowHandle) -> Bool in
+                let edge = windowHandle.newRect.getTopEdge()
+                let edgeRect = CGRect(x: edge.x1, y: edge.y, width: edge.x2 - edge.x1, height: 0)
+                return targetRect.intersects(edgeRect)
+            })
+        case .BOTTOM_RIGHT:
+            return []
+        case .RIGHT:
+            let targetRect = CGRect(
+                x: self.selectedWindowHandle!.newRect.origin.x + self.selectedWindowHandle!.newRect.size.width - (WINDOW_ADJECENT_RESIZE_DETECTION_SIZE / 2),
+                y: self.selectedWindowHandle!.newRect.origin.y,
+                width: WINDOW_ADJECENT_RESIZE_DETECTION_SIZE,
+                height: self.selectedWindowHandle!.newRect.size.height
+            )
+            windowHandles = self.windowHandles.filter({ (windowHandle) -> Bool in
+                let edge = windowHandle.newRect.getLeftEdge()
+                let edgeRect = CGRect(x: edge.x, y: edge.y1, width: 0, height: edge.y2 - edge.y1)
+                return targetRect.intersects(edgeRect)
+            })
+        case .TOP_RIGHT:
+            return []
+        }
+        
+        return windowHandles
     }
     
     func menuWillOpen(_ menu: NSMenu) {
