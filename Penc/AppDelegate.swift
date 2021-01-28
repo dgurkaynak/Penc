@@ -13,6 +13,7 @@ import Silica
 import Sparkle
 
 let WINDOW_ADJECENT_RESIZE_DETECTION_SIZE: CGFloat = 10
+let abortSound = NSSound(named: "Funk")
 
 extension Notification.Name {
     static let killLauncher = Notification.Name("killLauncher")
@@ -22,21 +23,24 @@ extension Notification.Name {
 class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate, KeyboardListenerDelegate, PreferencesDelegate, NSMenuDelegate {
     
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
-    var colorOverlayWindows = [NSWindow]()
-    var gestureOverlayWindows = [GestureOverlayWindow]()
     let preferencesWindowController = PreferencesWindowController.freshController()
     let aboutWindow = NSWindow(contentViewController: AboutViewController.freshController())
+    var updater = SUUpdater()
+    var disabledGlobally = false
+    let keyboardListener = KeyboardListener()
+    
+    // overlay windows
+    var bgOverlayWindows = [NSWindow]()
+    var gestureOverlayWindows = [GestureOverlayWindow]()
+    
+    // activation stuff
+    var active = false
+    var windowHandles = [PWindowHandle]() // ordered from frontmost to backmost
+    var windowAlignmentManager: WindowAlignmentManager? = nil
     var focusedWindow: SIWindow? = nil
     var selectedWindowHandle: PWindowHandle? = nil
-    var windowHandles = [PWindowHandle]() // ordered from frontmost to backmost
-    let keyboardListener = KeyboardListener()
-    var disabled = false
-    var windowAlignmentManager: WindowAlignmentManager? = nil
-    var active = false
-    var updater = SUUpdater()
     
-    let abortSound = NSSound(named: "Funk")
-    
+    // resizing stuff, will change on mouse move
     var activeResizeHandle: PWindowResizeHandle?
     var alignedWindowHandlesToResizeSimultaneously = [(
         resizingEdge: PWindowResizeHandle,
@@ -62,8 +66,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         Logger.shared.info("Checking accessibility permissions...")
         
-        if checkPermissions() {
-            constructMenu()
+        if checkAccessibilityPermissions() {
+            setupMenu()
             Preferences.shared.setDelegate(self)
             self.keyboardListener.setDelegate(self)
             
@@ -81,11 +85,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
     }
     
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
-    }
-    
-    func checkPermissions() -> Bool {
+    func checkAccessibilityPermissions() -> Bool {
         if AXIsProcessTrusted() {
             Logger.shared.info("We're trusted accessibility client")
             return true
@@ -97,7 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         }
     }
     
-    func constructMenu() {
+    func setupMenu() {
         let menu = NSMenu()
         menu.autoenablesItems = false
         
@@ -132,6 +132,76 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         self.statusItem.menu?.delegate = self
     }
     
+    func menuWillOpen(_ menu: NSMenu) {
+        let disableToggleMenuItem = menu.item(withTag: 1)
+        disableToggleMenuItem!.title = self.disabledGlobally ? "Enable" : "Disable"
+        
+        let disableAppToggleMenuItem = menu.item(withTag: 2)
+        if let app = NSWorkspace.shared.frontmostApplication {
+            if let appName = app.localizedName, let appBundleId = app.bundleIdentifier {
+                if Preferences.shared.disabledApps.contains(appBundleId) {
+                    disableAppToggleMenuItem!.title = "Enable for \"\(appName)\""
+                } else {
+                    disableAppToggleMenuItem!.title = "Disable for \"\(appName)\""
+                }
+                
+                disableAppToggleMenuItem!.isEnabled = true
+            }
+        } else {
+            disableAppToggleMenuItem!.title = "Disable for current app"
+            disableAppToggleMenuItem!.isEnabled = false
+        }
+    }
+    
+    @objc func toggleDisable(_ sender: Any?) {
+        self.disabledGlobally = !self.disabledGlobally
+        Logger.shared.info(self.disabledGlobally ? "Disabled globally" : "Enabled globally")
+    }
+    
+    @objc func toggleDisableApp(_ sender: Any?) {
+        if let app = NSWorkspace.shared.frontmostApplication {
+            if let appBundleId = app.bundleIdentifier {
+                if Preferences.shared.disabledApps.contains(appBundleId) {
+                    let i = Preferences.shared.disabledApps.firstIndex(of: appBundleId)
+                    Preferences.shared.disabledApps.remove(at: i!)
+                    Logger.shared.info("Enabled back for \(appBundleId)")
+                } else {
+                    Preferences.shared.disabledApps.append(appBundleId)
+                    Logger.shared.info("Disabled for \(appBundleId)")
+                }
+                
+                Preferences.shared.disabledApps = Preferences.shared.disabledApps
+            }
+        }
+    }
+    
+    func setupAboutWindow() {
+        self.aboutWindow.titleVisibility = .hidden
+        self.aboutWindow.styleMask.remove(.resizable)
+        self.aboutWindow.styleMask.remove(.miniaturizable)
+    }
+    
+    @objc func openAboutWindow(_ sender: Any?) {
+        self.aboutWindow.makeKeyAndOrderFront(self.aboutWindow)
+        NSApplication.shared.activate(ignoringOtherApps: true)
+    }
+    
+    @objc func openPreferencesWindow(_ sender: Any?) {
+        self.preferencesWindowController.showWindow(self)
+        NSApplication.shared.activate(ignoringOtherApps: true)
+    }
+    
+    func onPreferencesChanged() {
+        let preferences = Preferences.shared
+        self.keyboardListener.activationModifierKey = preferences.activationModifierKey
+        self.keyboardListener.secondActivationModifierKeyPress = Double(preferences.activationSensitivity)
+        self.keyboardListener.holdActivationModifierKeyTimeout = Double(preferences.holdDuration)
+        self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
+            gestureOverlayWindow.swipeDetectionVelocityThreshold = preferences.swipeDetectionVelocityThreshold
+            gestureOverlayWindow.reverseScroll = preferences.reverseScroll
+        }
+    }
+    
     func createGestureOverlayWindow() -> GestureOverlayWindow {
         let gestureOverlayWindow = GestureOverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
         gestureOverlayWindow.setDelegate(self)
@@ -148,63 +218,36 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         return gestureOverlayWindow
     }
     
-    func createColorOverlayWindow() -> NSWindow {
-        let colorOverlayWindow = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
+    func createBackgroundOverlayWindow() -> NSWindow {
+        let bgOverlayWindow = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
         
-        colorOverlayWindow.level = .popUpMenu
-        colorOverlayWindow.isOpaque = false
+        bgOverlayWindow.level = .popUpMenu
+        bgOverlayWindow.isOpaque = false
         
         if !NSWorkspace.shared.accessibilityDisplayShouldReduceTransparency {
-            let blurView = NSVisualEffectView(frame: colorOverlayWindow.frame)
+            let blurView = NSVisualEffectView(frame: bgOverlayWindow.frame)
             blurView.blendingMode = .behindWindow
             blurView.material = .dark
             blurView.state = .active
             blurView.autoresizingMask = [.width, .height]
-            colorOverlayWindow.contentView?.addSubview(blurView)
+            bgOverlayWindow.contentView?.addSubview(blurView)
         } else {
-            colorOverlayWindow.backgroundColor = NSColor(white: 0.15, alpha: 0.8)
+            bgOverlayWindow.backgroundColor = NSColor(white: 0.15, alpha: 0.8)
         }
         
-        return colorOverlayWindow
-    }
-    
-    @objc func openPreferencesWindow(_ sender: Any?) {
-        self.preferencesWindowController.showWindow(self)
-        NSApplication.shared.activate(ignoringOtherApps: true)
-    }
-    
-    func setupAboutWindow() {
-        self.aboutWindow.titleVisibility = .hidden
-        self.aboutWindow.styleMask.remove(.resizable)
-        self.aboutWindow.styleMask.remove(.miniaturizable)
-    }
-    
-    @objc func openAboutWindow(_ sender: Any?) {
-        self.aboutWindow.makeKeyAndOrderFront(self.aboutWindow)
-        NSApplication.shared.activate(ignoringOtherApps: true)
-    }
-    
-    func onPreferencesChanged() {
-        let preferences = Preferences.shared
-        self.keyboardListener.activationModifierKey = preferences.activationModifierKey
-        self.keyboardListener.secondActivationModifierKeyPress = Double(preferences.activationSensitivity)
-        self.keyboardListener.holdActivationModifierKeyTimeout = Double(preferences.holdDuration)
-        self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
-            gestureOverlayWindow.swipeDetectionVelocityThreshold = preferences.swipeDetectionVelocityThreshold
-            gestureOverlayWindow.reverseScroll = preferences.reverseScroll
-        }
+        return bgOverlayWindow
     }
     
     func onActivationStarted() {
-        guard !self.disabled else {
+        guard !self.disabledGlobally else {
             Logger.shared.info("Not gonna activate, Penc is disabled globally")
-            self.abortSound?.play()
+            abortSound?.play()
             return
         }
         
         guard NSScreen.screens.indices.contains(0) else {
             Logger.shared.info("Not gonna activate, there is no screen at all")
-            self.abortSound?.play()
+            abortSound?.play()
             return
         }
         
@@ -221,7 +264,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             })
         } catch {
             Logger.shared.error("Not gonna activate, could not get visible windows: \(error.localizedDescription)")
-            self.abortSound?.play()
+            abortSound?.play()
             return
         }
         
@@ -256,11 +299,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         
         // Show color overlay windows for each screen
         for (index, screen) in NSScreen.screens.enumerated() {
-            if !self.colorOverlayWindows.indices.contains(index) {
-                self.colorOverlayWindows.append(self.createColorOverlayWindow())
+            if !self.bgOverlayWindows.indices.contains(index) {
+                self.bgOverlayWindows.append(self.createBackgroundOverlayWindow())
             }
             
-            let colorOverlayWindow = self.colorOverlayWindows[index]
+            let colorOverlayWindow = self.bgOverlayWindows[index]
             colorOverlayWindow.setFrame(screen.frame, display: true, animate: false)
             colorOverlayWindow.makeKeyAndOrderFront(colorOverlayWindow)
         }
@@ -342,65 +385,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             selectedWindowFrame: self.selectedWindowHandle!.newRect,
             otherWindows: otherWindowHandlesDictionary
         )
-    }
-    
-    func onActivationCompleted() {
-        guard self.active else { return }
-        
-        guard NSScreen.screens.indices.contains(0) else {
-            Logger.shared.info("Not gonna complete activation, there is no screen -- force cancelling")
-            self.onActivationAborted()
-            return
-        }
-        
-        self.focusedWindow?.focusThisWindowOnly()
-        
-        self.windowHandles.forEach { (windowHandle) in
-            windowHandle.applyNewFrame()
-            windowHandle.placeholder.window.orderOut(windowHandle.placeholder.window)
-        }
-        self.colorOverlayWindows.forEach { (colorOverlayWindow) in
-            colorOverlayWindow.orderOut(colorOverlayWindow)
-        }
-        self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
-            gestureOverlayWindow.orderOut(gestureOverlayWindow)
-            gestureOverlayWindow.clear()
-        }
-        
-        self.windowAlignmentManager = nil
-        self.focusedWindow = nil
-        self.selectedWindowHandle = nil
-        self.windowHandles = []
-        self.active = false
-        NSCursor.arrow.set()
-        self.activeResizeHandle = nil
-    }
-    
-    func onActivationAborted() {
-        guard self.active else { return }
-        
-        Logger.shared.info("Aborted activation")
-        
-        self.focusedWindow?.focus()
-        
-        self.windowHandles.forEach { (windowHandle) in
-            windowHandle.placeholder.window.orderOut(windowHandle.placeholder.window)
-        }
-        self.colorOverlayWindows.forEach { (colorOverlayWindow) in
-            colorOverlayWindow.orderOut(colorOverlayWindow)
-        }
-        self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
-            gestureOverlayWindow.orderOut(gestureOverlayWindow)
-            gestureOverlayWindow.clear()
-        }
-        
-        self.windowAlignmentManager = nil
-        self.focusedWindow = nil
-        self.selectedWindowHandle = nil
-        self.windowHandles = []
-        self.active = false
-        NSCursor.arrow.set()
-        self.activeResizeHandle = nil
     }
     
     func onKeyDownWhileActivated(pressedKeys: Set<UInt16>) {
@@ -913,52 +897,72 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
         return windowHandles
     }
     
-    func menuWillOpen(_ menu: NSMenu) {
-        let disableToggleMenuItem = menu.item(withTag: 1)
-        disableToggleMenuItem!.title = self.disabled ? "Enable" : "Disable"
+    func onActivationCompleted() {
+        guard self.active else { return }
         
-        let disableAppToggleMenuItem = menu.item(withTag: 2)
-        if let app = NSWorkspace.shared.frontmostApplication {
-            if let appName = app.localizedName, let appBundleId = app.bundleIdentifier {
-                if Preferences.shared.disabledApps.contains(appBundleId) {
-                    disableAppToggleMenuItem!.title = "Enable for \"\(appName)\""
-                } else {
-                    disableAppToggleMenuItem!.title = "Disable for \"\(appName)\""
-                }
-                
-                disableAppToggleMenuItem!.isEnabled = true
-            }
-        } else {
-            disableAppToggleMenuItem!.title = "Disable for current app"
-            disableAppToggleMenuItem!.isEnabled = false
+        guard NSScreen.screens.indices.contains(0) else {
+            Logger.shared.info("Not gonna complete activation, there is no screen -- force cancelling")
+            self.onActivationAborted()
+            return
         }
+        
+        self.focusedWindow?.focusThisWindowOnly()
+        
+        self.windowHandles.forEach { (windowHandle) in
+            windowHandle.applyNewFrame()
+            windowHandle.placeholder.window.orderOut(windowHandle.placeholder.window)
+        }
+        self.bgOverlayWindows.forEach { (colorOverlayWindow) in
+            colorOverlayWindow.orderOut(colorOverlayWindow)
+        }
+        self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
+            gestureOverlayWindow.orderOut(gestureOverlayWindow)
+            gestureOverlayWindow.clear()
+        }
+        
+        self.windowAlignmentManager = nil
+        self.focusedWindow = nil
+        self.selectedWindowHandle = nil
+        self.windowHandles = []
+        self.active = false
+        NSCursor.arrow.set()
+        self.activeResizeHandle = nil
     }
     
-    @objc func toggleDisable(_ sender: Any?) {
-        self.disabled = !self.disabled
-        Logger.shared.info(self.disabled ? "Disabled globally" : "Enabled globally")
-    }
-    
-    @objc func toggleDisableApp(_ sender: Any?) {
-        if let app = NSWorkspace.shared.frontmostApplication {
-            if let appBundleId = app.bundleIdentifier {
-                if Preferences.shared.disabledApps.contains(appBundleId) {
-                    let i = Preferences.shared.disabledApps.firstIndex(of: appBundleId)
-                    Preferences.shared.disabledApps.remove(at: i!)
-                    Logger.shared.info("Enabled back for \(appBundleId)")
-                } else {
-                    Preferences.shared.disabledApps.append(appBundleId)
-                    Logger.shared.info("Disabled for \(appBundleId)")
-                }
-                
-                Preferences.shared.disabledApps = Preferences.shared.disabledApps
-            }
+    func onActivationAborted() {
+        guard self.active else { return }
+        
+        Logger.shared.info("Aborted activation")
+        
+        self.focusedWindow?.focus()
+        
+        self.windowHandles.forEach { (windowHandle) in
+            windowHandle.placeholder.window.orderOut(windowHandle.placeholder.window)
         }
+        self.bgOverlayWindows.forEach { (colorOverlayWindow) in
+            colorOverlayWindow.orderOut(colorOverlayWindow)
+        }
+        self.gestureOverlayWindows.forEach { (gestureOverlayWindow) in
+            gestureOverlayWindow.orderOut(gestureOverlayWindow)
+            gestureOverlayWindow.clear()
+        }
+        
+        self.windowAlignmentManager = nil
+        self.focusedWindow = nil
+        self.selectedWindowHandle = nil
+        self.windowHandles = []
+        self.active = false
+        NSCursor.arrow.set()
+        self.activeResizeHandle = nil
     }
     
     @objc func checkForUpdates(_ sender: Any?) {
         Logger.shared.info("Checking for updates")
         self.updater.checkForUpdates(nil)
+    }
+    
+    func applicationWillTerminate(_ aNotification: Notification) {
+        // Insert code here to tear down your application
     }
     
 }
