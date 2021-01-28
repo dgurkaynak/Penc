@@ -13,7 +13,6 @@ import Silica
 import Sparkle
 
 let WINDOW_ADJECENT_RESIZE_DETECTION_SIZE: CGFloat = 10
-let abortSound = NSSound(named: "Funk")
 
 extension Notification.Name {
     static let killLauncher = Notification.Name("killLauncher")
@@ -241,13 +240,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     func onActivationStarted() {
         guard !self.disabledGlobally else {
             Logger.shared.info("Not gonna activate, Penc is disabled globally")
-            abortSound?.play()
+            NSSound.beep()
             return
         }
         
         guard NSScreen.screens.indices.contains(0) else {
             Logger.shared.info("Not gonna activate, there is no screen at all")
-            abortSound?.play()
+            NSSound.beep()
             return
         }
         
@@ -264,7 +263,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
             })
         } catch {
             Logger.shared.error("Not gonna activate, could not get visible windows: \(error.localizedDescription)")
-            abortSound?.play()
+            NSSound.beep()
             return
         }
         
