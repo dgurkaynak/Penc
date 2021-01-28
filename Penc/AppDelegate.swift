@@ -37,17 +37,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
     
     let abortSound = NSSound(named: "Funk")
     
-    // NSCursor does not have diagonal resize cursor's built-in, so here comes some hack
-    // https://stackoverflow.com/questions/49297201/diagonal-resizing-mouse-pointer#comment85695817_49344105
-    let northWestSouthEastResizeCursor = NSCursor.init(
-        image: NSImage(byReferencingFile: "/System/Library/Frameworks/WebKit.framework/Versions/Current/Frameworks/WebCore.framework/Resources/northWestSouthEastResizeCursor.png")!,
-        hotSpot: NSPoint(x: 8, y: 8)
-    )
-    let northEastSouthWestResizeCursor = NSCursor.init(
-        image: NSImage(byReferencingFile: "/System/Library/Frameworks/WebKit.framework/Versions/Current/Frameworks/WebCore.framework/Resources/northEastSouthWestResizeCursor.png")!,
-        hotSpot: NSPoint(x: 8, y: 8)
-    )
-    
     var activeResizeHandle: PWindowResizeHandle?
     var alignedWindowHandlesToResizeSimultaneously = [(
         resizingEdge: PWindowResizeHandle,
@@ -805,7 +794,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                         )
                     })
                 case .TOP_LEFT:
-                    cursor = self.northWestSouthEastResizeCursor
+                    cursor = NSCursor.resizeNorthWestSouthEast
                     self.activeResizeHandle = .TOP_LEFT
                 case .LEFT:
                     cursor = NSCursor.resizeLeftRight
@@ -818,7 +807,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                         )
                     })
                 case .BOTTOM_LEFT:
-                    cursor = self.northEastSouthWestResizeCursor
+                    cursor = NSCursor.resizeNorthEastSouthWest
                     self.activeResizeHandle = .BOTTOM_LEFT
                 case .BOTTOM:
                     cursor = NSCursor.resizeUpDown
@@ -831,7 +820,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                         )
                     })
                 case .BOTTOM_RIGHT:
-                    cursor = self.northWestSouthEastResizeCursor
+                    cursor = NSCursor.resizeNorthWestSouthEast
                     self.activeResizeHandle = .BOTTOM_RIGHT
                 case .RIGHT:
                     cursor = NSCursor.resizeLeftRight
@@ -844,7 +833,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, GestureOverlayWindowDelegate
                         )
                     })
                 case .TOP_RIGHT:
-                    cursor = self.northEastSouthWestResizeCursor
+                    cursor = NSCursor.resizeNorthEastSouthWest
                     self.activeResizeHandle = .TOP_RIGHT
                 }
             }
