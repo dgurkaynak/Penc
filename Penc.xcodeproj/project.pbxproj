@@ -35,7 +35,6 @@
 		94C5FCCF1FB3025200916D97 /* PApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCCE1FB3025200916D97 /* PApplication.swift */; };
 		94C5FCD11FB347DA00916D97 /* PlaceholderWindowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */; };
 		94C88E9220AB6E5600F4B83E /* PlaceholderWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */; };
-		94C88E9620AC189A00F4B83E /* WindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C88E9520AC189A00F4B83E /* WindowHelper.swift */; };
 		94EF64CB20AD5A070041E4BC /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 94EF64CA20AD5A070041E4BC /* dsa_pub.pem */; };
 /* End PBXBuildFile section */
 
@@ -88,7 +87,6 @@
 		94C5FCCE1FB3025200916D97 /* PApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PApplication.swift; sourceTree = "<group>"; };
 		94C5FCD01FB347DA00916D97 /* PlaceholderWindowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderWindowViewController.swift; sourceTree = "<group>"; };
 		94C88E9120AB6E5600F4B83E /* PlaceholderWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderWindow.swift; sourceTree = "<group>"; };
-		94C88E9520AC189A00F4B83E /* WindowHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowHelper.swift; sourceTree = "<group>"; };
 		94EF64CA20AD5A070041E4BC /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		EC736EAB9572887E33DE2C99 /* Pods-Penc.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Penc.release.xcconfig"; path = "Pods/Target Support Files/Pods-Penc/Pods-Penc.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -160,7 +158,6 @@
 				945B902925C2EA6200205700 /* placeholder */,
 				945B902725C2E99100205700 /* extensions */,
 				945B902A25C2EAB700205700 /* utils */,
-				94C88E9520AC189A00F4B83E /* WindowHelper.swift */,
 				946C90AF25A19FB6007BDA76 /* LineSegment.swift */,
 				946C90BF25A1CB9C007BDA76 /* WindowAlignmentManager.swift */,
 			);
@@ -404,7 +401,6 @@
 			files = (
 				94490CA124D2FD220010C713 /* NSScreenExtension.swift in Sources */,
 				946C90E925ACE1C6007BDA76 /* PlaceholderPool.swift in Sources */,
-				94C88E9620AC189A00F4B83E /* WindowHelper.swift in Sources */,
 				94763F731FA8DE5800D60C27 /* CGRectExtension.swift in Sources */,
 				94C88E9220AB6E5600F4B83E /* PlaceholderWindow.swift in Sources */,
 				9417B7CB1FB04A0100749BC8 /* Preferences.swift in Sources */,
