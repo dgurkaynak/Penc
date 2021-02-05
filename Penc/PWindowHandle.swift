@@ -23,11 +23,6 @@ enum PWindowResizeHandle {
     case TOP_RIGHT
 }
 
-enum PWindowHandleError: Error {
-    case noScreens
-    case unexpectedNilResponse
-}
-
 class PWindowHandle {
     public private(set) var appPid: pid_t
     public private(set) var runningApp: NSRunningApplication?
@@ -45,7 +40,7 @@ class PWindowHandle {
     
     private var _siWindow: SIWindow?
     
-    private init(appPid: pid_t, windowNumber: Int, zIndex: Int, frame: CGRect) {
+    init(appPid: pid_t, windowNumber: Int, zIndex: Int, frame: CGRect) {
         self.appPid = appPid
         self.runningApp = NSRunningApplication.init(processIdentifier: appPid)
         self.windowNumber = windowNumber
@@ -147,7 +142,7 @@ class PWindowHandle {
         self.placeholder.windowViewController.imageView.image = self.runningApp!.icon
     }
     
-    func updateFrame(_ newFrame: CGRect) {
+    func setFrame(_ newFrame: CGRect) {
         self.newRect = newFrame
         self.placeholder.window.setFrame(self.newRect, display: true, animate: false)
         self.placeholder.windowViewController.updateWindowSizeTextField(self.newRect)
@@ -156,13 +151,10 @@ class PWindowHandle {
     }
     
     func applyNewFrame() {
-        guard self.isChanged() else { return }
+        // Ensure frame is changed
+        guard self.newRect != self.initialRect else { return }
         self.initialRect = self.newRect
         self.siWindow?.setFrameBottomLeft(self.newRect)
-    }
-    
-    func isChanged() -> Bool {
-        return self.newRect != self.initialRect
     }
     
     var siWindow: SIWindow? {
@@ -187,57 +179,5 @@ class PWindowHandle {
     
     deinit {
         PlaceholderPool.shared.release(self.placeholder)
-    }
-    
-    // Returns ordered from frontmost to backmost
-    static func visibleWindowHandles() throws -> [PWindowHandle] {
-        guard NSScreen.screens.indices.contains(0) else {
-            throw PWindowHandleError.noScreens
-        }
-        
-        let visibleWindowsInfo = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID)
-        guard visibleWindowsInfo != nil else {
-            throw PWindowHandleError.unexpectedNilResponse
-        }
-        
-        var visibleWindowHandles: [PWindowHandle] = []
-        var zIndex = 0
-        
-        for windowInfo in visibleWindowsInfo as! [NSDictionary] {
-            // Ignore dock, desktop, menubar stuff: https://stackoverflow.com/a/5286921
-            let windowLayer = windowInfo["kCGWindowLayer"] as? Int
-            guard windowLayer == 0 else { continue }
-            
-            let appPid = windowInfo["kCGWindowOwnerPID"] as? pid_t
-            let windowNumber = windowInfo["kCGWindowNumber"] as? Int
-            let windowBounds = windowInfo["kCGWindowBounds"] as? NSDictionary
-            
-            guard appPid != nil else { continue }
-            guard windowNumber != nil else { continue }
-            guard windowBounds != nil else { continue }
-            
-            let windowWidth = windowBounds!["Width"] as? Int
-            let windowHeight = windowBounds!["Height"] as? Int
-            let windowX = windowBounds!["X"] as? Int
-            let windowY = windowBounds!["Y"] as? Int // top-left origined
-            
-            guard windowWidth != nil else { continue }
-            guard windowHeight != nil else { continue }
-            guard windowX != nil else { continue }
-            guard windowY != nil else { continue }
-            
-            let rect = CGRect(x: windowX!, y: windowY!, width: windowWidth!, height: windowHeight!).topLeft2bottomLeft(NSScreen.screens[0])
-            let windowHandle = PWindowHandle(
-                appPid: appPid!,
-                windowNumber: windowNumber!,
-                zIndex: zIndex,
-                frame: rect
-            )
-            visibleWindowHandles.append(windowHandle)
-            
-            zIndex = zIndex - 1
-        }
-        
-        return visibleWindowHandles
     }
 }

@@ -27,6 +27,8 @@
 		9475700020ACB705003023FD /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94756FFF20ACB705003023FD /* ServiceManagement.framework */; };
 		94763F731FA8DE5800D60C27 /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94763F721FA8DE5800D60C27 /* CGRectExtension.swift */; };
 		94763F7F1FA9095E00D60C27 /* PreferencesGeneralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94763F7E1FA9095E00D60C27 /* PreferencesGeneralViewController.swift */; };
+		94951E3D25C590FD000293D1 /* Activation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94951E3C25C590FD000293D1 /* Activation.swift */; };
+		94951E4725C72914000293D1 /* OverlayWindowPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94951E4625C72914000293D1 /* OverlayWindowPool.swift */; };
 		949553E21FB0BDC60025E22C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949553E11FB0BDC60025E22C /* AboutViewController.swift */; };
 		94C1640624CB12C6005A564F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640524CB12C6005A564F /* Logger.swift */; };
 		94C1640E24CD81D1005A564F /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640D24CD81D1005A564F /* PreferencesWindowController.swift */; };
@@ -80,6 +82,8 @@
 		94756FFF20ACB705003023FD /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		94763F721FA8DE5800D60C27 /* CGRectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		94763F7E1FA9095E00D60C27 /* PreferencesGeneralViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesGeneralViewController.swift; sourceTree = "<group>"; };
+		94951E3C25C590FD000293D1 /* Activation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activation.swift; sourceTree = "<group>"; };
+		94951E4625C72914000293D1 /* OverlayWindowPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayWindowPool.swift; sourceTree = "<group>"; };
 		949553E11FB0BDC60025E22C /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		94C1640524CB12C6005A564F /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		94C1640D24CD81D1005A564F /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
@@ -162,6 +166,8 @@
 				945B902A25C2EAB700205700 /* utils */,
 				946C90AF25A19FB6007BDA76 /* LineSegment.swift */,
 				946C90BF25A1CB9C007BDA76 /* WindowAlignmentManager.swift */,
+				94951E3C25C590FD000293D1 /* Activation.swift */,
+				94951E4625C72914000293D1 /* OverlayWindowPool.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -411,6 +417,8 @@
 				94C5FCCB1FB2201200916D97 /* KeyboardListener.swift in Sources */,
 				80E0F4932230A6FD0084F0AC /* SIWindowExtension.swift in Sources */,
 				945195A41FA88B8B00FA53B4 /* AppDelegate.swift in Sources */,
+				94951E3D25C590FD000293D1 /* Activation.swift in Sources */,
+				94951E4725C72914000293D1 /* OverlayWindowPool.swift in Sources */,
 				9417B7C11FADB16300749BC8 /* GestureOverlayWindow.swift in Sources */,
 				94C1640624CB12C6005A564F /* Logger.swift in Sources */,
 				946C90E325ACDD1E007BDA76 /* PWindowHandle.swift in Sources */,

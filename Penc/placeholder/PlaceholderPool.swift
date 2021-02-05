@@ -9,12 +9,24 @@
 import Foundation
 import Cocoa
 
+internal typealias PlaceholderPoolItem = (
+    window: PlaceholderWindow,
+    windowViewController: PlaceholderWindowViewController
+)
+
 class PlaceholderPool {
     static let shared = PlaceholderPool()
     
-    private var pool = [(window: PlaceholderWindow, windowViewController: PlaceholderWindowViewController)]()
+    private var all = [PlaceholderPoolItem]()
+    private var avaliable = [PlaceholderPoolItem]()
     
-    private func create() -> (window: PlaceholderWindow, windowViewController: PlaceholderWindowViewController) {
+    func forEach(_ predicate: (PlaceholderPoolItem) -> ()) {
+        self.all.forEach { (item) in
+            predicate(item)
+        }
+    }
+    
+    private func create() -> PlaceholderPoolItem {
         let window = PlaceholderWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
         let windowViewController = PlaceholderWindowViewController.freshController()
         
@@ -24,18 +36,21 @@ class PlaceholderPool {
         window.contentViewController = windowViewController
         window.delegate = windowViewController
         
-        return (window: window, windowViewController: windowViewController)
+        let item = (window: window, windowViewController: windowViewController)
+        self.all.append(item)
+        
+        return item
     }
     
-    func acquire() -> (window: PlaceholderWindow, windowViewController: PlaceholderWindowViewController) {
-        if self.pool.isEmpty {
+    func acquire() -> PlaceholderPoolItem {
+        if self.avaliable.isEmpty {
             return self.create()
         }
         
-        return self.pool.removeLast()
+        return self.avaliable.removeLast()
     }
     
-    func release(_ item: (window: PlaceholderWindow, windowViewController: PlaceholderWindowViewController)) {
-        self.pool.append(item)
+    func release(_ item: PlaceholderPoolItem) {
+        self.avaliable.append(item)
     }
 }
