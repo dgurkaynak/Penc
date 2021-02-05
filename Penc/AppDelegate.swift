@@ -12,7 +12,6 @@ import ApplicationServices
 import Silica
 import Sparkle
 
-let WINDOW_ADJECENT_RESIZE_DETECTION_SIZE: CGFloat = 10
 
 extension Notification.Name {
     static let killLauncher = Notification.Name("killLauncher")

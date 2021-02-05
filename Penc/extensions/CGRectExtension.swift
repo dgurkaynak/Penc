@@ -217,7 +217,7 @@ extension CGRect {
         )
     }
     
-    func resizeBy(handle: PWindowResizeHandle, delta: (x: CGFloat, y: CGFloat)) -> CGRect {
+    func resizeBy(handle: WindowResizeHandleType, delta: (x: CGFloat, y: CGFloat)) -> CGRect {
         switch handle {
         case .TOP:
             return CGRect(

@@ -18,7 +18,7 @@
 		945B903025C2EB6600205700 /* NSCursorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945B902F25C2EB6600205700 /* NSCursorExtension.swift */; };
 		946C90B025A19FB6007BDA76 /* LineSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946C90AF25A19FB6007BDA76 /* LineSegment.swift */; };
 		946C90C025A1CB9C007BDA76 /* WindowAlignmentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946C90BF25A1CB9C007BDA76 /* WindowAlignmentManager.swift */; };
-		946C90E325ACDD1E007BDA76 /* PWindowHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946C90E225ACDD1E007BDA76 /* PWindowHandle.swift */; };
+		946C90E325ACDD1E007BDA76 /* ActivationWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946C90E225ACDD1E007BDA76 /* ActivationWindow.swift */; };
 		946C90E925ACE1C6007BDA76 /* PlaceholderPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946C90E825ACE1C6007BDA76 /* PlaceholderPool.swift */; };
 		94756FF020ACB665003023FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94756FEF20ACB665003023FD /* AppDelegate.swift */; };
 		94756FF420ACB666003023FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94756FF320ACB666003023FD /* Assets.xcassets */; };
@@ -29,6 +29,7 @@
 		94763F7F1FA9095E00D60C27 /* PreferencesGeneralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94763F7E1FA9095E00D60C27 /* PreferencesGeneralViewController.swift */; };
 		94951E3D25C590FD000293D1 /* Activation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94951E3C25C590FD000293D1 /* Activation.swift */; };
 		94951E4725C72914000293D1 /* OverlayWindowPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94951E4625C72914000293D1 /* OverlayWindowPool.swift */; };
+		94951E5325CDBABD000293D1 /* ResizeStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94951E5225CDBABD000293D1 /* ResizeStuff.swift */; };
 		949553E21FB0BDC60025E22C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949553E11FB0BDC60025E22C /* AboutViewController.swift */; };
 		94C1640624CB12C6005A564F /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640524CB12C6005A564F /* Logger.swift */; };
 		94C1640E24CD81D1005A564F /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C1640D24CD81D1005A564F /* PreferencesWindowController.swift */; };
@@ -71,7 +72,7 @@
 		945B902F25C2EB6600205700 /* NSCursorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSCursorExtension.swift; sourceTree = "<group>"; };
 		946C90AF25A19FB6007BDA76 /* LineSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineSegment.swift; sourceTree = "<group>"; };
 		946C90BF25A1CB9C007BDA76 /* WindowAlignmentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowAlignmentManager.swift; sourceTree = "<group>"; };
-		946C90E225ACDD1E007BDA76 /* PWindowHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PWindowHandle.swift; sourceTree = "<group>"; };
+		946C90E225ACDD1E007BDA76 /* ActivationWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivationWindow.swift; sourceTree = "<group>"; };
 		946C90E825ACE1C6007BDA76 /* PlaceholderPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderPool.swift; sourceTree = "<group>"; };
 		94756FED20ACB665003023FD /* PencLauncher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PencLauncher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94756FEF20ACB665003023FD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -84,6 +85,7 @@
 		94763F7E1FA9095E00D60C27 /* PreferencesGeneralViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesGeneralViewController.swift; sourceTree = "<group>"; };
 		94951E3C25C590FD000293D1 /* Activation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activation.swift; sourceTree = "<group>"; };
 		94951E4625C72914000293D1 /* OverlayWindowPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayWindowPool.swift; sourceTree = "<group>"; };
+		94951E5225CDBABD000293D1 /* ResizeStuff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResizeStuff.swift; sourceTree = "<group>"; };
 		949553E11FB0BDC60025E22C /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		94C1640524CB12C6005A564F /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		94C1640D24CD81D1005A564F /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
@@ -158,7 +160,6 @@
 				94C5FCCE1FB3025200916D97 /* PApplication.swift */,
 				9417B7C01FADB16300749BC8 /* GestureOverlayWindow.swift */,
 				94C5FCCA1FB2201200916D97 /* KeyboardListener.swift */,
-				946C90E225ACDD1E007BDA76 /* PWindowHandle.swift */,
 				949553E11FB0BDC60025E22C /* AboutViewController.swift */,
 				945B902825C2EA1400205700 /* preferences */,
 				945B902925C2EA6200205700 /* placeholder */,
@@ -167,7 +168,9 @@
 				946C90AF25A19FB6007BDA76 /* LineSegment.swift */,
 				946C90BF25A1CB9C007BDA76 /* WindowAlignmentManager.swift */,
 				94951E3C25C590FD000293D1 /* Activation.swift */,
+				946C90E225ACDD1E007BDA76 /* ActivationWindow.swift */,
 				94951E4625C72914000293D1 /* OverlayWindowPool.swift */,
+				94951E5225CDBABD000293D1 /* ResizeStuff.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -421,7 +424,8 @@
 				94951E4725C72914000293D1 /* OverlayWindowPool.swift in Sources */,
 				9417B7C11FADB16300749BC8 /* GestureOverlayWindow.swift in Sources */,
 				94C1640624CB12C6005A564F /* Logger.swift in Sources */,
-				946C90E325ACDD1E007BDA76 /* PWindowHandle.swift in Sources */,
+				946C90E325ACDD1E007BDA76 /* ActivationWindow.swift in Sources */,
+				94951E5325CDBABD000293D1 /* ResizeStuff.swift in Sources */,
 				94C1641024CD98C8005A564F /* PreferencesCustomizeActionsViewController.swift in Sources */,
 				94C5FCD11FB347DA00916D97 /* PlaceholderWindowViewController.swift in Sources */,
 				945B903025C2EB6600205700 /* NSCursorExtension.swift in Sources */,

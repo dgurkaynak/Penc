@@ -39,7 +39,7 @@ struct HorizontalEdgeAlignment {
 
 class WindowAlignmentManager {
     private var selectedWindowFrame: CGRect // expects bottom-left originated
-    private var otherWindows: [Int: PWindowHandle]
+    private var otherWindows: [Int: ActivationWindow]
     private var totalResistedX: CGFloat = 0.0
     private var totalResistedY: CGFloat = 0.0
     private var latestTimestamp: Double?
@@ -49,7 +49,7 @@ class WindowAlignmentManager {
     
     init(
         selectedWindowFrame: CGRect, // expects bottom-left originated
-        otherWindows: [Int: PWindowHandle]
+        otherWindows: [Int: ActivationWindow]
     ) {
         self.selectedWindowFrame = selectedWindowFrame
         self.otherWindows = otherWindows
