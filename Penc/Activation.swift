@@ -16,18 +16,20 @@ enum ActivationError: Error {
 }
 
 class Activation: GestureOverlayWindowDelegate {
-    // overlay windows
     private let overlayWindows: [(bg: NSWindow, gesture: GestureOverlayWindow)]
-
     private let allWindows: [ActivationWindow] // ordered from frontmost to backmost
     private var selectedWindow: ActivationWindow? = nil
     
-    // TODO: let olabilir mi
-    private var windowAlignmentManager: WindowAlignmentManager? = nil
+    // Window moving stuff w/ alignment
+    private var windowMovementProcessingState = WindowMovementProcessingState()
+    private var windowAlignmentGuides: WindowAlignmentGuides = (
+        horizontal: [WindowHorizontalEdgeAlignment](),
+        vertical: [WindowVerticalEdgeAlignment]()
+    )
     
-    // resizing stuff
-    private var activeResizeHandle: WindowResizeHandleType?
-    private var activeAlignedWindowsToResizeSimultaneously = [(
+    // Window resizing stuff
+    private var selectedWindowResizeHandle: WindowResizeHandleType?
+    private var alignedWindowsToResizeSimultaneously = [(
         resizingEdge: WindowResizeHandleType,
         window: ActivationWindow
     )]()
@@ -135,63 +137,37 @@ class Activation: GestureOverlayWindowDelegate {
     }
     
     private func selectWindow(_ newWindow: ActivationWindow?) {
-        // If trying to select already-selected one, NOOP
-        // TODO: Hata var, rapid sekilde change yaptiginda selected window normal bi sekilde kalabiliyor
-//        if newWindow != nil &&
-//            self.selectedWindow != nil &&
-//            newWindow!.windowNumber == self.selectedWindow!.windowNumber {
-//            return
-//        }
-        
-        // If there is already selected one, update its style
-        if self.selectedWindow != nil {
-            self.selectedWindow!.placeholder.windowViewController.styleNormal()
-        }
-        
-        // If no window is selected, early terminate
-        if newWindow == nil {
-            self.selectedWindow = nil
-            return
-        }
-        
-        newWindow!.placeholder.windowViewController.styleSelected()
-        self.selectedWindow = newWindow
+        self.selectedWindow?.placeholder.windowViewController.styleNormal()
+        newWindow?.placeholder.windowViewController.styleSelected()
         
         // If there are multiple screens, only the frontmost gesture overlay window
         // recieves magnify events. I guess this is one of macOS's restrictions and
         // we can't do anything. However, the only thing we can do is that we can set
         // the gesture overlay window in the selected window's screen as the frontmost
         // window.
-        let newScreen = newWindow!.placeholder.window.screen
-        if newScreen != nil {
+        if let newScreen = newWindow?.placeholder.window.screen {
             let overlayWindow = self.overlayWindows.first { (item) -> Bool in
                 return item.gesture.screen === newScreen
             }
             overlayWindow?.gesture.makeKeyAndOrderFront(overlayWindow?.gesture)
         }
         
-        // TODO
-        self.reloadWindowAlignmentManager()
+        if self.selectedWindow !== newWindow {
+            self.refreshWindowAlignmentGuides(for: newWindow)
+        }
+        
+        self.selectedWindow = newWindow
     }
     
     // If the selected window is changed, or one of the other window's
     // frame or zIndex is changed, we need to re-calculate window alignment
-    // targets in the WindowAlignmentManager. The only optimization we can
-    // do is: when changing the frame of selected window, calling
-    // self.windowAlignmentManager.updateSelectedWindowFrame(_: CGRect) method,
-    // instead of a hard reload.
-    private func reloadWindowAlignmentManager() {
-        guard self.selectedWindow != nil else { return }
+    // guides.
+    private func refreshWindowAlignmentGuides(for window: ActivationWindow?) {
+        guard window != nil else { return }
 
-        var otherWindowsDictionary = [Int: ActivationWindow]()
-        self.allWindows.forEach { (window) in
-            guard window.windowNumber != self.selectedWindow!.windowNumber else { return }
-            otherWindowsDictionary[window.windowNumber] = window
-        }
-        self.windowAlignmentManager = WindowAlignmentManager(
-            selectedWindowFrame: self.selectedWindow!.newRect,
-            otherWindows: otherWindowsDictionary
-        )
+        let otherWindows = self.allWindows.filter { $0.windowNumber != window!.windowNumber }
+        self.windowMovementProcessingState.reset()
+        self.windowAlignmentGuides = buildActualAlignmentGuides(otherWindows: otherWindows, addScreenEdges: true)
     }
     
     func onKeyDown(pressedKeys: Set<UInt16>) {
@@ -215,10 +191,15 @@ class Activation: GestureOverlayWindowDelegate {
     func onScrollGesture(delta: (x: CGFloat, y: CGFloat, timestamp: Double)) {
         guard self.selectedWindow != nil else { return }
         guard self.selectedWindow!.siWindow?.isMovable() ?? false else { return }
-        guard self.windowAlignmentManager != nil else { return }
         
         let rect = self.selectedWindow!.newRect
-        let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: delta.timestamp)
+        let newMovement = processWindowMovementConsideringAlignment(
+            windowRect: self.selectedWindow!.newRect,
+            alignmentGuides: self.windowAlignmentGuides,
+            state: self.windowMovementProcessingState,
+            movement: (x: -delta.x, y: delta.y),
+            timestamp: delta.timestamp
+        )
         let newRect = CGRect(
             x: rect.origin.x + newMovement.x,
             y: rect.origin.y + newMovement.y,
@@ -226,14 +207,13 @@ class Activation: GestureOverlayWindowDelegate {
             height: rect.height
         )
         self.selectedWindow!.setFrame(newRect)
-        self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
         
         NSCursor.arrow.set()
-        self.activeResizeHandle = nil
-        self.activeAlignedWindowsToResizeSimultaneously.forEach { (item) in
+        self.selectedWindowResizeHandle = nil
+        self.alignedWindowsToResizeSimultaneously.forEach { (item) in
             item.window.placeholder.windowViewController.styleNormal()
         }
-        self.activeAlignedWindowsToResizeSimultaneously = []
+        self.alignedWindowsToResizeSimultaneously = []
     }
     
     func onSwipeGesture(type: SwipeGestureType) {
@@ -259,7 +239,6 @@ class Activation: GestureOverlayWindowDelegate {
                     )
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -268,7 +247,6 @@ class Activation: GestureOverlayWindowDelegate {
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .TOP_CENTER)
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_TOP_RIGHT:
             if isResizable {
@@ -280,7 +258,6 @@ class Activation: GestureOverlayWindowDelegate {
                     )
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -289,7 +266,6 @@ class Activation: GestureOverlayWindowDelegate {
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .TOP_RIGHT)
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_RIGHT:
             if isResizable {
@@ -301,7 +277,6 @@ class Activation: GestureOverlayWindowDelegate {
                     )
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -310,7 +285,6 @@ class Activation: GestureOverlayWindowDelegate {
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .RIGHT_CENTER)
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_BOTTOM_RIGHT:
             if isResizable {
@@ -322,7 +296,6 @@ class Activation: GestureOverlayWindowDelegate {
                     )
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -331,7 +304,6 @@ class Activation: GestureOverlayWindowDelegate {
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_RIGHT)
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_BOTTOM:
             if isResizable {
@@ -343,7 +315,6 @@ class Activation: GestureOverlayWindowDelegate {
                     )
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -352,7 +323,6 @@ class Activation: GestureOverlayWindowDelegate {
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_CENTER)
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_BOTTOM_LEFT:
             if isResizable {
@@ -364,7 +334,6 @@ class Activation: GestureOverlayWindowDelegate {
                     )
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -373,7 +342,6 @@ class Activation: GestureOverlayWindowDelegate {
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .BOTTOM_LEFT)
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_LEFT:
             if isResizable {
@@ -385,7 +353,6 @@ class Activation: GestureOverlayWindowDelegate {
                     )
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -394,7 +361,6 @@ class Activation: GestureOverlayWindowDelegate {
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .LEFT_CENTER)
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         case .SWIPE_TOP_LEFT:
             if isResizable {
@@ -406,7 +372,6 @@ class Activation: GestureOverlayWindowDelegate {
                     )
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
             
             if isMovable {
@@ -415,16 +380,15 @@ class Activation: GestureOverlayWindowDelegate {
                     toPosition: placeholderWindowScreen!.visibleFrame.getPointOf(anchorPoint: .TOP_LEFT)
                 )
                 self.selectedWindow!.setFrame(newRect)
-                self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             }
         }
         
         NSCursor.arrow.set()
-        self.activeResizeHandle = nil
-        self.activeAlignedWindowsToResizeSimultaneously.forEach { (item) in
+        self.selectedWindowResizeHandle = nil
+        self.alignedWindowsToResizeSimultaneously.forEach { (item) in
             item.window.placeholder.windowViewController.styleNormal()
         }
-        self.activeAlignedWindowsToResizeSimultaneously = []
+        self.alignedWindowsToResizeSimultaneously = []
     }
     
     func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat)) {
@@ -437,14 +401,13 @@ class Activation: GestureOverlayWindowDelegate {
             .resizeBy(factor: factor)
             .fitInVisibleFrame(ofScreen: placeholderWindowScreen!)
         self.selectedWindow!.setFrame(newRect)
-        self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
         
         NSCursor.arrow.set()
-        self.activeResizeHandle = nil
-        self.activeAlignedWindowsToResizeSimultaneously.forEach { (item) in
+        self.selectedWindowResizeHandle = nil
+        self.alignedWindowsToResizeSimultaneously.forEach { (item) in
             item.window.placeholder.windowViewController.styleNormal()
         }
-        self.activeAlignedWindowsToResizeSimultaneously = []
+        self.alignedWindowsToResizeSimultaneously = []
     }
     
     func onDoubleClickGesture() {
@@ -481,31 +444,34 @@ class Activation: GestureOverlayWindowDelegate {
         if self.selectedWindow!.previousRectBeforeDblClick != nil &&
             self.selectedWindow!.newRect == newRect {
             self.selectedWindow!.setFrame(self.selectedWindow!.previousRectBeforeDblClick!)
-            self.windowAlignmentManager?.updateSelectedWindowFrame(self.selectedWindow!.previousRectBeforeDblClick!)
             self.selectedWindow!.previousRectBeforeDblClick = nil
         } else {
             self.selectedWindow!.previousRectBeforeDblClick = self.selectedWindow!.newRect
             self.selectedWindow!.setFrame(newRect)
-            self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
         }
         
         NSCursor.arrow.set()
-        self.activeResizeHandle = nil
-        self.activeAlignedWindowsToResizeSimultaneously.forEach { (item) in
+        self.selectedWindowResizeHandle = nil
+        self.alignedWindowsToResizeSimultaneously.forEach { (item) in
             item.window.placeholder.windowViewController.styleNormal()
         }
-        self.activeAlignedWindowsToResizeSimultaneously = []
+        self.alignedWindowsToResizeSimultaneously = []
     }
     
     func onMouseDragGesture(position: (x: CGFloat, y: CGFloat), delta: (x: CGFloat, y: CGFloat), timestamp: Double) {
         guard self.selectedWindow != nil else { return }
         guard self.selectedWindow!.siWindow?.isMovable() ?? false else { return }
-        guard self.windowAlignmentManager != nil else { return }
         
-        if self.activeResizeHandle == nil {
+        if self.selectedWindowResizeHandle == nil {
             // move window
             let rect = self.selectedWindow!.newRect
-            let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: timestamp)
+            let newMovement = processWindowMovementConsideringAlignment(
+                windowRect: self.selectedWindow!.newRect,
+                alignmentGuides: self.windowAlignmentGuides,
+                state: self.windowMovementProcessingState,
+                movement: (x: -delta.x, y: delta.y),
+                timestamp: timestamp
+            )
             let newRect = CGRect(
                 x: rect.origin.x + newMovement.x,
                 y: rect.origin.y + newMovement.y,
@@ -513,25 +479,25 @@ class Activation: GestureOverlayWindowDelegate {
                 height: rect.height
             )
             self.selectedWindow!.setFrame(newRect)
-            self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
         } else {
             // resize window
-//            let newMovement = self.windowAlignmentManager!.map(movement: (x: -delta.x, y: delta.y), timestamp: timestamp)
             let newMovement = (x: -delta.x, y: delta.y)
             let newRect = self.selectedWindow!.newRect.resizeBy(
-                handle: self.activeResizeHandle!,
+                handle: self.selectedWindowResizeHandle!,
                 delta: newMovement
             )
             self.selectedWindow!.setFrame(newRect)
-            self.windowAlignmentManager?.updateSelectedWindowFrame(newRect)
             
-            self.activeAlignedWindowsToResizeSimultaneously.forEach { (item) in
+            self.alignedWindowsToResizeSimultaneously.forEach { (item) in
                 let newRect = item.window.newRect.resizeBy(
                     handle: item.resizingEdge,
                     delta: newMovement
                 )
                 item.window.setFrame(newRect)
-                // TODO: What about self.windowAlignmentManager
+            }
+            
+            if !self.alignedWindowsToResizeSimultaneously.isEmpty {
+                self.refreshWindowAlignmentGuides(for: self.selectedWindow!)
             }
         }
     }
@@ -545,18 +511,14 @@ class Activation: GestureOverlayWindowDelegate {
         let windowUnderCursor = self.allWindows.first { (window) -> Bool in
             return window.newRect.contains(CGPoint(x: mouseX, y: mouseY))
         }
-    
-        // TODO: If windowUnderCursor === self.selectedWindow,
-        // do we need to select window again?
-        // Update from 5th Feb 2021 -- We did the NOOP if already selected one, test it
         
         self.selectWindow(windowUnderCursor)
         
-        self.activeResizeHandle = nil
-        self.activeAlignedWindowsToResizeSimultaneously.forEach { (item) in
+        self.selectedWindowResizeHandle = nil
+        self.alignedWindowsToResizeSimultaneously.forEach { (item) in
             item.window.placeholder.windowViewController.styleNormal()
         }
-        self.activeAlignedWindowsToResizeSimultaneously = []
+        self.alignedWindowsToResizeSimultaneously = []
         
         var cursor = NSCursor.arrow
         
@@ -569,13 +531,13 @@ class Activation: GestureOverlayWindowDelegate {
                 switch resizeHandleUnderCursor!.type {
                 case .TOP:
                     cursor = NSCursor.resizeUpDown
-                    self.activeResizeHandle = .TOP
+                    self.selectedWindowResizeHandle = .TOP
                     let alignedWindows = getAlignedWindowsToResizeSimultaneously(
                         window: self.selectedWindow!,
                         resizeHandle: .TOP,
                         allWindows: self.allWindows
                     )
-                    self.activeAlignedWindowsToResizeSimultaneously = alignedWindows.map({ (window) -> (resizingEdge: WindowResizeHandleType, window: ActivationWindow) in
+                    self.alignedWindowsToResizeSimultaneously = alignedWindows.map({ (window) -> (resizingEdge: WindowResizeHandleType, window: ActivationWindow) in
                         return (
                             resizingEdge: .BOTTOM,
                             window: window
@@ -583,16 +545,16 @@ class Activation: GestureOverlayWindowDelegate {
                     })
                 case .TOP_LEFT:
                     cursor = NSCursor.resizeNorthWestSouthEast
-                    self.activeResizeHandle = .TOP_LEFT
+                    self.selectedWindowResizeHandle = .TOP_LEFT
                 case .LEFT:
                     cursor = NSCursor.resizeLeftRight
-                    self.activeResizeHandle = .LEFT
+                    self.selectedWindowResizeHandle = .LEFT
                     let alignedWindows = getAlignedWindowsToResizeSimultaneously(
                         window: self.selectedWindow!,
                         resizeHandle: .LEFT,
                         allWindows: self.allWindows
                     )
-                    self.activeAlignedWindowsToResizeSimultaneously = alignedWindows.map({ (window) -> (resizingEdge: WindowResizeHandleType, window: ActivationWindow) in
+                    self.alignedWindowsToResizeSimultaneously = alignedWindows.map({ (window) -> (resizingEdge: WindowResizeHandleType, window: ActivationWindow) in
                         return (
                             resizingEdge: .RIGHT,
                             window: window
@@ -600,16 +562,16 @@ class Activation: GestureOverlayWindowDelegate {
                     })
                 case .BOTTOM_LEFT:
                     cursor = NSCursor.resizeNorthEastSouthWest
-                    self.activeResizeHandle = .BOTTOM_LEFT
+                    self.selectedWindowResizeHandle = .BOTTOM_LEFT
                 case .BOTTOM:
                     cursor = NSCursor.resizeUpDown
-                    self.activeResizeHandle = .BOTTOM
+                    self.selectedWindowResizeHandle = .BOTTOM
                     let alignedWindows = getAlignedWindowsToResizeSimultaneously(
                         window: self.selectedWindow!,
                         resizeHandle: .BOTTOM,
                         allWindows: self.allWindows
                     )
-                    self.activeAlignedWindowsToResizeSimultaneously = alignedWindows.map({ (window) -> (resizingEdge: WindowResizeHandleType, window: ActivationWindow) in
+                    self.alignedWindowsToResizeSimultaneously = alignedWindows.map({ (window) -> (resizingEdge: WindowResizeHandleType, window: ActivationWindow) in
                         return (
                             resizingEdge: .TOP,
                             window: window
@@ -617,16 +579,16 @@ class Activation: GestureOverlayWindowDelegate {
                     })
                 case .BOTTOM_RIGHT:
                     cursor = NSCursor.resizeNorthWestSouthEast
-                    self.activeResizeHandle = .BOTTOM_RIGHT
+                    self.selectedWindowResizeHandle = .BOTTOM_RIGHT
                 case .RIGHT:
                     cursor = NSCursor.resizeLeftRight
-                    self.activeResizeHandle = .RIGHT
+                    self.selectedWindowResizeHandle = .RIGHT
                     let alignedWindows = getAlignedWindowsToResizeSimultaneously(
                         window: self.selectedWindow!,
                         resizeHandle: .RIGHT,
                         allWindows: self.allWindows
                     )
-                    self.activeAlignedWindowsToResizeSimultaneously = alignedWindows.map({ (window) -> (resizingEdge: WindowResizeHandleType, window: ActivationWindow) in
+                    self.alignedWindowsToResizeSimultaneously = alignedWindows.map({ (window) -> (resizingEdge: WindowResizeHandleType, window: ActivationWindow) in
                         return (
                             resizingEdge: .LEFT,
                             window: window
@@ -634,14 +596,14 @@ class Activation: GestureOverlayWindowDelegate {
                     })
                 case .TOP_RIGHT:
                     cursor = NSCursor.resizeNorthEastSouthWest
-                    self.activeResizeHandle = .TOP_RIGHT
+                    self.selectedWindowResizeHandle = .TOP_RIGHT
                 }
             }
         }
         
         cursor.set()
         
-        self.activeAlignedWindowsToResizeSimultaneously.forEach { (item) in
+        self.alignedWindowsToResizeSimultaneously.forEach { (item) in
             item.window.placeholder.windowViewController.styleSelected()
         }
     }
@@ -677,9 +639,5 @@ class Activation: GestureOverlayWindowDelegate {
         self.overlayWindows.forEach { (item) in
             OverlayWindowPool.shared.release(item)
         }
-        
-        self.selectedWindow = nil
-        self.windowAlignmentManager = nil
-        self.activeResizeHandle = nil
     }
 }

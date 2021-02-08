@@ -19,6 +19,8 @@ class ActivationWindow {
     public private(set) var initialRect: CGRect // bottom-left originated
     var previousRectBeforeDblClick: CGRect? // bottom-left originated
     public private(set) var newRect: CGRect // bottom-left originated
+    
+    public private(set) var rawAlignmentGuides: WindowAlignmentGuides = (horizontal: [], vertical: [])
     public private(set) var resizeHandleRects = [WindowResizeHandleRect]()
     
     let placeholder = PlaceholderPool.shared.acquire()
@@ -41,6 +43,7 @@ class ActivationWindow {
         let appIcon = self.runningApp != nil ? self.runningApp!.icon : nil
         self.placeholder.windowViewController.imageView.image = appIcon
         
+        self.refreshRawAlignmentGuides()
         self.refreshResizeHandleRects()
     }
     
@@ -49,6 +52,7 @@ class ActivationWindow {
         self.placeholder.window.setFrame(self.newRect, display: true, animate: false)
         self.placeholder.windowViewController.updateWindowSizeTextField(self.newRect)
         
+        self.refreshRawAlignmentGuides()
         self.refreshResizeHandleRects()
     }
     
@@ -81,6 +85,10 @@ class ActivationWindow {
     
     private func refreshResizeHandleRects() {
         self.resizeHandleRects = getWindowResizeHandleRects(self.newRect)
+    }
+    
+    private func refreshRawAlignmentGuides() {
+        self.rawAlignmentGuides = buildRawAlignmentGuides(ofWindow: self.newRect)
     }
     
     deinit {
