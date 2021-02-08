@@ -158,19 +158,13 @@
 				945195AC1FA88B8B00FA53B4 /* Info.plist */,
 				945195AD1FA88B8B00FA53B4 /* Penc.entitlements */,
 				94C5FCCE1FB3025200916D97 /* PApplication.swift */,
-				9417B7C01FADB16300749BC8 /* GestureOverlayWindow.swift */,
 				94C5FCCA1FB2201200916D97 /* KeyboardListener.swift */,
 				949553E11FB0BDC60025E22C /* AboutViewController.swift */,
+				94951E6525D1AF85000293D1 /* activation */,
 				945B902825C2EA1400205700 /* preferences */,
-				945B902925C2EA6200205700 /* placeholder */,
 				945B902725C2E99100205700 /* extensions */,
 				945B902A25C2EAB700205700 /* utils */,
 				946C90AF25A19FB6007BDA76 /* LineSegment.swift */,
-				94951E3C25C590FD000293D1 /* Activation.swift */,
-				946C90E225ACDD1E007BDA76 /* ActivationWindow.swift */,
-				94951E4625C72914000293D1 /* OverlayWindowPool.swift */,
-				94951E5225CDBABD000293D1 /* ResizeStuff.swift */,
-				94951E5A25CDD408000293D1 /* AlignmentStuff.swift */,
 			);
 			path = Penc;
 			sourceTree = "<group>";
@@ -226,6 +220,20 @@
 				94756FF920ACB666003023FD /* PencLauncher.entitlements */,
 			);
 			path = PencLauncher;
+			sourceTree = "<group>";
+		};
+		94951E6525D1AF85000293D1 /* activation */ = {
+			isa = PBXGroup;
+			children = (
+				94951E3C25C590FD000293D1 /* Activation.swift */,
+				946C90E225ACDD1E007BDA76 /* ActivationWindow.swift */,
+				9417B7C01FADB16300749BC8 /* GestureOverlayWindow.swift */,
+				94951E4625C72914000293D1 /* OverlayWindowPool.swift */,
+				945B902925C2EA6200205700 /* placeholder */,
+				94951E5A25CDD408000293D1 /* AlignmentStuff.swift */,
+				94951E5225CDBABD000293D1 /* ResizeStuff.swift */,
+			);
+			path = activation;
 			sourceTree = "<group>";
 		};
 		E8893437771D8477DC21ED98 /* Frameworks */ = {
