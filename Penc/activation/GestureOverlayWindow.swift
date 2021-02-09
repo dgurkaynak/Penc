@@ -156,6 +156,8 @@ class GestureOverlayWindow: NSWindow {
             let latestScrollingDeltas = self.scrollingDeltas.filter { (delta) -> Bool in
                 return event.timestamp - delta.timestamp <= 0.5
             }
+            if latestScrollingDeltas.isEmpty { return }
+            
             let deltaTime = event.timestamp - latestScrollingDeltas.first!.timestamp
             let totalDeltaX = latestScrollingDeltas.reduce(0) { $0 + $1.x }
             let totalDeltaY = latestScrollingDeltas.reduce(0) { $0 + $1.y }
