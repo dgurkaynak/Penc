@@ -46,6 +46,10 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
     func updateWindowSizeTextField(_ windowFrame: CGRect) {
         self.windowSizeTextField.stringValue = "\(Int(windowFrame.width)) x \(Int(windowFrame.height))"
     }
+    
+    func toggleWindowSizeTextField(_ show: Bool) {
+        self.windowSizeTextField.alphaValue = show ? 1 : 0
+    }
 }
 
 extension PlaceholderWindowViewController {

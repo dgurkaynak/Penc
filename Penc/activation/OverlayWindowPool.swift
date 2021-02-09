@@ -32,17 +32,7 @@ class OverlayWindowPool {
         
         bgOverlayWindow.level = .popUpMenu
         bgOverlayWindow.isOpaque = false
-        
-        if !NSWorkspace.shared.accessibilityDisplayShouldReduceTransparency {
-            let blurView = NSVisualEffectView(frame: bgOverlayWindow.frame)
-            blurView.blendingMode = .behindWindow
-            blurView.material = .dark
-            blurView.state = .active
-            blurView.autoresizingMask = [.width, .height]
-            bgOverlayWindow.contentView?.addSubview(blurView)
-        } else {
-            bgOverlayWindow.backgroundColor = NSColor(white: 0.15, alpha: 0.8)
-        }
+        self.updateBackgroundOverlayWindowStyle(bgOverlayWindow)
         
         // Create gesture overlay window
         let gestureOverlayWindow = GestureOverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
@@ -61,6 +51,27 @@ class OverlayWindowPool {
         self.all.append(item)
         
         return item
+    }
+    
+    func updateAllBackgroundOverlayWindowStyles() {
+        self.all.forEach { (item) in
+            self.updateBackgroundOverlayWindowStyle(item.bg)
+        }
+    }
+    
+    private func updateBackgroundOverlayWindowStyle(_ bgOverlayWindow: NSWindow) {
+        bgOverlayWindow.contentView?.subviews = []
+        
+        if !NSWorkspace.shared.accessibilityDisplayShouldReduceTransparency && !Preferences.shared.disableBackgroundBlur {
+            let blurView = NSVisualEffectView(frame: bgOverlayWindow.frame)
+            blurView.blendingMode = .behindWindow
+            blurView.material = .dark
+            blurView.state = .active
+            blurView.autoresizingMask = [.width, .height]
+            bgOverlayWindow.contentView?.addSubview(blurView)
+        } else {
+            bgOverlayWindow.backgroundColor = NSColor(white: 0.15, alpha: 0.8)
+        }
     }
     
     func acquire() -> OverlayWindowPoolItem {

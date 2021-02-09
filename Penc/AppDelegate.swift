@@ -179,6 +179,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
         self.keyboardListener.secondActivationModifierKeyPress = Double(preferences.activationSensitivity)
         self.keyboardListener.holdActivationModifierKeyTimeout = Double(preferences.holdDuration)
         
+        OverlayWindowPool.shared.updateAllBackgroundOverlayWindowStyles()
         OverlayWindowPool.shared.forEach { (poolItem) in
             poolItem.gesture.swipeDetectionVelocityThreshold = preferences.swipeDetectionVelocityThreshold
             poolItem.gesture.reverseScroll = preferences.reverseScroll

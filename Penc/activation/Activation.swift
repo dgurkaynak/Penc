@@ -111,6 +111,7 @@ class Activation: GestureOverlayWindowDelegate {
             window.setFrame(window.newRect)
             window.placeholder.windowViewController.styleNormal()
             window.placeholder.window.order(.below, relativeTo: backmostGestureOverlayWindow.windowNumber)
+            window.placeholder.windowViewController.toggleWindowSizeTextField(Preferences.shared.showWindowSize)
         }
         
         // Determine the window under cursor and select it initially

@@ -24,6 +24,8 @@ final class Preferences {
     private static let key_disabledApps = "disabledApps"
     private static let key_reverseScroll = "reverseScroll"
     private static let key_customActionsForScreenPrefix = "customActionsForScreen"
+    private static let key_disableBackgroundBlur = "disableBackgroundBlur"
+    private static let key_showWindowSize = "showWindowSize"
 
     weak var delegate: PreferencesDelegate?
     
@@ -73,6 +75,20 @@ final class Preferences {
     var reverseScroll: Bool {
         didSet {
             UserDefaults.standard.set(self.reverseScroll, forKey: Preferences.key_reverseScroll)
+            self.delegate?.onPreferencesChanged()
+        }
+    }
+    
+    var disableBackgroundBlur: Bool {
+        didSet {
+            UserDefaults.standard.set(self.disableBackgroundBlur, forKey: Preferences.key_disableBackgroundBlur)
+            self.delegate?.onPreferencesChanged()
+        }
+    }
+    
+    var showWindowSize: Bool {
+        didSet {
+            UserDefaults.standard.set(self.showWindowSize, forKey: Preferences.key_showWindowSize)
             self.delegate?.onPreferencesChanged()
         }
     }
@@ -127,6 +143,22 @@ final class Preferences {
         } else {
             self.reverseScroll = reverseScroll!
         }
+        
+        let disableBackgroundBlur = defaults.object(forKey: Preferences.key_disableBackgroundBlur) as? Bool
+        if disableBackgroundBlur == nil {
+            self.disableBackgroundBlur = false
+            UserDefaults.standard.set(self.disableBackgroundBlur, forKey: Preferences.key_disableBackgroundBlur)
+        } else {
+            self.disableBackgroundBlur = disableBackgroundBlur!
+        }
+        
+        let showWindowSize = defaults.object(forKey: Preferences.key_showWindowSize) as? Bool
+        if showWindowSize == nil {
+            self.showWindowSize = false
+            UserDefaults.standard.set(self.showWindowSize, forKey: Preferences.key_showWindowSize)
+        } else {
+            self.showWindowSize = showWindowSize!
+        }
     }
     
     func setDelegate(_ delegate: PreferencesDelegate?) {
@@ -164,6 +196,8 @@ final class Preferences {
         self.swipeDetectionVelocityThreshold = 500
         self.disabledApps = []
         self.reverseScroll = false
+        self.disableBackgroundBlur = false
+        self.showWindowSize = false
     }
     
     func setLaunchAtLogin(_ value: Bool) -> Bool {

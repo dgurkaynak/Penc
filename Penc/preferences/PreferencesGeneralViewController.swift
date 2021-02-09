@@ -20,6 +20,8 @@ class PreferencesGeneralViewController: NSViewController {
     @IBOutlet var resetDefaultsButton: NSButton!
     @IBOutlet var modifierKeyPopUpButton: NSPopUpButton!
     @IBOutlet var reverseScrollCheckbox: NSButton!
+    @IBOutlet var disableBackgroundBlurCheckbox: NSButton!
+    @IBOutlet var showWindowSizeCheckbox: NSButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +50,12 @@ class PreferencesGeneralViewController: NSViewController {
         
         self.reverseScrollCheckbox.target = self
         self.reverseScrollCheckbox.action = #selector(onReverseScrollCheckboxChange)
+        
+        self.disableBackgroundBlurCheckbox.target = self
+        self.disableBackgroundBlurCheckbox.action = #selector(onDisableBackgroundBlurCheckboxChange)
+        
+        self.showWindowSizeCheckbox.target = self
+        self.showWindowSizeCheckbox.action = #selector(onShowWindowSizeCheckboxChange)
         
         self.launchAtLoginCheckbox.target = self
         self.launchAtLoginCheckbox.action = #selector(onLaunchAtLoginCheckboxChange)
@@ -86,6 +94,10 @@ class PreferencesGeneralViewController: NSViewController {
         self.swipeDetectionThresholdLabel.stringValue = String(format: "%.0f px/s", swipeDetectionThreshold)
         
         self.reverseScrollCheckbox.state = Preferences.shared.reverseScroll ? .on : .off
+        
+        self.disableBackgroundBlurCheckbox.state = Preferences.shared.disableBackgroundBlur ? .on : .off
+        
+        self.showWindowSizeCheckbox.state = Preferences.shared.showWindowSize ? .on : .off
         
         self.launchAtLoginCheckbox.state = Preferences.shared.launchAtLogin ? .on : .off
     }
@@ -131,6 +143,16 @@ class PreferencesGeneralViewController: NSViewController {
     @objc private func onReverseScrollCheckboxChange() {
         Preferences.shared.reverseScroll = self.reverseScrollCheckbox.state == .on
         Logger.shared.info("Set reverse scroll to \(self.reverseScrollCheckbox.state == .on)")
+    }
+    
+    @objc private func onDisableBackgroundBlurCheckboxChange() {
+        Preferences.shared.disableBackgroundBlur = self.disableBackgroundBlurCheckbox.state == .on
+        Logger.shared.info("Set disableBackgroundBlur to \(Preferences.shared.disableBackgroundBlur)")
+    }
+    
+    @objc private func onShowWindowSizeCheckboxChange() {
+        Preferences.shared.showWindowSize = self.showWindowSizeCheckbox.state == .on
+        Logger.shared.info("Set showWindowSize to \(Preferences.shared.showWindowSize)")
     }
     
     @objc private func onLaunchAtLoginCheckboxChange() {
