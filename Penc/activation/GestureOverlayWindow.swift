@@ -25,6 +25,7 @@ protocol GestureOverlayWindowDelegate: class {
     func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat))
     func onMouseMoveGesture(position: (x: CGFloat, y: CGFloat))
     func onDoubleClickGesture()
+    func onRightClickGesture()
     func onMouseDragGesture(
         position: (x: CGFloat, y: CGFloat),
         delta: (x: CGFloat, y: CGFloat),
@@ -129,6 +130,10 @@ class GestureOverlayWindow: NSWindow {
                 self.doubleClickTimer = PTimer()
             }
         }
+    }
+    
+    override func rightMouseDown(with event: NSEvent) {
+        self.delegate_?.onRightClickGesture()
     }
     
     override func scrollWheel(with event: NSEvent) {

@@ -19,6 +19,7 @@ class ActivationWindow {
     public private(set) var initialRect: CGRect // bottom-left originated
     var previousRectBeforeDblClick: CGRect? // bottom-left originated
     public private(set) var newRect: CGRect // bottom-left originated
+    public private(set) var minimized = false
     
     public private(set) var rawAlignmentGuides: WindowAlignmentGuides = (horizontal: [], vertical: [])
     public private(set) var resizeHandleRects = [WindowResizeHandleRect]()
@@ -56,7 +57,16 @@ class ActivationWindow {
         self.refreshResizeHandleRects()
     }
     
-    func applyNewFrame() {
+    func minimize() {
+        self.minimized = true
+    }
+    
+    func applyChanges() {
+        if self.minimized {
+            self.siWindow?.minimize()
+            return
+        }
+        
         // Ensure frame is changed
         guard self.newRect != self.initialRect else { return }
         self.initialRect = self.newRect

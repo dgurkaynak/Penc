@@ -108,7 +108,7 @@ func getWindowResizeHandleRects(_ windowRect: CGRect) -> [WindowResizeHandleRect
 func getAlignedWindowsToResizeSimultaneously(
     window: ActivationWindow, // current window
     resizeHandle: WindowResizeHandleType, // current resize handle
-    allWindows: [ActivationWindow]
+    otherWindows: [ActivationWindow]
 ) -> [ActivationWindow] {
     var alignedWindows = [ActivationWindow]()
     
@@ -120,7 +120,7 @@ func getAlignedWindowsToResizeSimultaneously(
             width: window.newRect.size.width,
             height: RESIZE_ADJECENT_WINDOW_DETECTION_SIZE
         )
-        alignedWindows = allWindows.filter({ (windowHandle) -> Bool in
+        alignedWindows = otherWindows.filter({ (windowHandle) -> Bool in
             let edge = windowHandle.newRect.getBottomEdge()
             let edgeRect = CGRect(x: edge.x1, y: edge.y, width: edge.x2 - edge.x1, height: 0)
             return targetRect.intersects(edgeRect)
@@ -134,7 +134,7 @@ func getAlignedWindowsToResizeSimultaneously(
             width: RESIZE_ADJECENT_WINDOW_DETECTION_SIZE,
             height: window.newRect.size.height
         )
-        alignedWindows = allWindows.filter({ (windowHandle) -> Bool in
+        alignedWindows = otherWindows.filter({ (windowHandle) -> Bool in
             let edge = windowHandle.newRect.getRightEdge()
             let edgeRect = CGRect(x: edge.x, y: edge.y1, width: 0, height: edge.y2 - edge.y1)
             return targetRect.intersects(edgeRect)
@@ -148,7 +148,7 @@ func getAlignedWindowsToResizeSimultaneously(
             width: window.newRect.size.width,
             height: RESIZE_ADJECENT_WINDOW_DETECTION_SIZE
         )
-        alignedWindows = allWindows.filter({ (windowHandle) -> Bool in
+        alignedWindows = otherWindows.filter({ (windowHandle) -> Bool in
             let edge = windowHandle.newRect.getTopEdge()
             let edgeRect = CGRect(x: edge.x1, y: edge.y, width: edge.x2 - edge.x1, height: 0)
             return targetRect.intersects(edgeRect)
@@ -162,7 +162,7 @@ func getAlignedWindowsToResizeSimultaneously(
             width: RESIZE_ADJECENT_WINDOW_DETECTION_SIZE,
             height: window.newRect.size.height
         )
-        alignedWindows = allWindows.filter({ (windowHandle) -> Bool in
+        alignedWindows = otherWindows.filter({ (windowHandle) -> Bool in
             let edge = windowHandle.newRect.getLeftEdge()
             let edgeRect = CGRect(x: edge.x, y: edge.y1, width: 0, height: edge.y2 - edge.y1)
             return targetRect.intersects(edgeRect)

@@ -124,6 +124,10 @@ class Activation: GestureOverlayWindowDelegate {
     // expects bottom-left
     private func getFrontmostWindow(byCoordinate pos: (x: CGFloat, y: CGFloat)) -> ActivationWindow? {
         for window in self.allWindows {
+            if window.minimized {
+                continue
+            }
+            
             if window.newRect.contains(CGPoint(x: pos.x, y: pos.y)) {
                 return window
             }
@@ -166,7 +170,9 @@ class Activation: GestureOverlayWindowDelegate {
     private func refreshWindowAlignmentGuides(for window: ActivationWindow?) {
         guard window != nil else { return }
 
-        let otherWindows = self.allWindows.filter { $0.windowNumber != window!.windowNumber }
+        let otherWindows = self.allWindows.filter {
+            !$0.minimized && $0.windowNumber != window!.windowNumber
+        }
         self.windowMovementProcessingState.reset()
         self.windowAlignmentGuides = buildActualAlignmentGuides(otherWindows: otherWindows, addScreenEdges: true)
     }
@@ -459,6 +465,21 @@ class Activation: GestureOverlayWindowDelegate {
         self.alignedWindowsToResizeSimultaneously = []
     }
     
+    func onRightClickGesture() {
+        guard self.selectedWindow != nil else { return }
+        
+        // Minimize the window
+        self.selectedWindow!.minimize()
+        self.selectedWindow!.placeholder.window.orderOut(self.selectedWindow!.placeholder.window)
+        
+        // Update selected window
+        let mouseX = NSEvent.mouseLocation.x
+        let mouseY = NSEvent.mouseLocation.y // bottom-left origined
+        let selectedWindow = self.getFrontmostWindow(byCoordinate: (x: mouseX, y: mouseY))
+        self.selectWindow(selectedWindow)
+        
+    }
+    
     func onMouseDragGesture(position: (x: CGFloat, y: CGFloat), delta: (x: CGFloat, y: CGFloat), timestamp: Double) {
         guard self.selectedWindow != nil else { return }
         guard self.selectedWindow!.siWindow?.isMovable() ?? false else { return }
@@ -510,7 +531,7 @@ class Activation: GestureOverlayWindowDelegate {
         let mouseY = NSEvent.mouseLocation.y // bottom-left origined
         
         let windowUnderCursor = self.allWindows.first { (window) -> Bool in
-            return window.newRect.contains(CGPoint(x: mouseX, y: mouseY))
+            return !window.minimized && window.newRect.contains(CGPoint(x: mouseX, y: mouseY))
         }
         
         self.selectWindow(windowUnderCursor)
@@ -529,6 +550,10 @@ class Activation: GestureOverlayWindowDelegate {
             }
             
             if resizeHandleUnderCursor != nil {
+                let otherWindows = self.allWindows.filter {
+                    !$0.minimized && $0.windowNumber != self.selectedWindow!.windowNumber
+                }
+                
                 switch resizeHandleUnderCursor!.type {
                 case .TOP:
                     cursor = NSCursor.resizeUpDown
@@ -536,7 +561,7 @@ class Activation: GestureOverlayWindowDelegate {
                     let alignedWindows = getAlignedWindowsToResizeSimultaneously(
                         window: self.selectedWindow!,
                         resizeHandle: .TOP,
-                        allWindows: self.allWindows
+                        otherWindows: otherWindows
                     )
                     self.alignedWindowsToResizeSimultaneously = alignedWindows.map({ (window) -> (resizingEdge: WindowResizeHandleType, window: ActivationWindow) in
                         return (
@@ -553,7 +578,7 @@ class Activation: GestureOverlayWindowDelegate {
                     let alignedWindows = getAlignedWindowsToResizeSimultaneously(
                         window: self.selectedWindow!,
                         resizeHandle: .LEFT,
-                        allWindows: self.allWindows
+                        otherWindows: otherWindows
                     )
                     self.alignedWindowsToResizeSimultaneously = alignedWindows.map({ (window) -> (resizingEdge: WindowResizeHandleType, window: ActivationWindow) in
                         return (
@@ -570,7 +595,7 @@ class Activation: GestureOverlayWindowDelegate {
                     let alignedWindows = getAlignedWindowsToResizeSimultaneously(
                         window: self.selectedWindow!,
                         resizeHandle: .BOTTOM,
-                        allWindows: self.allWindows
+                        otherWindows: otherWindows
                     )
                     self.alignedWindowsToResizeSimultaneously = alignedWindows.map({ (window) -> (resizingEdge: WindowResizeHandleType, window: ActivationWindow) in
                         return (
@@ -587,7 +612,7 @@ class Activation: GestureOverlayWindowDelegate {
                     let alignedWindows = getAlignedWindowsToResizeSimultaneously(
                         window: self.selectedWindow!,
                         resizeHandle: .RIGHT,
-                        allWindows: self.allWindows
+                        otherWindows: otherWindows
                     )
                     self.alignedWindowsToResizeSimultaneously = alignedWindows.map({ (window) -> (resizingEdge: WindowResizeHandleType, window: ActivationWindow) in
                         return (
@@ -610,8 +635,19 @@ class Activation: GestureOverlayWindowDelegate {
     }
     
     func complete() {
+        // When applying chages and if a window is minimized,
+        // `applyChanges()` blocks the thread until minimize animation
+        // is complete. This delays the removal of all the overlay
+        // stuff. Let the apply minimized window changes at the end.
+        var minimizedWindows = [ActivationWindow]()
+        
         self.allWindows.forEach { (window) in
-            window.applyNewFrame()
+            if window.minimized {
+                minimizedWindows.append(window)
+            } else {
+                window.applyChanges()
+            }
+            
             window.placeholder.window.orderOut(window.placeholder.window)
         }
         self.overlayWindows.forEach { (item) in
@@ -621,6 +657,14 @@ class Activation: GestureOverlayWindowDelegate {
         }
         
         NSCursor.arrow.set()
+        
+        // If we don't use dispatch queue, window minimize animation
+        // still blocks :/
+        DispatchQueue.main.asyncAfter(deadline: .now()) {
+            minimizedWindows.forEach { (window) in
+                window.applyChanges()
+            }
+        }
     }
     
     func abort() {
