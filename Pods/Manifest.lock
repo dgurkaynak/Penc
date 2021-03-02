@@ -1,6 +1,6 @@
 PODS:
   - Silica (0.1.5)
-  - Sparkle (1.23.0)
+  - Sparkle (1.26.0)
 
 DEPENDENCIES:
   - Silica (from `./Silica`)
@@ -16,7 +16,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Silica: 3b5a774469476ef84fe9d96a63bfe09908654e50
-  Sparkle: 55b1a87ba69d56913375a281546b7c82dec95bb0
+  Sparkle: d56d028f4b0c123577825f5d1004f6140d77f90e
 
 PODFILE CHECKSUM: 6dac210a5bf210471a9060ce784450d01a8600aa
 
