@@ -34,5 +34,7 @@
 	<string>https://deniz.co/penc/appcast.xml</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
+	<key>SUPublicEDKey</key>
+	<string>WPw12VjSw4cE8/LqayeYYh3wv3UpEzqQHZjoqeaCaFA=</string>
 </dict>
 </plist>
