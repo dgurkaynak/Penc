@@ -19,7 +19,7 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
         
         // Do view setup here.
         self.box.borderType = .grooveBorder
-        self.box.cornerRadius = 10
+        self.box.cornerRadius = 2
         self.windowSizeTextField.textColor = NSColor(calibratedRed: 1.0, green: 1.0, blue: 1.0, alpha: 0.75)
         self.windowTitleTextField.textColor = NSColor(calibratedRed: 1.0, green: 1.0, blue: 1.0, alpha: 0.75)
         self.styleNormal()
@@ -30,13 +30,11 @@ class PlaceholderWindowViewController: NSViewController, NSWindowDelegate {
     func styleNormal() {
         self.box.borderWidth = 1
         self.box.borderColor = NSColor(calibratedRed: 0.75, green: 0.75, blue: 0.75, alpha: 0.5)
-        self.box.fillColor = NSColor(calibratedRed: 0.0, green: 0.0, blue: 0.0, alpha: 0.75)
     }
     
     func styleSelected() {
         self.box.borderWidth = 5
         self.box.borderColor = NSColor(calibratedRed: 0.106, green: 0.537, blue: 0.937, alpha: 1.0)
-        self.box.fillColor = NSColor(calibratedRed: 0.05, green: 0.05, blue: 0.05, alpha: 0.95)
     }
     
     func updateWindowTitleTextField(_ title: String) {
