@@ -46,11 +46,56 @@ class Activation: GestureOverlayWindowDelegate {
             throw ActivationError.unexpectedWindowListError
         }
         
+        // Check the screens for having fullscreen'd window (or two windows in split-view).
+        // We want to ignore the windows in a fullscreen'd screen.
+        //
+        // According to my observations, when a screen is in fullscreen mode, the following
+        // entry is missing (for that screen's frame):
+        //   kCGWindowLayer = "-2147483603";
+        //   kCGWindowOwnerName = Finder;
+        //
+        // This is the only way that I can find to detect whether we're
+        // activated in a fullscreen window(s) set-up.
+        var isFullscreen = Array(repeating: true, count: NSScreen.screens.count)
+        for windowInfo in visibleWindowsInfo as! [NSDictionary] {
+            let windowLayer = windowInfo["kCGWindowLayer"] as? Int
+            guard windowLayer != nil && windowLayer! < 0 else { continue }
+            
+            let windowOwnerName = windowInfo["kCGWindowOwnerName"] as? String
+            guard windowOwnerName == "Finder" else { continue }
+            
+            let windowBounds = windowInfo["kCGWindowBounds"] as? NSDictionary
+            guard windowBounds != nil else { continue }
+            
+            let windowWidth = windowBounds!["Width"] as? Int
+            let windowHeight = windowBounds!["Height"] as? Int
+            let windowX = windowBounds!["X"] as? Int
+            let windowY = windowBounds!["Y"] as? Int // top-left origined
+            guard windowWidth != nil else { continue }
+            guard windowHeight != nil else { continue }
+            guard windowX != nil else { continue }
+            guard windowY != nil else { continue }
+            
+            let windowFrame = CGRect(
+                x: windowX!,
+                y: windowY!,
+                width: windowWidth!,
+                height: windowHeight!
+            ).topLeft2bottomLeft(NSScreen.screens[0]) // convert to bottom-left
+            
+            // Find out the screen
+            let screenIndex = NSScreen.screens.firstIndex { $0.frame == windowFrame }
+            guard screenIndex != nil else { continue }
+            isFullscreen[screenIndex!] = false
+        }
+        
+        // Get the visible windows
         var visibleWindows: [ActivationWindow] = []
         var zIndex = 0
         
         for windowInfo in visibleWindowsInfo as! [NSDictionary] {
-            // Ignore dock, desktop, menubar stuff: https://stackoverflow.com/a/5286921
+            // Ignore dock, desktop, menubar stuff by just filtering
+            // windows at the level zero -- https://stackoverflow.com/a/5286921
             let windowLayer = windowInfo["kCGWindowLayer"] as? Int
             guard windowLayer == 0 else { continue }
             
@@ -72,12 +117,17 @@ class Activation: GestureOverlayWindowDelegate {
             guard windowX != nil else { continue }
             guard windowY != nil else { continue }
             
-            let rect = CGRect(x: windowX!, y: windowY!, width: windowWidth!, height: windowHeight!).topLeft2bottomLeft(NSScreen.screens[0])
+            let windowFrame = CGRect(x: windowX!, y: windowY!, width: windowWidth!, height: windowHeight!).topLeft2bottomLeft(NSScreen.screens[0])
+            
+            // If window is a fullscreen'd screen, ignore it
+            let screenIndex = NSScreen.screens.firstIndex { $0.frame.contains(windowFrame) }
+            if screenIndex != nil && isFullscreen[screenIndex!] == true { continue }
+            
             let window = ActivationWindow(
                 appPid: appPid!,
                 windowNumber: windowNumber!,
                 zIndex: zIndex,
-                frame: rect
+                frame: windowFrame
             )
             visibleWindows.append(window)
             
