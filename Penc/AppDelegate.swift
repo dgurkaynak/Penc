@@ -32,13 +32,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         
-        Logger.shared.info("Booting...")
+        Logger.shared.log("Booting...")
         
         let launcherAppId = "com.denizgurkaynak.PencLauncher"
         let runningApps = NSWorkspace.shared.runningApplications
         let isLauncherRunning = !runningApps.filter { $0.bundleIdentifier == launcherAppId }.isEmpty
         if isLauncherRunning {
-            Logger.shared.debug("Launcher is running, killing it...")
+            Logger.shared.log("Launcher is running, killing it...")
             DistributedNotificationCenter.default().post(name: .killLauncher, object: Bundle.main.bundleIdentifier!)
         }
         
@@ -46,7 +46,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
             button.image = NSImage(named:"penc-menu-icon")
         }
         
-        Logger.shared.info("Checking accessibility permissions...")
+        Logger.shared.log("Checking accessibility permissions...")
         
         if checkAccessibilityPermissions() {
             setupMenu()
@@ -56,7 +56,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
             self.setupAboutWindow()
             self.onPreferencesChanged()
             
-            Logger.shared.info("Boot successful")
+            Logger.shared.log("Boot successful")
         } else {
             let warnAlert = NSAlert();
             warnAlert.messageText = "Accessibility permissions needed";
@@ -69,12 +69,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
     
     func checkAccessibilityPermissions() -> Bool {
         if AXIsProcessTrusted() {
-            Logger.shared.info("We're trusted accessibility client")
+            Logger.shared.log("We're trusted accessibility client")
             return true
         } else {
             let options = NSDictionary(object: kCFBooleanTrue, forKey: kAXTrustedCheckOptionPrompt.takeUnretainedValue() as NSString) as CFDictionary
             let accessibilityEnabled = AXIsProcessTrustedWithOptions(options)
-            Logger.shared.warn("We're NOT trusted accessibility client, manual check result: \(accessibilityEnabled)")
+            Logger.shared.log("We're NOT trusted accessibility client, manual check result: \(accessibilityEnabled)")
             return accessibilityEnabled
         }
     }
@@ -137,7 +137,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
     
     @objc func toggleDisable(_ sender: Any?) {
         self.disabledGlobally = !self.disabledGlobally
-        Logger.shared.info(self.disabledGlobally ? "Disabled globally" : "Enabled globally")
+        Logger.shared.log(self.disabledGlobally ? "Disabled globally" : "Enabled globally")
     }
     
     @objc func toggleDisableApp(_ sender: Any?) {
@@ -146,10 +146,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
                 if Preferences.shared.disabledApps.contains(appBundleId) {
                     let i = Preferences.shared.disabledApps.firstIndex(of: appBundleId)
                     Preferences.shared.disabledApps.remove(at: i!)
-                    Logger.shared.info("Enabled back for \(appBundleId)")
+                    Logger.shared.log("Enabled back for \(appBundleId)")
                 } else {
                     Preferences.shared.disabledApps.append(appBundleId)
-                    Logger.shared.info("Disabled for \(appBundleId)")
+                    Logger.shared.log("Disabled for \(appBundleId)")
                 }
                 
                 Preferences.shared.disabledApps = Preferences.shared.disabledApps
@@ -188,7 +188,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
     
     func onActivationStarted() {
         guard !self.disabledGlobally else {
-            Logger.shared.info("Not gonna activate, Penc is disabled globally")
+            Logger.shared.log("Not gonna activate, Penc is disabled globally")
             NSSound.beep()
             return
         }
@@ -198,7 +198,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
         if focusedWindow?.title() == nil {
             if let focusedApp = focusedWindow?.app() {
                 if focusedApp.title() == "Finder" {
-                    Logger.shared.debug("Desktop is focused, ignoring")
+                    Logger.shared.log("Desktop is focused, ignoring")
                     focusedWindow = nil
                 }
             }
@@ -207,7 +207,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
         do {
             self.activation = try Activation()
         } catch {
-            Logger.shared.info("Not gonna activate: \(error.localizedDescription)")
+            Logger.shared.log("Not gonna activate: \(error.localizedDescription)")
             NSSound.beep()
             return
         }
@@ -236,7 +236,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
     }
     
     @objc func checkForUpdates(_ sender: Any?) {
-        Logger.shared.info("Checking for updates")
+        Logger.shared.log("Checking for updates")
         self.updater.checkForUpdates(nil)
     }
     

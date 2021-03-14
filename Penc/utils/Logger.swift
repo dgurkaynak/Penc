@@ -8,13 +8,6 @@
 
 import Foundation
 
-enum LogLevel: String {
-    case debug = "debug"
-    case info = "info"
-    case warn = "warn"
-    case error = "error"
-}
-
 class Logger {
     static let shared = Logger()
     
@@ -43,22 +36,6 @@ class Logger {
                 self.fileHandle = nil
             }
         }
-    }
-    
-    func debug(_ message: String) {
-        self.log("[debug] \(message)")
-    }
-    
-    func info(_ message: String) {
-        self.log("[info] \(message)")
-    }
-    
-    func warn(_ message: String) {
-        self.log("[warn] \(message)")
-    }
-    
-    func error(_ message: String) {
-        self.log("[error] \(message)")
     }
     
     func log(_ message: String, _ payload: Any...) {

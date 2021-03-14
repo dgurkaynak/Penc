@@ -235,13 +235,13 @@ class PreferencesCustomizeActionsViewController: NSViewController {
     
     private func updateSliders() {
         guard self.selectedScreen != nil else {
-            Logger.shared.warn("Selected screen is null")
+            Logger.shared.log("Selected screen is null")
             return
         }
         
         let screenNumber = self.selectedScreen!.getScreenNumber()
         guard screenNumber != nil else {
-            Logger.shared.warn("Selected screen's number is null")
+            Logger.shared.log("Selected screen's number is null")
             return
         }
         
@@ -249,7 +249,7 @@ class PreferencesCustomizeActionsViewController: NSViewController {
         let customActionEntry = customActions[self.selectedAction.rawValue]
         
         guard customActionEntry != nil else {
-            Logger.shared.error("Unexpected selected action while updating sliders: \(self.selectedAction)")
+            Logger.shared.log("Unexpected selected action while updating sliders: \(self.selectedAction)")
             return
         }
         
@@ -257,26 +257,26 @@ class PreferencesCustomizeActionsViewController: NSViewController {
             try self.setSliderValue(self.widthSlider, ratio: customActionEntry![0])
             try self.setSliderValue(self.heightSlider, ratio: customActionEntry![1])
         } catch {
-            Logger.shared.error("Could not set slider value \(customActionEntry!) \(error)")
+            Logger.shared.log("Could not set slider value \(customActionEntry!) \(error)")
         }
     }
     
     @objc private func onWidthSliderChange() {
         guard self.selectedScreen != nil else {
-            Logger.shared.warn("Selected screen is null")
+            Logger.shared.log("Selected screen is null")
             return
         }
         
         let screenNumber = self.selectedScreen!.getScreenNumber()
         guard screenNumber != nil else {
-            Logger.shared.warn("Selected screen's number is null")
+            Logger.shared.log("Selected screen's number is null")
             return
         }
         
         var customActions = Preferences.shared.getCustomActions(forScreenNumber: screenNumber!)
         
         guard customActions[self.selectedAction.rawValue] != nil else {
-            Logger.shared.error("Unexpected selected action while setting custom action width: \(self.selectedAction)")
+            Logger.shared.log("Unexpected selected action while setting custom action width: \(self.selectedAction)")
             return
         }
         
@@ -285,26 +285,26 @@ class PreferencesCustomizeActionsViewController: NSViewController {
             customActions[self.selectedAction.rawValue]![0] = ratio
             Preferences.shared.setCustomActions(customActions, forScreenNumber: screenNumber!)
         } catch {
-            Logger.shared.error("Unexpected width-slider value recieved \(error)")
+            Logger.shared.log("Unexpected width-slider value recieved \(error)")
         }
     }
     
     @objc private func onHeightSliderChange() {
         guard self.selectedScreen != nil else {
-            Logger.shared.warn("Selected screen is null")
+            Logger.shared.log("Selected screen is null")
             return
         }
         
         let screenNumber = self.selectedScreen!.getScreenNumber()
         guard screenNumber != nil else {
-            Logger.shared.warn("Selected screen's number is null")
+            Logger.shared.log("Selected screen's number is null")
             return
         }
         
         var customActions = Preferences.shared.getCustomActions(forScreenNumber: screenNumber!)
         
         guard customActions[self.selectedAction.rawValue] != nil else {
-            Logger.shared.error("Unexpected selected action while setting custom action height: \(self.selectedAction)")
+            Logger.shared.log("Unexpected selected action while setting custom action height: \(self.selectedAction)")
             return
         }
         
@@ -313,7 +313,7 @@ class PreferencesCustomizeActionsViewController: NSViewController {
             customActions[self.selectedAction.rawValue]![1] = ratio
             Preferences.shared.setCustomActions(customActions, forScreenNumber: screenNumber!)
         } catch {
-            Logger.shared.error("Unexpected height-slider value recieved \(error)")
+            Logger.shared.log("Unexpected height-slider value recieved \(error)")
         }
     }
     

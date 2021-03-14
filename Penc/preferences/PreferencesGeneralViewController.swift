@@ -106,59 +106,59 @@ class PreferencesGeneralViewController: NSViewController {
         switch self.modifierKeyPopUpButton.indexOfSelectedItem {
         case 0:
             Preferences.shared.activationModifierKey = .command
-            Logger.shared.info("Set activation modifier key as Command")
+            Logger.shared.log("Set activation modifier key as Command")
         case 1:
             Preferences.shared.activationModifierKey = .option
-            Logger.shared.info("Set activation modifier key as Option")
+            Logger.shared.log("Set activation modifier key as Option")
         case 2:
             Preferences.shared.activationModifierKey = .control
-            Logger.shared.info("Set activation modifier key as Control")
+            Logger.shared.log("Set activation modifier key as Control")
         case 3:
             Preferences.shared.activationModifierKey = .shift
-            Logger.shared.info("Set activation modifier key as Shift")
+            Logger.shared.log("Set activation modifier key as Shift")
         default:
             Preferences.shared.activationModifierKey = .command
-            Logger.shared.warn("Unknown activation modifier key index, set activation modifier key as Command anyway")
+            Logger.shared.log("Unknown activation modifier key index, set activation modifier key as Command anyway")
         }
     }
     
     @objc private func onDoublePressSensitivitySliderChange() {
         self.doublePressSensitivityLabel.stringValue = "\(self.doublePressSensitivitySider.integerValue) ms"
         Preferences.shared.activationSensitivity = self.doublePressSensitivitySider.floatValue / 1000
-        Logger.shared.info("Set activation double press sensitivity \(Preferences.shared.activationSensitivity)")
+        Logger.shared.log("Set activation double press sensitivity \(Preferences.shared.activationSensitivity)")
     }
     
     @objc private func onHoldDurationSliderChange() {
         self.holdDurationLabel.stringValue = "\(self.holdDurationSlider.integerValue) ms"
         Preferences.shared.holdDuration = self.holdDurationSlider.floatValue / 1000
-        Logger.shared.info("Set hold duration \(Preferences.shared.holdDuration)")
+        Logger.shared.log("Set hold duration \(Preferences.shared.holdDuration)")
     }
     
     @objc private func onSwipeSensitivitySliderChange() {
         self.swipeDetectionThresholdLabel.stringValue = String(format: "%.0f px/s", self.swipeDetectionThresholdSlider.doubleValue)
         Preferences.shared.swipeDetectionVelocityThreshold = self.swipeDetectionThresholdSlider.doubleValue
-        Logger.shared.info("Set swipe detection threshold \(Preferences.shared.swipeDetectionVelocityThreshold) px/s")
+        Logger.shared.log("Set swipe detection threshold \(Preferences.shared.swipeDetectionVelocityThreshold) px/s")
     }
     
     @objc private func onReverseScrollCheckboxChange() {
         Preferences.shared.reverseScroll = self.reverseScrollCheckbox.state == .on
-        Logger.shared.info("Set reverse scroll to \(self.reverseScrollCheckbox.state == .on)")
+        Logger.shared.log("Set reverse scroll to \(self.reverseScrollCheckbox.state == .on)")
     }
     
     @objc private func onDisableBackgroundBlurCheckboxChange() {
         Preferences.shared.disableBackgroundBlur = self.disableBackgroundBlurCheckbox.state == .on
-        Logger.shared.info("Set disableBackgroundBlur to \(Preferences.shared.disableBackgroundBlur)")
+        Logger.shared.log("Set disableBackgroundBlur to \(Preferences.shared.disableBackgroundBlur)")
     }
     
     @objc private func onShowWindowSizeCheckboxChange() {
         Preferences.shared.showWindowSize = self.showWindowSizeCheckbox.state == .on
-        Logger.shared.info("Set showWindowSize to \(Preferences.shared.showWindowSize)")
+        Logger.shared.log("Set showWindowSize to \(Preferences.shared.showWindowSize)")
     }
     
     @objc private func onLaunchAtLoginCheckboxChange() {
-        Logger.shared.info("Setting launch at login to \(self.launchAtLoginCheckbox.state == .on)")
+        Logger.shared.log("Setting launch at login to \(self.launchAtLoginCheckbox.state == .on)")
         if !Preferences.shared.setLaunchAtLogin(self.launchAtLoginCheckbox.state == .on) {
-            Logger.shared.error("Could not add Penc to login items")
+            Logger.shared.log("Could not add Penc to login items")
             let warnAlert = NSAlert();
             warnAlert.messageText = "Could not add Penc to login items";
             warnAlert.informativeText = "Please move Penc app into Applications folder and relaunch."
@@ -180,7 +180,7 @@ class PreferencesGeneralViewController: NSViewController {
         if alert.runModal() == .alertFirstButtonReturn {
             Preferences.shared.reset()
             self.update()
-            Logger.shared.info("Reset all preferences to default")
+            Logger.shared.log("Reset all preferences to default")
         }
     }
 }
