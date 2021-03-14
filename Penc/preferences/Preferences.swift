@@ -64,9 +64,10 @@ final class Preferences {
         }
     }
     
-    @available(OSX, deprecated: 10.10)
     @objc dynamic var launchAtLogin : Bool {
         get {
+            // There is no way to supress this warning
+            // https://github.com/sindresorhus/LaunchAtLogin/tree/0f39982b9d6993eef253b81219d3c39ba1e680f3#im-getting-a-smcopyalljobdictionaries-was-deprecated-in-os-x-1010-warning
             guard let jobDicts = SMCopyAllJobDictionaries( kSMDomainUserLaunchd ).takeRetainedValue() as? [[String:Any]] else { return false }
             return jobDicts.first(where: { $0["Label"] as! String == "com.denizgurkaynak.PencLauncher" }) != nil
         }
