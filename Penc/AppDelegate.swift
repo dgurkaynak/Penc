@@ -193,28 +193,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
             return
         }
         
-        var focusedWindow = SIWindow.focused()
-        // If focused window is finder's desktop window, ignore
-        if focusedWindow?.title() == nil {
-            if let focusedApp = focusedWindow?.app() {
-                if focusedApp.title() == "Finder" {
-                    Logger.shared.log("Desktop is focused, ignoring")
-                    focusedWindow = nil
-                }
-            }
-        }
-        
         do {
+            let focusedWindowBeforeActivation = SIWindow.focused()
             self.activation = try Activation()
+            
+            self.focusedWindow = focusedWindowBeforeActivation
+            NSApplication.shared.activate(ignoringOtherApps: true)
         } catch {
             Logger.shared.log("Not gonna activate: \(error.localizedDescription)")
             NSSound.beep()
             return
         }
-
-        self.focusedWindow = focusedWindow
-        
-        NSApplication.shared.activate(ignoringOtherApps: true)
     }
     
     func onKeyDownWhileActivated(pressedKeys: Set<UInt16>) {
