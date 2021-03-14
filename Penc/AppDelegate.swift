@@ -32,21 +32,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         
-        Logger.shared.log("Booting...")
+        Logger.shared.log("Booting app...", [
+            "version": Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown",
+            "build": Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "unknown"
+        ])
         
         let launcherAppId = "com.denizgurkaynak.PencLauncher"
         let runningApps = NSWorkspace.shared.runningApplications
         let isLauncherRunning = !runningApps.filter { $0.bundleIdentifier == launcherAppId }.isEmpty
         if isLauncherRunning {
-            Logger.shared.log("Launcher is running, killing it...")
             DistributedNotificationCenter.default().post(name: .killLauncher, object: Bundle.main.bundleIdentifier!)
         }
         
         if let button = self.statusItem.button {
             button.image = NSImage(named:"penc-menu-icon")
         }
-        
-        Logger.shared.log("Checking accessibility permissions...")
         
         if checkAccessibilityPermissions() {
             setupMenu()
@@ -56,7 +56,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
             self.setupAboutWindow()
             self.onPreferencesChanged()
             
-            Logger.shared.log("Boot successful")
+            Logger.shared.log("Boot successful!")
         } else {
             let warnAlert = NSAlert();
             warnAlert.messageText = "Accessibility permissions needed";
@@ -137,7 +137,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
     
     @objc func toggleDisable(_ sender: Any?) {
         self.disabledGlobally = !self.disabledGlobally
-        Logger.shared.log(self.disabledGlobally ? "Disabled globally" : "Enabled globally")
     }
     
     @objc func toggleDisableApp(_ sender: Any?) {
@@ -146,10 +145,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
                 if Preferences.shared.disabledApps.contains(appBundleId) {
                     let i = Preferences.shared.disabledApps.firstIndex(of: appBundleId)
                     Preferences.shared.disabledApps.remove(at: i!)
-                    Logger.shared.log("Enabled back for \(appBundleId)")
                 } else {
                     Preferences.shared.disabledApps.append(appBundleId)
-                    Logger.shared.log("Disabled for \(appBundleId)")
                 }
                 
                 Preferences.shared.disabledApps = Preferences.shared.disabledApps
@@ -225,7 +222,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
     }
     
     @objc func checkForUpdates(_ sender: Any?) {
-        Logger.shared.log("Checking for updates")
         self.updater.checkForUpdates(nil)
     }
     
