@@ -54,6 +54,8 @@ extension NSScreen {
             return self.localizedName
         }
         
+        // NSScreenNumber is unique, and it does not change after system reboot etc.
+        // https://stackoverflow.com/a/16164331
         guard let displayID = deviceDescription[NSDeviceDescriptionKey(rawValue: "NSScreenNumber")] as? CGDirectDisplayID else {
             return nil
         }
