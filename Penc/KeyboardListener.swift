@@ -17,7 +17,7 @@ protocol KeyboardListenerDelegate: class {
     func onKeyDownWhileActivated(pressedKeys: Set<UInt16>)
 }
 
-private enum ActivationState {
+private enum ActivationState: String {
     case idle
     case waitingForSecondActivationModifierKeyPress
     case holdActivationModifierKeyToActivate
@@ -76,6 +76,10 @@ class KeyboardListener {
     
     private func onModifierKeyEvent(_ event: NSEvent) {
         let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        Logger.shared.log("Modifier key event", [
+            "state": self.state.rawValue,
+            "flags": humanReadableModifierFlags(flags),
+        ])
         
         // Allow working while caps lock is on
         if flags == [] || flags == [NSEvent.ModifierFlags.capsLock] {
@@ -89,6 +93,12 @@ class KeyboardListener {
     
     private func onKeyDown(_ event: NSEvent) {
         guard !event.isARepeat else { return }
+        
+        Logger.shared.log("Key down event", [
+            "state": self.state.rawValue,
+            "alreadPressedKeys": self.pressedKeys,
+            "keyCode": event.keyCode // Keycode list: https://boredzo.org/blog/archives/2007-05-22/virtual-key-codes
+        ])
         
         switch self.state {
         case .idle:
@@ -152,6 +162,13 @@ class KeyboardListener {
 
     private func onKeyUp(_ event: NSEvent) {
         guard self.state == .active else { return }
+        
+        Logger.shared.log("Key up event", [
+            "state": self.state.rawValue,
+            "alreadPressedKeys": self.pressedKeys,
+            "keyCode": event.keyCode // Keycode list: https://boredzo.org/blog/archives/2007-05-22/virtual-key-codes
+        ])
+        
         self.pressedKeys.remove(event.keyCode)
     }
     
@@ -234,6 +251,11 @@ class KeyboardListener {
     }
     
     private func handleSecondActivationModifierKeyPressTimeout() {
+        Logger.shared.log("Timeout for second activation modifier key press", [
+            "state": self.state.rawValue,
+            "timeoutDuration": self.secondActivationModifierKeyPress
+        ])
+        
         switch self.state {
         case .idle:
             // Not expected
@@ -254,6 +276,11 @@ class KeyboardListener {
     }
     
     private func handleHoldActivationModifierKeyTimeout() {
+        Logger.shared.log("Timeout for holding activation modifier key", [
+            "state": self.state.rawValue,
+            "timeoutDuration": self.holdActivationModifierKeyTimeout
+        ])
+        
         switch self.state {
         case .idle:
             // Not expected
@@ -283,4 +310,16 @@ class KeyboardListener {
         NSEvent.removeMonitor(self.globalKeyUpMonitor as Any)
     }
     
+}
+
+fileprivate func humanReadableModifierFlags(_ flags: NSEvent.ModifierFlags) -> String {
+    var keys: [String] = []
+    if flags.contains(.capsLock) { keys.append("capsLock") }
+    if flags.contains(.shift) { keys.append("shift") }
+    if flags.contains(.control) { keys.append("control") }
+    if flags.contains(.option) { keys.append("option") }
+    if flags.contains(.command) { keys.append("command") }
+    if flags.contains(.numericPad) { keys.append("numericPad") }
+    if flags.contains(.help) { keys.append("help") }
+    return keys.joined(separator: " ")
 }

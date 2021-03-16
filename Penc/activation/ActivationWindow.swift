@@ -40,6 +40,11 @@ class ActivationWindow {
         let appName = self.runningApp != nil ? self.runningApp!.localizedName ?? "Unknown App" : "Unknown App"
         self.placeholder.windowViewController.updateWindowTitleTextField(appName)
         
+        // We can get window title instead of app name, however
+        // it (getting siWindow) has serius performance overhead.
+        // let windowTitle = self.siWindow != nil ? self.siWindow?.title() ?? "Untitled Window" : "Untitled Window"
+        // self.placeholder.windowViewController.updateWindowTitleTextField(windowTitle)
+        
         // Update the placeholder window's icon
         let appIcon = self.runningApp != nil ? self.runningApp!.icon : nil
         self.placeholder.windowViewController.imageView.image = appIcon

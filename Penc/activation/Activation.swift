@@ -35,16 +35,20 @@ class Activation: GestureOverlayWindowDelegate {
     )]()
     
     init() throws {
+        let startTime = Date().timeIntervalSince1970
+        
         // If there is no screen
         guard NSScreen.screens.indices.contains(0) else {
             throw ActivationError.noScreens
         }
+        Logger.shared.log("Screen frames:", NSScreen.screens.map({ $0.frame }))
         
         // Get visible windows (its order is frontmost to backmost)
         let visibleWindowsInfo = CGWindowListCopyWindowInfo(.optionOnScreenOnly, kCGNullWindowID)
         guard visibleWindowsInfo != nil else {
             throw ActivationError.unexpectedWindowListError
         }
+        Logger.shared.log("CGWindowListCopyWindowInfo dump:", visibleWindowsInfo!)
         
         // Check the screens for having fullscreen'd window (or two windows in split-view).
         // We want to ignore the windows in a fullscreen'd screen.
@@ -88,6 +92,7 @@ class Activation: GestureOverlayWindowDelegate {
             guard screenIndex != nil else { continue }
             isFullscreen[screenIndex!] = false
         }
+        Logger.shared.log("Are screens displaying fullscreen'd window(s):", isFullscreen)
         
         // Get the visible windows
         var visibleWindows: [ActivationWindow] = []
@@ -138,7 +143,13 @@ class Activation: GestureOverlayWindowDelegate {
         self.allWindows = visibleWindows.filter({ (window) -> Bool in
             if window.runningApp == nil { return true }
             if window.runningApp!.bundleIdentifier == nil { return true }
-            return !Preferences.shared.disabledApps.contains(window.runningApp!.bundleIdentifier!)
+            
+            let isDisabled = Preferences.shared.disabledApps.contains(window.runningApp!.bundleIdentifier!)
+            if isDisabled {
+                Logger.shared.log("Ignoring a window of disabled app: \(window.runningApp!.bundleIdentifier!)")
+            }
+            
+            return !isDisabled
         })
         
         // Setup bg & gesture overlay windows for each screen
@@ -169,6 +180,8 @@ class Activation: GestureOverlayWindowDelegate {
         let mouseY = NSEvent.mouseLocation.y // bottom-left origined
         let initialSelectedWindow = self.getFrontmostWindow(byCoordinate: (x: mouseX, y: mouseY))
         self.selectWindow(initialSelectedWindow)
+        
+        Logger.shared.log("Activation started w/ \(self.allWindows.count) window(s) in \((Date().timeIntervalSince1970 - startTime) * 1000)ms")
     }
     
     // expects bottom-left
