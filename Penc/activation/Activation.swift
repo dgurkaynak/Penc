@@ -543,7 +543,7 @@ class Activation: GestureOverlayWindowDelegate {
         
     }
     
-    func onMouseDragGesture(position: (x: CGFloat, y: CGFloat), delta: (x: CGFloat, y: CGFloat), timestamp: Double) {
+    func onMouseDragGesture(position: (x: CGFloat, y: CGFloat), delta: (x: CGFloat, y: CGFloat, timestamp: Double)) {
         guard self.selectedWindow != nil else { return }
         guard self.selectedWindow!.siWindow?.isMovable() ?? false else { return }
         
@@ -555,7 +555,7 @@ class Activation: GestureOverlayWindowDelegate {
                 alignmentGuides: self.windowAlignmentGuides,
                 state: self.windowMovementProcessingState,
                 movement: (x: -delta.x, y: delta.y),
-                timestamp: timestamp
+                timestamp: delta.timestamp
             )
             let newRect = CGRect(
                 x: rect.origin.x + newMovement.x,

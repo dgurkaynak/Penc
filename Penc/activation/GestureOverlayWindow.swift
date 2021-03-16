@@ -28,8 +28,7 @@ protocol GestureOverlayWindowDelegate: class {
     func onRightClickGesture()
     func onMouseDragGesture(
         position: (x: CGFloat, y: CGFloat),
-        delta: (x: CGFloat, y: CGFloat),
-        timestamp: Double
+        delta: (x: CGFloat, y: CGFloat, timestamp: Double)
     )
 }
 
@@ -39,8 +38,11 @@ class GestureOverlayWindow: NSWindow {
     private var magnifying = false
     private var magnificationAngle = CGFloat.pi / 4
 
-    var swipeDetectionVelocityThreshold: Double = 500
-    private var scrollingDeltas = [(x: CGFloat, y: CGFloat, timestamp: TimeInterval)]()
+    var scrollSwipeDetectionVelocityThreshold: Double = 500
+    private var scrollingDeltaHistory = [(x: CGFloat, y: CGFloat, timestamp: TimeInterval)]()
+    
+    var mouseDragSwipeDetectionVelocityThreshold: Double = 500
+    private var mouseDragDeltaHistory = [(x: CGFloat, y: CGFloat, timestamp: TimeInterval)]()
     
     var reverseScroll = false
     
@@ -106,12 +108,88 @@ class GestureOverlayWindow: NSWindow {
             x: NSEvent.mouseLocation.x,
             y: NSEvent.mouseLocation.y // bottom-left origined
         )
-        let delta = (x: -1 * event.deltaX, y: -1 * event.deltaY)
-        self.delegate_?.onMouseDragGesture(
-            position: position,
-            delta: delta,
+        
+        let delta = (
+            x: -1 * event.deltaX,
+            y: -1 * event.deltaY,
             timestamp: event.timestamp
         )
+        self.mouseDragDeltaHistory.append(delta)
+        self.mouseDragDeltaHistory = Array(self.mouseDragDeltaHistory.suffix(5))
+        
+        self.delegate_?.onMouseDragGesture(
+            position: position,
+            delta: delta
+        )
+    }
+    
+    // Sorry for duplication (from scrollWheel's ended case)
+    override func mouseUp(with event: NSEvent) {
+        // Maybe swiping?
+        if self.mouseDragDeltaHistory.isEmpty { return }
+        
+        // Include only that movements happen in 500ms before ended
+        let latestMouseDragDeltas = self.mouseDragDeltaHistory.filter { (delta) -> Bool in
+            return event.timestamp - delta.timestamp <= 0.5
+        }
+        if latestMouseDragDeltas.isEmpty { return }
+        
+        let deltaTime = event.timestamp - latestMouseDragDeltas.first!.timestamp
+        let totalDeltaX = latestMouseDragDeltas.reduce(0) { $0 + $1.x }
+        let totalDeltaY = latestMouseDragDeltas.reduce(0) { $0 + $1.y }
+        let speedX = Double(totalDeltaX) / deltaTime // px/s
+        let speedY = Double(totalDeltaY) / deltaTime // px/s
+        
+        var swipe = (x: 0, y: 0)
+        
+        if abs(speedX) > self.mouseDragSwipeDetectionVelocityThreshold {
+            swipe.x = speedX > 0 ? 1 : -1
+        }
+        
+        if abs(speedY) > self.mouseDragSwipeDetectionVelocityThreshold {
+            swipe.y = speedY > 0 ? 1 : -1
+        }
+        
+        var swipeType: SwipeGestureType? = nil
+        
+        switch swipe {
+        case (x: -1, y: -1):
+            swipeType = SwipeGestureType.SWIPE_BOTTOM_RIGHT
+            break
+        case (x: -1, y: 0):
+            swipeType = SwipeGestureType.SWIPE_RIGHT
+            break
+        case (x: -1, y: 1):
+            swipeType = SwipeGestureType.SWIPE_TOP_RIGHT
+            break
+        case (x: 0, y: -1):
+            swipeType = SwipeGestureType.SWIPE_BOTTOM
+            break
+        case (x: 0, y: 0):
+            swipeType = nil
+            break
+        case (x: 0, y: 1):
+            swipeType = SwipeGestureType.SWIPE_TOP
+            break
+        case (x: 1, y: -1):
+            swipeType = SwipeGestureType.SWIPE_BOTTOM_LEFT
+            break
+        case (x: 1, y: 0):
+            swipeType = SwipeGestureType.SWIPE_LEFT
+            break
+        case (x: 1, y: 1):
+            swipeType = SwipeGestureType.SWIPE_TOP_LEFT
+            break
+        default:
+            swipeType = nil
+            break
+        }
+        
+        if swipeType != nil {
+            self.delegate_?.onSwipeGesture(type: swipeType!)
+        }
+        
+        self.mouseDragDeltaHistory = []
     }
     
     override func mouseDown(with event: NSEvent) {
@@ -138,9 +216,9 @@ class GestureOverlayWindow: NSWindow {
     
     override func scrollWheel(with event: NSEvent) {
         if event.phase == NSEvent.Phase.began {
-            self.scrollingDeltas = []
+            self.scrollingDeltaHistory = []
         } else if event.phase == NSEvent.Phase.cancelled {
-            self.scrollingDeltas = []
+            self.scrollingDeltaHistory = []
         } else if event.phase == NSEvent.Phase.changed {
             // Moving or resizing (delta) window
             var factor: CGFloat = event.isDirectionInvertedFromDevice ? -1 : 1;
@@ -150,15 +228,15 @@ class GestureOverlayWindow: NSWindow {
                 y: factor * event.scrollingDeltaY,
                 timestamp: event.timestamp
             )
-            self.scrollingDeltas.append(delta)
-            self.scrollingDeltas = Array(self.scrollingDeltas.suffix(5))
+            self.scrollingDeltaHistory.append(delta)
+            self.scrollingDeltaHistory = Array(self.scrollingDeltaHistory.suffix(5))
             self.delegate_?.onScrollGesture(delta: delta)
         } else if event.phase == NSEvent.Phase.ended {
             // Maybe swiping?
-            if self.scrollingDeltas.isEmpty { return }
+            if self.scrollingDeltaHistory.isEmpty { return }
             
             // Include only that movements happen in 500ms before ended
-            let latestScrollingDeltas = self.scrollingDeltas.filter { (delta) -> Bool in
+            let latestScrollingDeltas = self.scrollingDeltaHistory.filter { (delta) -> Bool in
                 return event.timestamp - delta.timestamp <= 0.5
             }
             if latestScrollingDeltas.isEmpty { return }
@@ -171,11 +249,11 @@ class GestureOverlayWindow: NSWindow {
             
             var swipe = (x: 0, y: 0)
             
-            if abs(speedX) > self.swipeDetectionVelocityThreshold {
+            if abs(speedX) > self.scrollSwipeDetectionVelocityThreshold {
                 swipe.x = speedX > 0 ? 1 : -1
             }
             
-            if abs(speedY) > self.swipeDetectionVelocityThreshold {
+            if abs(speedY) > self.scrollSwipeDetectionVelocityThreshold {
                 swipe.y = speedY > 0 ? 1 : -1
             }
             
@@ -218,7 +296,7 @@ class GestureOverlayWindow: NSWindow {
                 self.delegate_?.onSwipeGesture(type: swipeType!)
             }
             
-            self.scrollingDeltas = []
+            self.scrollingDeltaHistory = []
         }
     }
     
@@ -230,6 +308,6 @@ class GestureOverlayWindow: NSWindow {
     
     func clear() {
         self.magnifying = false
-        self.scrollingDeltas = []
+        self.scrollingDeltaHistory = []
     }
 }
