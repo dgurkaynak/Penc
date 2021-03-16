@@ -11,12 +11,13 @@ import Foundation
 class Logger {
     static let shared = Logger()
     
+    let enabled = CommandLine.arguments.contains("--enable-logging")
     let fileUrl = URL(fileURLWithPath: "/tmp/penc.log")
     var fileHandle: FileHandle? = nil
     
     private init() {
         // Only initalize file handle if the app is running w/ `--enable-logging` argument
-        if CommandLine.arguments.contains("--enable-logging") {
+        if self.enabled {
             // Ensure file (create if not exists)
             if !FileManager.default.fileExists(atPath: fileUrl.path) {
                 do {
@@ -46,9 +47,10 @@ class Logger {
             logString = "\(logString)\n\(item)"
         }
         
-        #if DEBUG
-        print(logString)
-        #endif
+        // If you want to log to xcode console in debug mode, uncomment following lines:
+        // #if DEBUG
+        // print(logString)
+        // #endif
         
         self.fileHandle?.write("\(logString)\n".data(using: .utf8)!)
     }
