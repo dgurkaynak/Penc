@@ -30,6 +30,7 @@ protocol GestureOverlayWindowDelegate: class {
         position: (x: CGFloat, y: CGFloat),
         delta: (x: CGFloat, y: CGFloat, timestamp: Double)
     )
+    func onMouseScrollGesture(delta: (x: CGFloat, y: CGFloat))
 }
 
 class GestureOverlayWindow: NSWindow {
@@ -215,6 +216,15 @@ class GestureOverlayWindow: NSWindow {
     }
     
     override func scrollWheel(with event: NSEvent) {
+        // Check if scroll is triggered from mouse wheel
+        // https://stackoverflow.com/a/13981577
+        if event.phase == NSEvent.Phase.init(rawValue: 0) &&
+            event.momentumPhase == NSEvent.Phase.init(rawValue: 0) {
+            self.delegate_?.onMouseScrollGesture(delta: (x: event.scrollingDeltaX, y: event.scrollingDeltaY))
+            return
+        }
+        
+        // We now know scroll is triggered from trackpad
         if event.phase == NSEvent.Phase.began {
             self.scrollingDeltaHistory = []
         } else if event.phase == NSEvent.Phase.cancelled {

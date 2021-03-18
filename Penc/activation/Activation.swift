@@ -480,6 +480,25 @@ class Activation: GestureOverlayWindowDelegate {
         self.alignedWindowsToResizeSimultaneously = []
     }
     
+    func onMouseScrollGesture(delta: (x: CGFloat, y: CGFloat)) {
+        guard self.selectedWindow != nil else { return }
+        let placeholderWindowScreen = self.selectedWindow!.placeholder.window.screen
+        guard placeholderWindowScreen != nil else { return }
+        guard self.selectedWindow!.siWindow?.isResizable() ?? false else { return }
+        
+        let newRect = self.selectedWindow!.newRect
+            .resizeBy(delta: (x: delta.y * 5, y: delta.y * 5)) // ignore delta.x
+            .fitInVisibleFrame(ofScreen: placeholderWindowScreen!)
+        self.selectedWindow!.setFrame(newRect)
+        
+        NSCursor.arrow.set()
+        self.selectedWindowResizeHandle = nil
+        self.alignedWindowsToResizeSimultaneously.forEach { (item) in
+            item.window.placeholder.windowViewController.styleNormal()
+        }
+        self.alignedWindowsToResizeSimultaneously = []
+    }
+    
     func onDoubleClickGesture() {
         guard self.selectedWindow != nil else { return }
         let placeholderWindowScreen = self.selectedWindow!.placeholder.window.screen

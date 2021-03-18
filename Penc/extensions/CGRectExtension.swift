@@ -277,4 +277,14 @@ extension CGRect {
             )
         }
     }
+    
+    // Resize by keeping its center stable
+    func resizeBy(delta: (x: CGFloat, y: CGFloat)) -> CGRect {
+        return CGRect(
+            x: self.origin.x - (delta.x / 2),
+            y: self.origin.y - (delta.y / 2),
+            width: self.size.width + delta.x,
+            height: self.size.height + delta.y
+        )
+    }
 }
