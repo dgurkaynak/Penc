@@ -42,7 +42,7 @@ class GestureOverlayWindow: NSWindow {
     var scrollSwipeDetectionVelocityThreshold: Double = 500
     private var scrollingDeltaHistory = [(x: CGFloat, y: CGFloat, timestamp: TimeInterval)]()
     
-    var mouseDragSwipeDetectionVelocityThreshold: Double = 500
+    var mouseDragSwipeDetectionVelocityThreshold: Double = 1000
     private var mouseDragDeltaHistory = [(x: CGFloat, y: CGFloat, timestamp: TimeInterval)]()
     
     var reverseScroll = false

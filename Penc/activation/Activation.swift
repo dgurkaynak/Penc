@@ -487,7 +487,10 @@ class Activation: GestureOverlayWindowDelegate {
         guard self.selectedWindow!.siWindow?.isResizable() ?? false else { return }
         
         let newRect = self.selectedWindow!.newRect
-            .resizeBy(delta: (x: delta.y * 5, y: delta.y * 5)) // ignore delta.x
+            .resizeBy(delta: (
+                x: delta.y * CGFloat(Preferences.shared.mouseScrollWheelResizeSensitivity), // ignore delta.x
+                y: delta.y * CGFloat(Preferences.shared.mouseScrollWheelResizeSensitivity)
+            ))
             .fitInVisibleFrame(ofScreen: placeholderWindowScreen!)
         self.selectedWindow!.setFrame(newRect)
         
