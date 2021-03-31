@@ -1,0 +1,20 @@
+{
+  "name": "penc-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "build": "./scripts/build.sh",
+    "start": "rm -rf dist && parcel index.html --out-dir dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Deniz Gurkaynak <dgurkaynak@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "browserslist": "^4.7.0",
+    "dotenv": "^8.2.0",
+    "inline-assets": "^1.4.1",
+    "parcel-bundler": "^1.12.3"
+  }
+}

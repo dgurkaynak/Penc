@@ -3,17 +3,16 @@ import videoMoveUrl from './assets/move.mp4'
 import videoPinchUrl from './assets/pinch.mp4'
 import videoSwipeUrl from './assets/swipe.mp4'
 
-const packageJsonRaw = fs.readFileSync(__dirname + '/../package.json', 'utf8');
-const packageJson = JSON.parse(packageJsonRaw + '');
 const videoUrls = {
     move: videoMoveUrl,
     pinch: videoPinchUrl,
     swipe: videoSwipeUrl
 };
+const pencDownloadVersion = process.env.PENC_DOWNLOAD_VERSION;
 
 const downloadButtonEl = document.getElementById('download-button');
-downloadButtonEl.setAttribute('href', 'https://github.com/dgurkaynak/Penc/releases/download/' + packageJson.version + '/Penc-' + packageJson.version + '.dmg');
-downloadButtonEl.textContent = 'Download Penc ' + packageJson.version;
+downloadButtonEl.setAttribute('href', 'https://github.com/dgurkaynak/Penc/releases/download/' + pencDownloadVersion + '/Penc-' + pencDownloadVersion + '.dmg');
+downloadButtonEl.textContent = 'Download Penc ' + pencDownloadVersion;
 
 let activeShowcaseItem = null;
 let isShowcaseDirty = false;
