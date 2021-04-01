@@ -199,7 +199,6 @@ class Activation: GestureOverlayWindowDelegate {
         return nil
     }
     
-    // TODO: Test this
     var backmostGestureOverlayWindow: GestureOverlayWindow {
         return self.overlayWindows.map({ $0.gesture }).min { a,b in a.orderedIndex < b.orderedIndex }!
     }
@@ -610,8 +609,6 @@ class Activation: GestureOverlayWindowDelegate {
     }
     
     func onMouseMoveGesture(position: (x: CGFloat, y: CGFloat)) {
-        // TODO: Should we throttle this?
-        
         let mouseX = NSEvent.mouseLocation.x
         let mouseY = NSEvent.mouseLocation.y // bottom-left origined
         
