@@ -37,8 +37,8 @@ fi
 
 create-dmg \
     --volname "Penc" \
-    --background "./scripts/dmg-assets/installer-bg.jpg" \
-    --window-size 600 400 \
+    --background "./scripts/dmg-assets/installer-bg.png" \
+    --window-size 600 420 `# 400 (bg image height) + 20 (window title height)` \
     --icon-size 80 \
     --icon "Penc.app" 150 235 \
     --hide-extension "Penc.app" \
