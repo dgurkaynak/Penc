@@ -217,6 +217,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
     
     func onActivationAborted() {
         guard self.activation != nil else { return }
+        NSSound.beep()
         self.activation!.abort()
         self.activation = nil
         self.focusedWindow?.focusThisWindowOnly()
