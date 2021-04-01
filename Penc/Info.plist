@@ -31,7 +31,7 @@
 	<key>NSPrincipalClass</key>
 	<string>PApplication</string>
 	<key>SUFeedURL</key>
-	<string>https://deniz.co/penc/appcast.xml</string>
+	<string>https://deniz.co/penc/appcast_new.xml</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 	<key>SUPublicEDKey</key>
