@@ -213,23 +213,23 @@ class PreferencesCustomizeActionsViewController: NSViewController {
     private func updateActionDescription() {
         switch self.selectedAction {
         case .top:
-            self.actionDescription.stringValue = "- Swipe up, or\n- Press up key"
+            self.actionDescription.stringValue = "• With trackpad: Two-finger swipe up\n• With mouse: Drag a window and throw it to top direction\n• With keyboard: Press up arrow key"
         case .topRight:
-            self.actionDescription.stringValue = "- Swipe to top-right direction, or\n- Press up + right keys"
+            self.actionDescription.stringValue = "• With trackpad: Two-finger swipe to top-right direction\n• With mouse: Drag a window and throw it to top-right direction\n• With keyboard: Press up + right arrow keys"
         case .right:
-            self.actionDescription.stringValue = "- Swipe right, or\n- Press right key"
+            self.actionDescription.stringValue = "• With trackpad: Two-finger swipe right\n• With mouse: Drag a window and throw it to right direction\n• With keyboard: Press right arrow key"
         case .bottomRight:
-            self.actionDescription.stringValue = "- Swipe to bottom-right direction, or\n- Press down + right keys"
+            self.actionDescription.stringValue = "• With trackpad: Two-finger swipe to bottom-right direction\n• With mouse: Drag a window and throw it to bottom-right direction\n• With keyboard: Press down + right arrow keys"
         case .bottom:
-            self.actionDescription.stringValue = "- Swipe down, or\n- Press down key"
+            self.actionDescription.stringValue = "• With trackpad: Two-finger swipe down\n• With mouse: Drag a window and throw it to down direction\n• With keyboard: Press down arrow key"
         case .bottomLeft:
-            self.actionDescription.stringValue = "- Swipe to bottom-left direction, or\n- Press down + left keys"
+            self.actionDescription.stringValue = "• With trackpad: Two-finger swipe to bottom-left direction\n• With mouse: Drag a window and throw it to bottom-left direction\n• With keyboard: Press down + left arrow keys"
         case .left:
-            self.actionDescription.stringValue = "- Swipe left, or\n- Press left key"
+            self.actionDescription.stringValue = "• With trackpad: Two-finger swipe left\n• With mouse: Drag a window and throw it to left direction\n• With keyboard: Press left arrow key"
         case .topLeft:
-            self.actionDescription.stringValue = "- Swipe to top-left direction, or\n- Press left + up keys"
+            self.actionDescription.stringValue = "• With trackpad: Two-finger swipe to top-left direction\n• With mouse: Drag a window and throw it to top-left direction\n• With keyboard: Press left + up arrow keys"
         case .dblClick:
-            self.actionDescription.stringValue = "- Double click anywhere on screen, or\n- Press enter key"
+            self.actionDescription.stringValue = "• With trackpad: Double tap on a window\n• With mouse: Double click on a window\n• With keyboard: Press enter key"
         }
     }
     
