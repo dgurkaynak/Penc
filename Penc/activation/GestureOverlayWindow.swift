@@ -21,6 +21,8 @@ enum SwipeGestureType {
 
 protocol GestureOverlayWindowDelegate: class {
     func onTrackpadScrollGesture(delta: (x: CGFloat, y: CGFloat, timestamp: Double))
+    func onTrackpadScrollGestureBegan()
+    func onTrackpadScrollGestureEnded()
     func onSwipeGesture(type: SwipeGestureType)
     func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat))
     func onMouseMoveGesture(position: (x: CGFloat, y: CGFloat))
@@ -31,6 +33,7 @@ protocol GestureOverlayWindowDelegate: class {
         delta: (x: CGFloat, y: CGFloat, timestamp: Double)
     )
     func onMouseScrollGesture(delta: (x: CGFloat, y: CGFloat))
+    func onMouseUpGesture()
 }
 
 class GestureOverlayWindow: NSWindow {
@@ -126,6 +129,9 @@ class GestureOverlayWindow: NSWindow {
     
     // Sorry for duplication (from scrollWheel's ended case)
     override func mouseUp(with event: NSEvent) {
+        // Call delegate method
+        self.delegate_?.onMouseUpGesture()
+        
         // Maybe swiping?
         if self.mouseDragDeltaHistory.isEmpty { return }
         
@@ -226,6 +232,8 @@ class GestureOverlayWindow: NSWindow {
         
         // We now know scroll is triggered from trackpad
         if event.phase == NSEvent.Phase.began {
+            self.delegate_?.onTrackpadScrollGestureBegan()
+            
             self.trackpadScrollDeltaHistory = []
         } else if event.phase == NSEvent.Phase.cancelled {
             self.trackpadScrollDeltaHistory = []
@@ -242,6 +250,9 @@ class GestureOverlayWindow: NSWindow {
             self.trackpadScrollDeltaHistory = Array(self.trackpadScrollDeltaHistory.suffix(5))
             self.delegate_?.onTrackpadScrollGesture(delta: delta)
         } else if event.phase == NSEvent.Phase.ended {
+            // Call the delegate method
+            self.delegate_?.onTrackpadScrollGestureEnded()
+            
             // Maybe swiping?
             if self.trackpadScrollDeltaHistory.isEmpty { return }
             

@@ -20,12 +20,8 @@ class Activation: GestureOverlayWindowDelegate {
     private let allWindows: [ActivationWindow] // ordered from frontmost to backmost
     private var selectedWindow: ActivationWindow? = nil
     
-    // Window moving stuff w/ alignment
+    // Window alignment stuff
     private var windowMovementProcessingState = WindowMovementProcessingState()
-    private var windowAlignmentGuides: WindowAlignmentGuides = (
-        horizontal: [WindowHorizontalEdgeAlignment](),
-        vertical: [WindowVerticalEdgeAlignment]()
-    )
     
     // Window resizing stuff
     private var selectedWindowResizeHandle: WindowResizeHandleType?
@@ -220,23 +216,31 @@ class Activation: GestureOverlayWindowDelegate {
         }
         
         if self.selectedWindow !== newWindow {
-            self.refreshWindowAlignmentGuides(for: newWindow)
+            self.windowMovementProcessingState.reset()
         }
         
         self.selectedWindow = newWindow
     }
     
-    // If the selected window is changed, or one of the other window's
-    // frame or zIndex is changed, we need to re-calculate window alignment
-    // guides.
-    private func refreshWindowAlignmentGuides(for window: ActivationWindow?) {
-        guard window != nil else { return }
-
-        let otherWindows = self.allWindows.filter {
-            !$0.minimized && $0.windowNumber != window!.windowNumber
+    // Builds alignment guides for the selected window.
+    private func buildAlignmentGuidesForSelectedWindow() -> WindowAlignmentGuides {
+        let otherWindows = self.allWindows.filter { (window) -> Bool in
+            // Ignore minimized windows
+            if window.minimized { return false }
+            
+            // Ignore the selected window
+            if window.windowNumber == self.selectedWindow?.windowNumber { return false }
+            
+            // Ignore the windows that we resize simultaneously
+            let isResizingSimultaneously = self.alignedWindowsToResizeSimultaneously.contains { (windowToResizeSimultaneously) -> Bool in
+                return windowToResizeSimultaneously.window.windowNumber == window.windowNumber
+            }
+            if isResizingSimultaneously { return false }
+            
+            return true
         }
-        self.windowMovementProcessingState.reset()
-        self.windowAlignmentGuides = buildActualAlignmentGuides(otherWindows: otherWindows, addScreenEdges: true)
+        
+        return buildActualAlignmentGuides(otherWindows: otherWindows, addScreenEdges: true)
     }
     
     func onKeyDown(pressedKeys: Set<UInt16>) {
@@ -264,7 +268,7 @@ class Activation: GestureOverlayWindowDelegate {
         let rect = self.selectedWindow!.newRect
         let newMovement = processWindowMovementConsideringAlignment(
             windowRect: self.selectedWindow!.newRect,
-            alignmentGuides: self.windowAlignmentGuides,
+            alignmentGuides: self.buildAlignmentGuidesForSelectedWindow(),
             state: self.windowMovementProcessingState,
             movement: (x: -delta.x, y: delta.y),
             timestamp: delta.timestamp
@@ -283,6 +287,14 @@ class Activation: GestureOverlayWindowDelegate {
             item.window.placeholder.windowViewController.styleNormal()
         }
         self.alignedWindowsToResizeSimultaneously = []
+    }
+    
+    func onTrackpadScrollGestureBegan() {
+        self.windowMovementProcessingState.reset()
+    }
+    
+    func onTrackpadScrollGestureEnded() {
+        self.windowMovementProcessingState.reset()
     }
     
     func onSwipeGesture(type: SwipeGestureType) {
@@ -573,7 +585,7 @@ class Activation: GestureOverlayWindowDelegate {
             let rect = self.selectedWindow!.newRect
             let newMovement = processWindowMovementConsideringAlignment(
                 windowRect: self.selectedWindow!.newRect,
-                alignmentGuides: self.windowAlignmentGuides,
+                alignmentGuides: self.buildAlignmentGuidesForSelectedWindow(),
                 state: self.windowMovementProcessingState,
                 movement: (x: -delta.x, y: delta.y),
                 timestamp: delta.timestamp
@@ -587,7 +599,13 @@ class Activation: GestureOverlayWindowDelegate {
             self.selectedWindow!.setFrame(newRect)
         } else {
             // resize window
-            let newMovement = (x: -delta.x, y: delta.y)
+            let newMovement = processWindowMovementConsideringAlignment(
+                windowRect: self.selectedWindow!.newRect,
+                alignmentGuides: self.buildAlignmentGuidesForSelectedWindow(),
+                state: self.windowMovementProcessingState,
+                movement: (x: -delta.x, y: delta.y),
+                timestamp: delta.timestamp
+            )
             let newRect = self.selectedWindow!.newRect.resizeBy(
                 handle: self.selectedWindowResizeHandle!,
                 delta: newMovement
@@ -601,11 +619,11 @@ class Activation: GestureOverlayWindowDelegate {
                 )
                 item.window.setFrame(newRect)
             }
-            
-            if !self.alignedWindowsToResizeSimultaneously.isEmpty {
-                self.refreshWindowAlignmentGuides(for: self.selectedWindow!)
-            }
         }
+    }
+    
+    func onMouseUpGesture() {
+        self.windowMovementProcessingState.reset()
     }
     
     func onMouseMoveGesture(position: (x: CGFloat, y: CGFloat)) {
