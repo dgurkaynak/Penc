@@ -14,16 +14,16 @@ class PreferencesGeneralViewController: NSViewController {
     @IBOutlet var doublePressSensitivityLabel: NSTextField!
     @IBOutlet var holdDurationSlider: NSSlider!
     @IBOutlet var holdDurationLabel: NSTextField!
-    @IBOutlet var swipeDetectionThresholdSlider: NSSlider!
-    @IBOutlet var swipeDetectionThresholdLabel: NSTextField!
+    @IBOutlet var trackpadScrollToSwipeDetectionThresholdSlider: NSSlider!
+    @IBOutlet var trackpadScrollToSwipeDetectionThresholdLabel: NSTextField!
     @IBOutlet var launchAtLoginCheckbox: NSButton!
     @IBOutlet var resetDefaultsButton: NSButton!
     @IBOutlet var modifierKeyPopUpButton: NSPopUpButton!
     @IBOutlet var reverseScrollCheckbox: NSButton!
-    @IBOutlet var mouseSwipeDetectionThresholdSlider: NSSlider!
-    @IBOutlet var mouseSwipeDetectionThresholdLabel: NSTextField!
-    @IBOutlet var mouseScrollWheelResizeSensitivitySlider: NSSlider!
-    @IBOutlet var mouseScrollWheelResizeSensitivityLabel: NSTextField!
+    @IBOutlet var mouseDragToSwipeDetectionThresholdSlider: NSSlider!
+    @IBOutlet var mouseDragToSwipeDetectionThresholdLabel: NSTextField!
+    @IBOutlet var mouseScrollWheelToResizeSensitivitySlider: NSSlider!
+    @IBOutlet var mouseScrollWheelToResizeSensitivityLabel: NSTextField!
     @IBOutlet var disableBackgroundBlurCheckbox: NSButton!
     @IBOutlet var showWindowSizeCheckbox: NSButton!
     
@@ -49,17 +49,17 @@ class PreferencesGeneralViewController: NSViewController {
         self.holdDurationSlider.target = self
         self.holdDurationSlider.action = #selector(onHoldDurationSliderChange)
         
-        self.swipeDetectionThresholdSlider.target = self
-        self.swipeDetectionThresholdSlider.action = #selector(onSwipeSensitivitySliderChange)
+        self.trackpadScrollToSwipeDetectionThresholdSlider.target = self
+        self.trackpadScrollToSwipeDetectionThresholdSlider.action = #selector(onSwipeSensitivitySliderChange)
         
         self.reverseScrollCheckbox.target = self
         self.reverseScrollCheckbox.action = #selector(onReverseScrollCheckboxChange)
         
-        self.mouseSwipeDetectionThresholdSlider.target = self
-        self.mouseSwipeDetectionThresholdSlider.action = #selector(onMouseSwipeSensitivitySliderChange)
+        self.mouseDragToSwipeDetectionThresholdSlider.target = self
+        self.mouseDragToSwipeDetectionThresholdSlider.action = #selector(onMouseSwipeSensitivitySliderChange)
         
-        self.mouseScrollWheelResizeSensitivitySlider.target = self
-        self.mouseScrollWheelResizeSensitivitySlider.action = #selector(onMouseScrollWheelToResizeSensitivitySliderChange)
+        self.mouseScrollWheelToResizeSensitivitySlider.target = self
+        self.mouseScrollWheelToResizeSensitivitySlider.action = #selector(onMouseScrollWheelToResizeSensitivitySliderChange)
         
         self.disableBackgroundBlurCheckbox.target = self
         self.disableBackgroundBlurCheckbox.action = #selector(onDisableBackgroundBlurCheckboxChange)
@@ -99,19 +99,19 @@ class PreferencesGeneralViewController: NSViewController {
         self.holdDurationSlider.integerValue = holdDuration
         self.holdDurationLabel.stringValue = "\(holdDuration) ms"
         
-        let swipeDetectionThreshold = Preferences.shared.swipeDetectionVelocityThreshold
-        self.swipeDetectionThresholdSlider.doubleValue = swipeDetectionThreshold
-        self.swipeDetectionThresholdLabel.stringValue = String(format: "%.0f px/s", swipeDetectionThreshold)
+        let swipeDetectionThreshold = Preferences.shared.trackpadScrollToSwipeDetectionVelocityThreshold
+        self.trackpadScrollToSwipeDetectionThresholdSlider.doubleValue = swipeDetectionThreshold
+        self.trackpadScrollToSwipeDetectionThresholdLabel.stringValue = String(format: "%.0f px/s", swipeDetectionThreshold)
         
         self.reverseScrollCheckbox.state = Preferences.shared.reverseScroll ? .on : .off
         
-        let mouseSwipeDetectionThreshold = Preferences.shared.mouseSwipeDetectionVelocityThreshold
-        self.mouseSwipeDetectionThresholdSlider.doubleValue = mouseSwipeDetectionThreshold
-        self.mouseSwipeDetectionThresholdLabel.stringValue = String(format: "%.0f px/s", mouseSwipeDetectionThreshold)
+        let mouseSwipeDetectionThreshold = Preferences.shared.mouseDragToSwipeDetectionVelocityThreshold
+        self.mouseDragToSwipeDetectionThresholdSlider.doubleValue = mouseSwipeDetectionThreshold
+        self.mouseDragToSwipeDetectionThresholdLabel.stringValue = String(format: "%.0f px/s", mouseSwipeDetectionThreshold)
         
-        let mouseScrollWheelResizeSensitivity = Preferences.shared.mouseScrollWheelResizeSensitivity
-        self.mouseScrollWheelResizeSensitivitySlider.doubleValue = mouseScrollWheelResizeSensitivity * 10
-        self.mouseScrollWheelResizeSensitivityLabel.stringValue = String(format: "%.1fx", mouseScrollWheelResizeSensitivity)
+        let mouseScrollWheelResizeSensitivity = Preferences.shared.mouseScrollWheelToResizeSensitivity
+        self.mouseScrollWheelToResizeSensitivitySlider.doubleValue = mouseScrollWheelResizeSensitivity * 10
+        self.mouseScrollWheelToResizeSensitivityLabel.stringValue = String(format: "%.1fx", mouseScrollWheelResizeSensitivity)
         
         self.disableBackgroundBlurCheckbox.state = Preferences.shared.disableBackgroundBlur ? .on : .off
         
@@ -147,8 +147,8 @@ class PreferencesGeneralViewController: NSViewController {
     }
     
     @objc private func onSwipeSensitivitySliderChange() {
-        self.swipeDetectionThresholdLabel.stringValue = String(format: "%.0f px/s", self.swipeDetectionThresholdSlider.doubleValue)
-        Preferences.shared.swipeDetectionVelocityThreshold = self.swipeDetectionThresholdSlider.doubleValue
+        self.trackpadScrollToSwipeDetectionThresholdLabel.stringValue = String(format: "%.0f px/s", self.trackpadScrollToSwipeDetectionThresholdSlider.doubleValue)
+        Preferences.shared.trackpadScrollToSwipeDetectionVelocityThreshold = self.trackpadScrollToSwipeDetectionThresholdSlider.doubleValue
     }
     
     @objc private func onReverseScrollCheckboxChange() {
@@ -156,13 +156,13 @@ class PreferencesGeneralViewController: NSViewController {
     }
     
     @objc private func onMouseSwipeSensitivitySliderChange() {
-        self.mouseSwipeDetectionThresholdLabel.stringValue = String(format: "%.0f px/s", self.mouseSwipeDetectionThresholdSlider.doubleValue)
-        Preferences.shared.mouseSwipeDetectionVelocityThreshold = self.mouseSwipeDetectionThresholdSlider.doubleValue
+        self.mouseDragToSwipeDetectionThresholdLabel.stringValue = String(format: "%.0f px/s", self.mouseDragToSwipeDetectionThresholdSlider.doubleValue)
+        Preferences.shared.mouseDragToSwipeDetectionVelocityThreshold = self.mouseDragToSwipeDetectionThresholdSlider.doubleValue
     }
     
     @objc private func onMouseScrollWheelToResizeSensitivitySliderChange() {
-        self.mouseScrollWheelResizeSensitivityLabel.stringValue = String(format: "%.1fx", self.mouseScrollWheelResizeSensitivitySlider.doubleValue / 10)
-        Preferences.shared.mouseScrollWheelResizeSensitivity = self.mouseScrollWheelResizeSensitivitySlider.doubleValue / 10
+        self.mouseScrollWheelToResizeSensitivityLabel.stringValue = String(format: "%.1fx", self.mouseScrollWheelToResizeSensitivitySlider.doubleValue / 10)
+        Preferences.shared.mouseScrollWheelToResizeSensitivity = self.mouseScrollWheelToResizeSensitivitySlider.doubleValue / 10
     }
     
     @objc private func onDisableBackgroundBlurCheckboxChange() {

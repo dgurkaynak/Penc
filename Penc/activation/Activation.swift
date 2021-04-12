@@ -257,7 +257,7 @@ class Activation: GestureOverlayWindowDelegate {
         else if isEnterKeyPressed { self.onDoubleClickGesture() }
     }
     
-    func onScrollGesture(delta: (x: CGFloat, y: CGFloat, timestamp: Double)) {
+    func onTrackpadScrollGesture(delta: (x: CGFloat, y: CGFloat, timestamp: Double)) {
         guard self.selectedWindow != nil else { return }
         guard self.selectedWindow!.siWindow?.isMovable() ?? false else { return }
         
@@ -487,8 +487,8 @@ class Activation: GestureOverlayWindowDelegate {
         
         let newRect = self.selectedWindow!.newRect
             .resizeBy(delta: (
-                x: delta.y * CGFloat(Preferences.shared.mouseScrollWheelResizeSensitivity), // ignore delta.x
-                y: delta.y * CGFloat(Preferences.shared.mouseScrollWheelResizeSensitivity)
+                x: delta.y * CGFloat(Preferences.shared.mouseScrollWheelToResizeSensitivity), // ignore delta.x
+                y: delta.y * CGFloat(Preferences.shared.mouseScrollWheelToResizeSensitivity)
             ))
             .fitInVisibleFrame(ofScreen: placeholderWindowScreen!)
         self.selectedWindow!.setFrame(newRect)

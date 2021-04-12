@@ -37,7 +37,7 @@ class OverlayWindowPool {
         // Create gesture overlay window
         let gestureOverlayWindow = GestureOverlayWindow(contentRect: CGRect(x: 0, y: 0, width: 0, height: 0), styleMask: [NSWindow.StyleMask.borderless], backing: NSWindow.BackingStoreType.buffered, defer: true)
         
-        gestureOverlayWindow.scrollSwipeDetectionVelocityThreshold = Preferences.shared.swipeDetectionVelocityThreshold
+        gestureOverlayWindow.trackpadScrollToSwipeDetectionVelocityThreshold = Preferences.shared.trackpadScrollToSwipeDetectionVelocityThreshold
         
         gestureOverlayWindow.level = .popUpMenu
         gestureOverlayWindow.isOpaque = false

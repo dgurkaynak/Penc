@@ -20,11 +20,11 @@ final class Preferences {
     private static let key_activationModifierKey = "activationModifierKey"
     private static let key_activationSensitivity = "activationSensitivity"
     private static let key_holdDuration = "holdDuration"
-    private static let key_swipeDetectionVelocityThreshold = "swipeDetectionVelocityThreshold"
+    private static let key_trackpadScrollToSwipeDetectionVelocityThreshold = "swipeDetectionVelocityThreshold"
     private static let key_reverseScroll = "reverseScroll"
     private static let key_disabledApps = "disabledApps"
-    private static let key_mouseSwipeDetectionVelocityThreshold = "mouseSwipeDetectionVelocityThreshold"
-    private static let key_mouseScrollWheelResizeSensitivity = "mouseScrollWheelResizeSensitivity"
+    private static let key_mouseDragToSwipeDetectionVelocityThreshold = "mouseSwipeDetectionVelocityThreshold"
+    private static let key_mouseScrollWheelToResizeSensitivity = "mouseScrollWheelResizeSensitivity"
     private static let key_customActionsForScreenPrefix = "customActionsForScreen"
     private static let key_disableBackgroundBlur = "disableBackgroundBlur"
     private static let key_showWindowSize = "showWindowSize"
@@ -52,9 +52,9 @@ final class Preferences {
         }
     }
     
-    var swipeDetectionVelocityThreshold: Double {
+    var trackpadScrollToSwipeDetectionVelocityThreshold: Double {
         didSet {
-            UserDefaults.standard.set(self.swipeDetectionVelocityThreshold, forKey: Preferences.key_swipeDetectionVelocityThreshold)
+            UserDefaults.standard.set(self.trackpadScrollToSwipeDetectionVelocityThreshold, forKey: Preferences.key_trackpadScrollToSwipeDetectionVelocityThreshold)
             self.delegate?.onPreferencesChanged()
         }
     }
@@ -82,16 +82,16 @@ final class Preferences {
         }
     }
     
-    var mouseSwipeDetectionVelocityThreshold: Double {
+    var mouseDragToSwipeDetectionVelocityThreshold: Double {
         didSet {
-            UserDefaults.standard.set(self.mouseSwipeDetectionVelocityThreshold, forKey: Preferences.key_mouseSwipeDetectionVelocityThreshold)
+            UserDefaults.standard.set(self.mouseDragToSwipeDetectionVelocityThreshold, forKey: Preferences.key_mouseDragToSwipeDetectionVelocityThreshold)
             self.delegate?.onPreferencesChanged()
         }
     }
     
-    var mouseScrollWheelResizeSensitivity: Double {
+    var mouseScrollWheelToResizeSensitivity: Double {
         didSet {
-            UserDefaults.standard.set(self.mouseScrollWheelResizeSensitivity, forKey: Preferences.key_mouseScrollWheelResizeSensitivity)
+            UserDefaults.standard.set(self.mouseScrollWheelToResizeSensitivity, forKey: Preferences.key_mouseScrollWheelToResizeSensitivity)
             self.delegate?.onPreferencesChanged()
         }
     }
@@ -137,12 +137,12 @@ final class Preferences {
             self.holdDuration = holdDuration!
         }
         
-        let swipeDetectionVelocityThreshold = defaults.object(forKey: Preferences.key_swipeDetectionVelocityThreshold) as? Double
-        if swipeDetectionVelocityThreshold == nil {
-            self.swipeDetectionVelocityThreshold = 500
-            UserDefaults.standard.set(self.swipeDetectionVelocityThreshold, forKey: Preferences.key_swipeDetectionVelocityThreshold)
+        let trackpadScrollToSwipeDetectionVelocityThreshold = defaults.object(forKey: Preferences.key_trackpadScrollToSwipeDetectionVelocityThreshold) as? Double
+        if trackpadScrollToSwipeDetectionVelocityThreshold == nil {
+            self.trackpadScrollToSwipeDetectionVelocityThreshold = 500
+            UserDefaults.standard.set(self.trackpadScrollToSwipeDetectionVelocityThreshold, forKey: Preferences.key_trackpadScrollToSwipeDetectionVelocityThreshold)
         } else {
-            self.swipeDetectionVelocityThreshold = swipeDetectionVelocityThreshold!
+            self.trackpadScrollToSwipeDetectionVelocityThreshold = trackpadScrollToSwipeDetectionVelocityThreshold!
         }
         
         let disabledApps = defaults.object(forKey: Preferences.key_disabledApps) as? [String]
@@ -161,20 +161,20 @@ final class Preferences {
             self.reverseScroll = reverseScroll!
         }
         
-        let mouseSwipeDetectionVelocityThreshold = defaults.object(forKey: Preferences.key_mouseSwipeDetectionVelocityThreshold) as? Double
-        if mouseSwipeDetectionVelocityThreshold == nil {
-            self.mouseSwipeDetectionVelocityThreshold = 1000
-            UserDefaults.standard.set(self.mouseSwipeDetectionVelocityThreshold, forKey: Preferences.key_mouseSwipeDetectionVelocityThreshold)
+        let mouseDragToSwipeDetectionVelocityThreshold = defaults.object(forKey: Preferences.key_mouseDragToSwipeDetectionVelocityThreshold) as? Double
+        if mouseDragToSwipeDetectionVelocityThreshold == nil {
+            self.mouseDragToSwipeDetectionVelocityThreshold = 1000
+            UserDefaults.standard.set(self.mouseDragToSwipeDetectionVelocityThreshold, forKey: Preferences.key_mouseDragToSwipeDetectionVelocityThreshold)
         } else {
-            self.mouseSwipeDetectionVelocityThreshold = mouseSwipeDetectionVelocityThreshold!
+            self.mouseDragToSwipeDetectionVelocityThreshold = mouseDragToSwipeDetectionVelocityThreshold!
         }
         
-        let mouseScrollWheelResizeSensitivity = defaults.object(forKey: Preferences.key_mouseScrollWheelResizeSensitivity) as? Double
-        if mouseScrollWheelResizeSensitivity == nil {
-            self.mouseScrollWheelResizeSensitivity = 1
-            UserDefaults.standard.set(self.mouseScrollWheelResizeSensitivity, forKey: Preferences.key_mouseScrollWheelResizeSensitivity)
+        let mouseScrollWheelToResizeSensitivity = defaults.object(forKey: Preferences.key_mouseScrollWheelToResizeSensitivity) as? Double
+        if mouseScrollWheelToResizeSensitivity == nil {
+            self.mouseScrollWheelToResizeSensitivity = 1
+            UserDefaults.standard.set(self.mouseScrollWheelToResizeSensitivity, forKey: Preferences.key_mouseScrollWheelToResizeSensitivity)
         } else {
-            self.mouseScrollWheelResizeSensitivity = mouseScrollWheelResizeSensitivity!
+            self.mouseScrollWheelToResizeSensitivity = mouseScrollWheelToResizeSensitivity!
         }
         
         let disableBackgroundBlur = defaults.object(forKey: Preferences.key_disableBackgroundBlur) as? Bool
@@ -226,11 +226,11 @@ final class Preferences {
         self.activationModifierKey = .command
         self.activationSensitivity = 0.3
         self.holdDuration = 0.1
-        self.swipeDetectionVelocityThreshold = 500
+        self.trackpadScrollToSwipeDetectionVelocityThreshold = 500
         self.reverseScroll = false
         self.disabledApps = []
-        self.mouseSwipeDetectionVelocityThreshold = 1000
-        self.mouseScrollWheelResizeSensitivity = 5
+        self.mouseDragToSwipeDetectionVelocityThreshold = 1000
+        self.mouseScrollWheelToResizeSensitivity = 5
         self.disableBackgroundBlur = false
         self.showWindowSize = false
     }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -1046,15 +1045,15 @@
                         <outlet property="holdDurationSlider" destination="nrU-Zu-llV" id="mOn-vC-D5X"/>
                         <outlet property="launchAtLoginCheckbox" destination="Fsm-xo-OLp" id="s6k-Gr-3C0"/>
                         <outlet property="modifierKeyPopUpButton" destination="S5h-MR-UgN" id="bSA-e1-xei"/>
-                        <outlet property="mouseScrollWheelResizeSensitivityLabel" destination="Bte-jE-7LY" id="mg0-uG-T5k"/>
-                        <outlet property="mouseScrollWheelResizeSensitivitySlider" destination="1Mv-g4-fpA" id="vKB-uw-9cf"/>
-                        <outlet property="mouseSwipeDetectionThresholdLabel" destination="8xw-sY-uAF" id="3oA-b5-kpZ"/>
-                        <outlet property="mouseSwipeDetectionThresholdSlider" destination="zDO-0F-uQ7" id="LRy-EJ-RCh"/>
+                        <outlet property="mouseDragToSwipeDetectionThresholdLabel" destination="8xw-sY-uAF" id="3oA-b5-kpZ"/>
+                        <outlet property="mouseDragToSwipeDetectionThresholdSlider" destination="zDO-0F-uQ7" id="LRy-EJ-RCh"/>
+                        <outlet property="mouseScrollWheelToResizeSensitivityLabel" destination="Bte-jE-7LY" id="mg0-uG-T5k"/>
+                        <outlet property="mouseScrollWheelToResizeSensitivitySlider" destination="1Mv-g4-fpA" id="vKB-uw-9cf"/>
                         <outlet property="resetDefaultsButton" destination="lbR-8e-hcN" id="Xie-Wj-Lh6"/>
                         <outlet property="reverseScrollCheckbox" destination="uTQ-vH-3ZI" id="aJ7-fc-l0s"/>
                         <outlet property="showWindowSizeCheckbox" destination="jec-xf-dBO" id="5yM-9A-wzN"/>
-                        <outlet property="swipeDetectionThresholdLabel" destination="JMn-Mr-0Q2" id="ryB-da-kZl"/>
-                        <outlet property="swipeDetectionThresholdSlider" destination="6xw-ip-1OK" id="a9C-Xg-zRt"/>
+                        <outlet property="trackpadScrollToSwipeDetectionThresholdLabel" destination="JMn-Mr-0Q2" id="ryB-da-kZl"/>
+                        <outlet property="trackpadScrollToSwipeDetectionThresholdSlider" destination="6xw-ip-1OK" id="a9C-Xg-zRt"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -1257,7 +1256,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="s6E-QA-czc">
-                                <rect key="frame" x="424" y="202" width="157" height="22"/>
+                                <rect key="frame" x="424" y="191" width="157" height="22"/>
                                 <textFieldCell key="cell" selectable="YES" title="- Swipe to top-left direction, or - Press left + up keys" id="ViL-Ue-0AL">
                                     <font key="font" metaFont="label" size="9"/>
                                     <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>

@@ -178,8 +178,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, KeyboardListenerDelegate, Pr
         
         OverlayWindowPool.shared.updateAllBackgroundOverlayWindowStyles()
         OverlayWindowPool.shared.forEach { (poolItem) in
-            poolItem.gesture.scrollSwipeDetectionVelocityThreshold = preferences.swipeDetectionVelocityThreshold
-            poolItem.gesture.mouseDragSwipeDetectionVelocityThreshold = preferences.mouseSwipeDetectionVelocityThreshold
+            poolItem.gesture.trackpadScrollToSwipeDetectionVelocityThreshold = preferences.trackpadScrollToSwipeDetectionVelocityThreshold
+            poolItem.gesture.mouseDragToSwipeDetectionVelocityThreshold = preferences.mouseDragToSwipeDetectionVelocityThreshold
             poolItem.gesture.reverseScroll = preferences.reverseScroll
         }
     }

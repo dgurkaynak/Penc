@@ -20,7 +20,7 @@ enum SwipeGestureType {
 }
 
 protocol GestureOverlayWindowDelegate: class {
-    func onScrollGesture(delta: (x: CGFloat, y: CGFloat, timestamp: Double))
+    func onTrackpadScrollGesture(delta: (x: CGFloat, y: CGFloat, timestamp: Double))
     func onSwipeGesture(type: SwipeGestureType)
     func onMagnifyGesture(factor: (width: CGFloat, height: CGFloat))
     func onMouseMoveGesture(position: (x: CGFloat, y: CGFloat))
@@ -39,10 +39,10 @@ class GestureOverlayWindow: NSWindow {
     private var magnifying = false
     private var magnificationAngle = CGFloat.pi / 4
 
-    var scrollSwipeDetectionVelocityThreshold: Double = 500
-    private var scrollingDeltaHistory = [(x: CGFloat, y: CGFloat, timestamp: TimeInterval)]()
+    var trackpadScrollToSwipeDetectionVelocityThreshold: Double = 500
+    private var trackpadScrollDeltaHistory = [(x: CGFloat, y: CGFloat, timestamp: TimeInterval)]()
     
-    var mouseDragSwipeDetectionVelocityThreshold: Double = 1000
+    var mouseDragToSwipeDetectionVelocityThreshold: Double = 1000
     private var mouseDragDeltaHistory = [(x: CGFloat, y: CGFloat, timestamp: TimeInterval)]()
     
     var reverseScroll = false
@@ -143,11 +143,11 @@ class GestureOverlayWindow: NSWindow {
         
         var swipe = (x: 0, y: 0)
         
-        if abs(speedX) > self.mouseDragSwipeDetectionVelocityThreshold {
+        if abs(speedX) > self.mouseDragToSwipeDetectionVelocityThreshold {
             swipe.x = speedX > 0 ? 1 : -1
         }
         
-        if abs(speedY) > self.mouseDragSwipeDetectionVelocityThreshold {
+        if abs(speedY) > self.mouseDragToSwipeDetectionVelocityThreshold {
             swipe.y = speedY > 0 ? 1 : -1
         }
         
@@ -226,9 +226,9 @@ class GestureOverlayWindow: NSWindow {
         
         // We now know scroll is triggered from trackpad
         if event.phase == NSEvent.Phase.began {
-            self.scrollingDeltaHistory = []
+            self.trackpadScrollDeltaHistory = []
         } else if event.phase == NSEvent.Phase.cancelled {
-            self.scrollingDeltaHistory = []
+            self.trackpadScrollDeltaHistory = []
         } else if event.phase == NSEvent.Phase.changed {
             // Moving or resizing (delta) window
             var factor: CGFloat = event.isDirectionInvertedFromDevice ? -1 : 1;
@@ -238,15 +238,15 @@ class GestureOverlayWindow: NSWindow {
                 y: factor * event.scrollingDeltaY,
                 timestamp: event.timestamp
             )
-            self.scrollingDeltaHistory.append(delta)
-            self.scrollingDeltaHistory = Array(self.scrollingDeltaHistory.suffix(5))
-            self.delegate_?.onScrollGesture(delta: delta)
+            self.trackpadScrollDeltaHistory.append(delta)
+            self.trackpadScrollDeltaHistory = Array(self.trackpadScrollDeltaHistory.suffix(5))
+            self.delegate_?.onTrackpadScrollGesture(delta: delta)
         } else if event.phase == NSEvent.Phase.ended {
             // Maybe swiping?
-            if self.scrollingDeltaHistory.isEmpty { return }
+            if self.trackpadScrollDeltaHistory.isEmpty { return }
             
             // Include only that movements happen in 500ms before ended
-            let latestScrollingDeltas = self.scrollingDeltaHistory.filter { (delta) -> Bool in
+            let latestScrollingDeltas = self.trackpadScrollDeltaHistory.filter { (delta) -> Bool in
                 return event.timestamp - delta.timestamp <= 0.5
             }
             if latestScrollingDeltas.isEmpty { return }
@@ -259,11 +259,11 @@ class GestureOverlayWindow: NSWindow {
             
             var swipe = (x: 0, y: 0)
             
-            if abs(speedX) > self.scrollSwipeDetectionVelocityThreshold {
+            if abs(speedX) > self.trackpadScrollToSwipeDetectionVelocityThreshold {
                 swipe.x = speedX > 0 ? 1 : -1
             }
             
-            if abs(speedY) > self.scrollSwipeDetectionVelocityThreshold {
+            if abs(speedY) > self.trackpadScrollToSwipeDetectionVelocityThreshold {
                 swipe.y = speedY > 0 ? 1 : -1
             }
             
@@ -306,7 +306,7 @@ class GestureOverlayWindow: NSWindow {
                 self.delegate_?.onSwipeGesture(type: swipeType!)
             }
             
-            self.scrollingDeltaHistory = []
+            self.trackpadScrollDeltaHistory = []
         }
     }
     
@@ -318,6 +318,6 @@ class GestureOverlayWindow: NSWindow {
     
     func clear() {
         self.magnifying = false
-        self.scrollingDeltaHistory = []
+        self.trackpadScrollDeltaHistory = []
     }
 }
