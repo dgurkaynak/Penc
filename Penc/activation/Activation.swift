@@ -176,6 +176,7 @@ class Activation: GestureOverlayWindowDelegate {
         let mouseY = NSEvent.mouseLocation.y // bottom-left origined
         let initialSelectedWindow = self.getFrontmostWindow(byCoordinate: (x: mouseX, y: mouseY))
         self.selectWindow(initialSelectedWindow)
+        self.handleTooltipOnMouseMove()
         
         Logger.shared.log("Activation started w/ \(self.allWindows.count) window(s) in \((Date().timeIntervalSince1970 - startTime) * 1000)ms")
     }
@@ -760,6 +761,18 @@ class Activation: GestureOverlayWindowDelegate {
                 return
             }
             
+            // If center of the selected window is visible,
+            // no need to show the tooltip
+            let centerPoint = CGPoint(
+                x: self.selectedWindow!.newRect.origin.x + (self.selectedWindow!.newRect.size.width / 2),
+                y: self.selectedWindow!.newRect.origin.y + (self.selectedWindow!.newRect.size.height / 2)
+            )
+            let firstContainerWindow = self.allWindows.first { !$0.minimized && $0.newRect.contains(centerPoint) }
+            if firstContainerWindow?.windowNumber == self.selectedWindow!.windowNumber {
+                item.gesture.tooltipLabel.isHidden = true
+                return
+            }
+
             item.gesture.tooltipLabel.stringValue = appName!
             item.gesture.tooltipLabel.isHidden = false
             
