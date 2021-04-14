@@ -732,6 +732,59 @@ class Activation: GestureOverlayWindowDelegate {
         self.alignedWindowsToResizeSimultaneously.forEach { (item) in
             item.window.placeholder.windowViewController.styleSelected()
         }
+        
+        self.handleTooltipOnMouseMove()
+    }
+    
+    func handleTooltipOnMouseMove() {
+        // If there is no selected window, hide all the tooltips
+        guard self.selectedWindow != nil else {
+            self.overlayWindows.forEach { $0.gesture.tooltipLabel.isHidden = true }
+            return
+        }
+        
+        self.overlayWindows.forEach { (item) in
+            let doesContainMouse = item.gesture.frame.contains(NSEvent.mouseLocation)
+            
+            // If mouse is not this overlay, hide the tooltip
+            if !doesContainMouse {
+                item.gesture.tooltipLabel.isHidden = true
+                return
+            }
+            
+            // Try to get app name of selected window
+            // If we could not get it, hide tooltip
+            let appName = self.selectedWindow!.runningApp?.localizedName
+            if appName == nil {
+                item.gesture.tooltipLabel.isHidden = true
+                return
+            }
+            
+            item.gesture.tooltipLabel.stringValue = appName!
+            item.gesture.tooltipLabel.isHidden = false
+            
+            let tooltipWidth = 200 as CGFloat
+            
+            if NSEvent.mouseLocation.x <= item.gesture.frame.origin.x + item.gesture.frame.size.width - tooltipWidth {
+                // Align to left
+                item.gesture.tooltipLabel.alignment = .left
+                item.gesture.tooltipLabel.frame = CGRect(
+                    x: NSEvent.mouseLocation.x + 15,
+                    y: NSEvent.mouseLocation.y - 16,
+                    width: tooltipWidth,
+                    height: 20
+                )
+            } else {
+                // Align to right
+                item.gesture.tooltipLabel.alignment = .right
+                item.gesture.tooltipLabel.frame = CGRect(
+                    x: NSEvent.mouseLocation.x - 10 - tooltipWidth,
+                    y: NSEvent.mouseLocation.y - 16,
+                    width: tooltipWidth,
+                    height: 20
+                )
+            }
+        }
     }
     
     func complete() {
@@ -752,6 +805,7 @@ class Activation: GestureOverlayWindowDelegate {
         }
         self.overlayWindows.forEach { (item) in
             item.bg.orderOut(item.bg)
+            item.gesture.tooltipLabel.isHidden = true
             item.gesture.orderOut(item.gesture)
             item.gesture.clear()
         }
@@ -773,6 +827,7 @@ class Activation: GestureOverlayWindowDelegate {
         }
         self.overlayWindows.forEach { (item) in
             item.bg.orderOut(item.bg)
+            item.gesture.tooltipLabel.isHidden = true
             item.gesture.orderOut(item.gesture)
             item.gesture.clear()
         }

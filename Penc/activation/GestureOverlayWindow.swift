@@ -53,6 +53,8 @@ class GestureOverlayWindow: NSWindow {
     private var doubleClickTimer: PTimer? = nil
     var doubleClickTimeout = 0.3
     
+    var tooltipLabel = NSTextField(string: "")
+    
     func setDelegate(_ delegate: GestureOverlayWindowDelegate?) {
         self.delegate_ = delegate
     }
@@ -330,5 +332,15 @@ class GestureOverlayWindow: NSWindow {
     func clear() {
         self.magnifying = false
         self.trackpadScrollDeltaHistory = []
+    }
+    
+    func setupTooltip() {
+        self.tooltipLabel.isSelectable = false
+        self.tooltipLabel.isEditable = false
+        self.tooltipLabel.drawsBackground = false
+        self.tooltipLabel.isBezeled = false
+        self.tooltipLabel.isHidden = true
+        
+        self.contentView?.addSubview(self.tooltipLabel)
     }
 }
