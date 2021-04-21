@@ -621,6 +621,8 @@ class Activation: GestureOverlayWindowDelegate {
                 item.window.setFrame(newRect)
             }
         }
+        
+        self.handleTooltipOnMouseMove()
     }
     
     func onMouseUpGesture() {
