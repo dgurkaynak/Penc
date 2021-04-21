@@ -337,9 +337,13 @@ class GestureOverlayWindow: NSWindow {
     func setupTooltip() {
         self.tooltipLabel.isSelectable = false
         self.tooltipLabel.isEditable = false
-        self.tooltipLabel.drawsBackground = false
         self.tooltipLabel.isBezeled = false
         self.tooltipLabel.isHidden = true
+        self.tooltipLabel.font = NSFont.systemFont(ofSize: 12)
+        self.tooltipLabel.textColor = .white
+        self.tooltipLabel.backgroundColor = NSColor(calibratedRed: 0.106, green: 0.537, blue: 0.937, alpha: 1.0)
+        self.tooltipLabel.wantsLayer = true
+        self.tooltipLabel.layer?.cornerRadius = 5
         
         self.contentView?.addSubview(self.tooltipLabel)
     }

@@ -776,25 +776,27 @@ class Activation: GestureOverlayWindowDelegate {
             item.gesture.tooltipLabel.stringValue = appName!
             item.gesture.tooltipLabel.isHidden = false
             
-            let tooltipWidth = 200 as CGFloat
+            item.gesture.tooltipLabel.sizeToFit()
+            let tooltipWidth = item.gesture.tooltipLabel.frame.size.width + 5 // 5 is for padding
+            let tooltipHeight = 17 as CGFloat
             
             if NSEvent.mouseLocation.x <= item.gesture.frame.origin.x + item.gesture.frame.size.width - tooltipWidth {
                 // Align to left
-                item.gesture.tooltipLabel.alignment = .left
+                item.gesture.tooltipLabel.alignment = .center
                 item.gesture.tooltipLabel.frame = CGRect(
                     x: NSEvent.mouseLocation.x + 15,
                     y: NSEvent.mouseLocation.y - 16,
                     width: tooltipWidth,
-                    height: 20
+                    height: tooltipHeight
                 )
             } else {
                 // Align to right
-                item.gesture.tooltipLabel.alignment = .right
+                item.gesture.tooltipLabel.alignment = .center
                 item.gesture.tooltipLabel.frame = CGRect(
                     x: NSEvent.mouseLocation.x - 10 - tooltipWidth,
                     y: NSEvent.mouseLocation.y - 16,
                     width: tooltipWidth,
-                    height: 20
+                    height: tooltipHeight
                 )
             }
         }
