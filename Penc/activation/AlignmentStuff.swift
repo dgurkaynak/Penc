@@ -335,7 +335,9 @@ func processWindowMovementConsideringAlignment(
     alignmentGuides: WindowAlignmentGuides,
     state: WindowMovementProcessingState, // !!! WILL BE MUTATED !!!
     movement: (x: CGFloat, y: CGFloat), // window movement request
-    timestamp: Double
+    timestamp: Double,
+    ignoreAlignmentOfHorizontalEdges: [WindowHorizontalEdgeType] = [],
+    ignoreAlignmentOfVerticalEdges: [WindowVerticalEdgeType] = []
 ) -> (x: CGFloat, y: CGFloat) {
     let currentFrame = windowRect
     let currentX = currentFrame.origin.x
@@ -366,6 +368,10 @@ func processWindowMovementConsideringAlignment(
 
             // Let's check if we're already aligned to something
             let alignedGuide = alignmentGuides.vertical.first { (alignment) -> Bool in
+                if ignoreAlignmentOfVerticalEdges.contains(alignment.edge) {
+                    return false
+                }
+
                 let currentEdge = alignment.edge == .LEFT ? currentLeftEdge : currentRightEdge
                 let currentEdgeLineSegment = alignment.edgeModifier == nil ? currentEdge : alignment.edgeModifier!(currentEdge)
                 return currentEdgeLineSegment.isOverlapping(with: alignment.alignTo)
@@ -387,6 +393,10 @@ func processWindowMovementConsideringAlignment(
                 // We're not already aligned to a guide
                 // Let's check whether we're going to align in next step
                 let collidedGuide = alignmentGuides.vertical.first { (alignment) -> Bool in
+                    if ignoreAlignmentOfVerticalEdges.contains(alignment.edge) {
+                        return false
+                    }
+
                     let currentEdge = alignment.edge == .LEFT ? currentLeftEdge : currentRightEdge
                     let currentEdgeLineSegment = alignment.edgeModifier == nil ? currentEdge : alignment.edgeModifier!(currentEdge)
                     return currentEdgeLineSegment.checkContinuousCollision(withTarget: alignment.alignTo, movement: movement)
@@ -418,6 +428,10 @@ func processWindowMovementConsideringAlignment(
 
             // Let's check if we're already aligned to something
             let alignedGuide = alignmentGuides.horizontal.first { (alignment) -> Bool in
+                if ignoreAlignmentOfHorizontalEdges.contains(alignment.edge) {
+                    return false
+                }
+
                 let currentEdge = alignment.edge == .TOP ? currentTopEdge : currentBottomEdge
                 let currentEdgeLineSegment = alignment.edgeModifier == nil ? currentEdge : alignment.edgeModifier!(currentEdge)
                 return currentEdgeLineSegment.isOverlapping(with: alignment.alignTo)
@@ -439,6 +453,10 @@ func processWindowMovementConsideringAlignment(
                 // We're not already aligned to a guide
                 // Let's check whether we're going to align in next step
                 let collidedGuide = alignmentGuides.horizontal.first { (alignment) -> Bool in
+                    if ignoreAlignmentOfHorizontalEdges.contains(alignment.edge) {
+                        return false
+                    }
+
                     let currentEdge = alignment.edge == .TOP ? currentTopEdge : currentBottomEdge
                     let currentEdgeLineSegment = alignment.edgeModifier == nil ? currentEdge : alignment.edgeModifier!(currentEdge)
                     return currentEdgeLineSegment.checkContinuousCollision(withTarget: alignment.alignTo, movement: movement)

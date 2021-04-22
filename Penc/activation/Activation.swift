@@ -582,7 +582,7 @@ class Activation: GestureOverlayWindowDelegate {
         guard self.selectedWindow!.siWindow?.isMovable() ?? false else { return }
         
         if self.selectedWindowResizeHandle == nil {
-            // move window
+            // Moving window...
             let rect = self.selectedWindow!.newRect
             let newMovement = processWindowMovementConsideringAlignment(
                 windowRect: self.selectedWindow!.newRect,
@@ -599,13 +599,48 @@ class Activation: GestureOverlayWindowDelegate {
             )
             self.selectedWindow!.setFrame(newRect)
         } else {
-            // resize window
+            // Resizing window...
+
+            // Which edge alignments should be ignored,
+            // according to resize handle?
+            var ignoreAlignmentOfHorizontalEdges: [WindowHorizontalEdgeType] = []
+            var ignoreAlignmentOfVerticalEdges: [WindowVerticalEdgeType] = []
+            switch self.selectedWindowResizeHandle! {
+            case .TOP:
+                ignoreAlignmentOfHorizontalEdges = [.BOTTOM]
+                ignoreAlignmentOfVerticalEdges = []
+            case .TOP_RIGHT:
+                ignoreAlignmentOfHorizontalEdges = [.BOTTOM]
+                ignoreAlignmentOfVerticalEdges = [.LEFT]
+            case .RIGHT:
+                ignoreAlignmentOfHorizontalEdges = []
+                ignoreAlignmentOfVerticalEdges = [.LEFT]
+            case .BOTTOM_RIGHT:
+                ignoreAlignmentOfHorizontalEdges = [.TOP]
+                ignoreAlignmentOfVerticalEdges = [.LEFT]
+            case .BOTTOM:
+                ignoreAlignmentOfHorizontalEdges = [.TOP]
+                ignoreAlignmentOfVerticalEdges = []
+            case .BOTTOM_LEFT:
+                ignoreAlignmentOfHorizontalEdges = [.TOP]
+                ignoreAlignmentOfVerticalEdges = [.RIGHT]
+            case .LEFT:
+                ignoreAlignmentOfHorizontalEdges = []
+                ignoreAlignmentOfVerticalEdges = [.RIGHT]
+            case .TOP_LEFT:
+                ignoreAlignmentOfHorizontalEdges = [.BOTTOM]
+                ignoreAlignmentOfVerticalEdges = [.RIGHT]
+            }
+
+            // Calculate new delta, considering window alignments
             let newMovement = processWindowMovementConsideringAlignment(
                 windowRect: self.selectedWindow!.newRect,
                 alignmentGuides: self.buildAlignmentGuidesForSelectedWindow(),
                 state: self.windowMovementProcessingState,
                 movement: (x: -delta.x, y: delta.y),
-                timestamp: delta.timestamp
+                timestamp: delta.timestamp,
+                ignoreAlignmentOfHorizontalEdges: ignoreAlignmentOfHorizontalEdges,
+                ignoreAlignmentOfVerticalEdges: ignoreAlignmentOfVerticalEdges
             )
             let newRect = self.selectedWindow!.newRect.resizeBy(
                 handle: self.selectedWindowResizeHandle!,
