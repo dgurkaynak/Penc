@@ -1,7 +1,7 @@
 # Penc
 Penc is yet another window manager app for macOS. Instead of complicated keyboard shortcuts, Penc is designed for trackpad usage.
 
-![Showcase](landing/assets/videos-concat.gif?raw=true)
+![Showcase](website/assets/videos-concat.gif?raw=true)
 
 ## Usage
 
@@ -18,7 +18,7 @@ There are two recommended options for installation.
 
 **Homebrew**
 
-`$ brew cask install penc`.
+`$ brew cask install penc`
 
 **Download Release from Github**
 
@@ -32,7 +32,7 @@ There are two recommended options for installation.
 
 ## System Requirements
 
-Penc currently supports macOS High Sierra (10.13) and Mojave (10.14).
+Penc supports macOS High Sierra (10.13) and above.
 
 ## Common Issues
 
