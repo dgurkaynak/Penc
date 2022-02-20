@@ -18,7 +18,7 @@ There are two recommended options for installation.
 
 **Homebrew**
 
-`$ brew cask install penc`
+`$ brew install penc --cask`
 
 **Download Release from Github**
 
