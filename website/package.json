@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "build": "./scripts/build.sh",
-    "start": "rm -rf dist && parcel index.html --out-dir dist",
+    "dev": "rm -rf dist && parcel index.html --out-dir dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
